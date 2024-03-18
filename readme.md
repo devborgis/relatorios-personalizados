@@ -11,8 +11,14 @@
 
 <!-- Badges -->
 <div align="center">
-  <img src="https://img.shields.io/github/license/devborgis/relatorios-personalizados.svg" alt="License">
-  <img src="https://img.shields.io/github/downloads/devborgis/relatorios-personalizados/total.svg" alt="Downloads">
+  <!-- License -->
+  <img src="https://img.shields.io/github/license/devborgis/relatorios-personalizados" alt="License">
+  <!-- Version -->
+  <img src="https://img.shields.io/github/v/release/devborgis/relatorios-personalizados?label=Version" alt="Version">
+  <!-- Downloads -->
+  <img src="https://img.shields.io/github/downloads/devborgis/relatorios-personalizados/total?label=Downloads" alt="Downloads">
+  <!-- Contributors -->
+  <img src="https://img.shields.io/github/contributors/devborgis/relatorios-personalizados?label=Contributors" alt="Contributors">
 </div>
 
 <!-- Seção de Ferramentas Utilizadas -->
@@ -23,14 +29,8 @@
 - Banco de dados Firebird
 - FortesReport para impressão de relatórios
 
-<!-- Seção de Versão -->
-## Versão
-
-- Versão 1.0.0
 
 <div align="center">
- <br>
-   <h2>Este projeto está licenciado sob a Licença Apache 2.0</h2>
 <br>
    <h3>Contribuições são bem-vindas!</h3>
 <br>
