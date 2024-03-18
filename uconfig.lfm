@@ -12,6 +12,7 @@ object frmConfig: TfrmConfig
   Color = clWhite
   OnShow = FormShow
   Position = poScreenCenter
+  LCLVersion = '3.0.0.3'
   object Label1: TLabel
     Left = 8
     Height = 15

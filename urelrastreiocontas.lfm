@@ -6,6 +6,7 @@ object frmRelatorio1: TfrmRelatorio1
   Caption = 'frmRelatorio1'
   ClientHeight = 680
   ClientWidth = 1496
+  LCLVersion = '3.0.0.3'
   object RLReport1: TRLReport
     Left = 0
     Height = 1123

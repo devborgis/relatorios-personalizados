@@ -236,6 +236,7 @@ object frmFiltrosRelParRestante: TfrmFiltrosRelParRestante
   }
   OnShow = FormShow
   Position = poScreenCenter
+  LCLVersion = '3.0.0.3'
   object Label1: TLabel
     Left = 5
     Height = 15

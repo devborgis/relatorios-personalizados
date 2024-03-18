@@ -1,3 +1,24 @@
+{*****************************************************************************
+ * Nome do Arquivo: uListaRelatorios.pas
+ * Descrição: Listagem dos relatorios disponiveis
+ * Licença: Apache License, Version 2.0
+ ******************************************************************************
+ * Copyright (c) 2024 Vinicius Borges Gomes - Borgis & Co. Desenvolvimento
+ ******************************************************************************
+ * Informações de Licença:
+ *
+ * Este software é licenciado sob os termos da Licença Apache, Versão 2.0 (a "Licença");
+ * Você não pode usar este arquivo, exceto em conformidade com a Licença.
+ * Você pode obter uma cópia da Licença em
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * A menos que exigido por lei aplicável ou acordado por escrito, software
+ * distribuído sob a Licença é distribuído "COMO ESTÁ", SEM GARANTIAS OU CONDIÇÕES DE QUALQUER TIPO,
+ * expressa ou implícita.
+ * Consulte a Licença para as permissões específicas que regem o uso do software.
+ * ****************************************************************************}
+
 unit uListaRelatorios;
 
 {$mode objfpc}{$H+}
