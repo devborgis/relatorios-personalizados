@@ -30,7 +30,7 @@
 
 <div align="center">
  <br>
-   <h2>Este projeto está licenciado sob a Licença MIT</h2>
+   <h2>Este projeto está licenciado sob a Licença Apache 2.0</h2>
 <br>
    <h3>Contribuições são bem-vindas!</h3>
 <br>
