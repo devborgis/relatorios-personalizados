@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/03/21 15:54:27.000.740,=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/21 15:57:15.000.810,=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/21 16:52:43.000.360,=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2024/03/21 16:57:07.000.462,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uConfig.pas=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2024/03/21 16:57:07.000.462,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uConfig.dfm=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit2.dfm</Transaction>
+    <Transaction>2024/03/21 16:57:18.000.878,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uLogin.pas=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/21 16:57:18.000.878,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uLogin.dfm=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>2024/03/21 16:57:32.000.519,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
+    <Transaction>2024/03/21 17:31:33.000.555,C:\GitHub\relatorios-personalizados-delphi\rlsBorgis.dproj=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj</Transaction>
+    <Transaction>2024/03/21 17:53:55.000.509,=C:\GitHub\relatorios-personalizados-delphi\Unit1.pas</Transaction>
+    <Transaction>2024/03/21 18:03:52.000.285,C:\GitHub\relatorios-personalizados-delphi\uSystem.dfm=C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm</Transaction>
+    <Transaction>2024/03/21 18:03:52.000.285,C:\GitHub\relatorios-personalizados-delphi\uSystem.pas=C:\GitHub\relatorios-personalizados-delphi\Unit1.pas</Transaction>
+    <Transaction>2024/03/21 19:09:04.000.555,C:\GitHub\relatorios-personalizados-delphi\rlsBorgis.dproj=C:\GitHub\relatorios-personalizados-delphi\rlsBorgis.dproj</Transaction>
+    <Transaction>2024/03/22 09:29:30.000.164,=C:\GitHub\relatorios-personalizados-delphi\Unit1.pas</Transaction>
+    <Transaction>2024/03/22 09:36:07.000.558,C:\GitHub\relatorios-personalizados-delphi\Unit1.pas=C:\GitHub\relatorios-personalizados-delphi\dmIntegracao.pas</Transaction>
+    <Transaction>2024/03/22 09:36:07.000.558,C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm=C:\GitHub\relatorios-personalizados-delphi\dmIntegracao.dfm</Transaction>
+    <Transaction>2024/03/22 10:42:17.000.044,=C:\GitHub\relatorios-personalizados-delphi\Unit1.pas</Transaction>
+    <Transaction>2024/03/22 10:42:32.000.268,C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm=C:\GitHub\relatorios-personalizados-delphi\dmSystem.dfm</Transaction>
+    <Transaction>2024/03/22 10:42:32.000.268,C:\GitHub\relatorios-personalizados-delphi\Unit1.pas=C:\GitHub\relatorios-personalizados-delphi\dmSystem.pas</Transaction>
+    <Transaction>2024/03/25 15:05:35.000.545,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
