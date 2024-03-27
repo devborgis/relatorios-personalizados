@@ -47,7 +47,7 @@ type
     procedure btnExitClick(Sender: TObject);
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -101,7 +101,7 @@ begin
   close;
 end;
 
-procedure TfrmLogin.FormCreate(Sender: TObject);
+procedure TfrmLogin.FormShow(Sender: TObject);
 var
   IniPath, DatabasePath, DLLPath: string;
   Ini: TIniFile;

@@ -13,7 +13,7 @@ object frmLogin: TfrmLogin
   Font.Style = [fsBold]
   Position = poScreenCenter
   StyleElements = []
-  OnCreate = FormCreate
+  OnShow = FormShow
   TextHeight = 17
   object Label1: TLabel
     Left = 418
