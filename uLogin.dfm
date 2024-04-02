@@ -8117,6 +8117,22 @@ object frmLogin: TfrmLogin
     OnClick = btnExitClick
     KeepMouseLeavePressed = True
   end
+  object Label4: TLabel
+    Left = 457
+    Top = 439
+    Width = 200
+    Height = 37
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'BORGIS & Co. Desenvolvimento - Todos os direitos reservados'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clSilver
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = [fsItalic]
+    ParentFont = False
+    WordWrap = True
+  end
   object edtLogin: TEdit
     Left = 418
     Top = 295
@@ -8135,6 +8151,7 @@ object frmLogin: TfrmLogin
     ParentCtl3D = False
     ParentFont = False
     TabOrder = 0
+    OnKeyPress = edtLoginKeyPress
   end
   object edtPassword: TEdit
     Left = 418

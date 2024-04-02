@@ -216,7 +216,6 @@ object frmSystem: TfrmSystem
         Align = alLeft
         AutoGray = False
         Caption = 'In'#237'cio'
-        Color = 3355443
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWhite
         Font.Height = -16
@@ -771,8 +770,6 @@ object frmSystem: TfrmSystem
           Align = alTop
           BevelOuter = bvNone
           TabOrder = 0
-          ExplicitLeft = -48
-          ExplicitTop = 3
           object btnEdtReport: TJvTransparentButton
             Left = 325
             Top = 13
@@ -784,6 +781,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EDITAR  '
             Color = 8454143
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -994,6 +992,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EXCLUIR  '
             Color = 8618239
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1099,6 +1098,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'ADICIONAR '
             Color = 9437056
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1115,6 +1115,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnAddReportClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -1212,6 +1213,7 @@ object frmSystem: TfrmSystem
             ParentFont = False
             TabOrder = 0
             TextHint = 'RELAT'#211'RIO DE CONTAS A RECEBER'
+            OnChange = edtFilterDescReportChange
           end
         end
         object dbgReports: TDBGrid
@@ -1272,6 +1274,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EDITAR  '
             Color = 8454143
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1288,6 +1291,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnEdtUserClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -1377,6 +1381,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'ADICIONAR '
             Color = 9437056
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1393,6 +1398,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnCreateUserClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -1482,6 +1488,7 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EXCLUIR  '
             Color = 8618239
+            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1498,6 +1505,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnDeleteUserClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -1595,6 +1603,7 @@ object frmSystem: TfrmSystem
             ParentFont = False
             TabOrder = 0
             TextHint = 'FULANO DE TAL'
+            OnChange = edtFilterNameUserChange
           end
         end
         object dbgUsers: TDBGrid
@@ -1614,7 +1623,7 @@ object frmSystem: TfrmSystem
           GradientEndColor = clAqua
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
-          Font.Height = -11
+          Font.Height = -20
           Font.Name = 'Tahoma'
           Font.Style = []
           Options = [dgTitles, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTitleClick, dgTitleHotTrack]
@@ -1626,9 +1635,9 @@ object frmSystem: TfrmSystem
           TabOrder = 1
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
-          TitleFont.Height = -13
-          TitleFont.Name = 'Segoe UI'
-          TitleFont.Style = [fsBold]
+          TitleFont.Height = -11
+          TitleFont.Name = 'Tahoma'
+          TitleFont.Style = []
           StyleElements = []
         end
       end
@@ -10466,68 +10475,6 @@ object frmSystem: TfrmSystem
           Stretch = True
         end
       end
-    end
-  end
-  object frxDesigner1: TfrxDesigner
-    DefaultScriptLanguage = 'PascalScript'
-    DefaultFont.Charset = DEFAULT_CHARSET
-    DefaultFont.Color = clWindowText
-    DefaultFont.Height = -13
-    DefaultFont.Name = 'Arial'
-    DefaultFont.Style = []
-    DefaultLeftMargin = 10.000000000000000000
-    DefaultRightMargin = 10.000000000000000000
-    DefaultTopMargin = 10.000000000000000000
-    DefaultBottomMargin = 10.000000000000000000
-    DefaultPaperSize = 9
-    DefaultOrientation = poPortrait
-    GradientEnd = 11982554
-    GradientStart = clWindow
-    TemplatesExt = 'fr3'
-    Restrictions = []
-    RTLLanguage = False
-    MemoParentFont = False
-    Left = 744
-    Top = 24
-  end
-  object frxReport1: TfrxReport
-    Version = '6.9.14'
-    DotMatrixReport = False
-    IniFile = '\Software\Fast Reports'
-    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
-    PreviewOptions.Zoom = 1.000000000000000000
-    PrintOptions.Printer = 'Default'
-    PrintOptions.PrintOnSheet = 0
-    ReportOptions.CreateDate = 45373.682331655090000000
-    ReportOptions.LastChange = 45373.682331655090000000
-    ScriptLanguage = 'PascalScript'
-    ScriptText.Strings = (
-      'begin'
-      ''
-      'end.')
-    Left = 680
-    Top = 24
-    Datasets = <>
-    Variables = <>
-    Style = <>
-    object Data: TfrxDataPage
-      Height = 1000.000000000000000000
-      Width = 1000.000000000000000000
-      object ADODatabase1: TfrxADODatabase
-        pLeft = 111
-        pTop = 78
-      end
-    end
-    object Page1: TfrxReportPage
-      PaperWidth = 210.000000000000000000
-      PaperHeight = 297.000000000000000000
-      PaperSize = 9
-      LeftMargin = 10.000000000000000000
-      RightMargin = 10.000000000000000000
-      TopMargin = 10.000000000000000000
-      BottomMargin = 10.000000000000000000
-      Frame.Typ = []
-      MirrorMode = []
     end
   end
 end

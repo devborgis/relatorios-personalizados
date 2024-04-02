@@ -1,18 +1,15 @@
 ﻿object mSystem: TmSystem
-  OnCreate = DataModuleCreate
-  Height = 328
-  Width = 388
+  Height = 265
+  Width = 484
   object conSystem: TFDConnection
     Params.Strings = (
       'Database=C:\Borgis\borgis.db'
       'DriverID=SQLite')
-    Connected = True
     LoginPrompt = False
     Left = 56
     Top = 40
   end
   object qryLogin: TFDQuery
-    Active = True
     Connection = conSystem
     SQL.Strings = (
       'select * from tb_users')
@@ -20,7 +17,6 @@
     Top = 40
   end
   object qryUsers: TFDQuery
-    Active = True
     Connection = conSystem
     SQL.Strings = (
       'SELECT '
@@ -32,7 +28,6 @@
     Top = 104
   end
   object qryReports: TFDQuery
-    Active = True
     Connection = conSystem
     SQL.Strings = (
       'SELECT '
@@ -72,5 +67,38 @@
     DataSet = qryReports
     Left = 120
     Top = 168
+  end
+  object qryCadUser: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'select * from tb_users')
+    Left = 192
+    Top = 40
+  end
+  object qryUserPermission: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'select * from tb_user_permission '
+      'where ID_USER = :id_login')
+    Left = 288
+    Top = 40
+    ParamData = <
+      item
+        Name = 'ID_LOGIN'
+        ParamType = ptInput
+      end>
+  end
+  object qryCadPermission: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'select * from tb_user_permission '
+      'where ID_USER = :id_sel')
+    Left = 288
+    Top = 104
+    ParamData = <
+      item
+        Name = 'ID_SEL'
+        ParamType = ptInput
+      end>
   end
 end

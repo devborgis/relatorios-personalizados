@@ -44,10 +44,12 @@ type
     Image2: TImage;
     btnEnter: TJvTransparentButton;
     btnExit: TJvTransparentButton;
+    Label4: TLabel;
     procedure btnExitClick(Sender: TObject);
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -68,37 +70,53 @@ end;
 
 procedure TfrmLogin.btnEnterClick(Sender: TObject);
 begin
-
-try
-  with mSystem.qryLogin do
+  try
+    with mSystem.qryLogin do
     begin
       Close;
       SQL.Clear;
-      sql.Add('SELECT * FROM TB_USERS WHERE LOGIN = :login AND PASSWORD = :password');
+      SQL.Add('SELECT * FROM TB_USERS WHERE LOGIN = :login AND PASSWORD = :password');
       ParamByName('login').AsString := edtLogin.Text;
       ParamByName('password').AsString := edtPassword.Text;
       Open;
-      if Fields[0].AsInteger > 0 then 
-        begin 
+      if not IsEmpty then // Verifica se a consulta retornou algum registro
+      begin
+        if FieldByName('STATUS').AsString = '0' then // Ajuste aqui para usar FieldByName para obter o campo 'STATUS'
+        begin
+          ShowMessage('O Usuário não tem permissão para acessar o sistema, verifique!');
+        end
+        else
+        begin
+          mSystem.conSystem.Connected := True;
+          mSystem.qryUsers.Active := True;
+          mSystem.qryReports.Active := True;
           frmSystem.ShowModal;
           frmLogin.Close;
-        end else 
-          begin
-            ShowMessage('Usuários e/ou senhas incorretos, verifique');
-            edtPassword.Text := '';
-            edtLogin.SetFocus;
-          end;
+        end;
+      end
+      else
+      begin
+        ShowMessage('Usuário e/ou senha incorretos, verifique');
+        edtPassword.Text := '';
+        edtLogin.SetFocus;
+      end;
     end;
-except
-  on E: Exception do
-    ShowMessage('Erro ao fazer login no sistema: ' + #13#10 + #13#10 + E.Message);
+  except
+    on E: Exception do
+      ShowMessage('Erro ao fazer login no sistema: ' + #13#10 + #13#10 + E.Message);
+  end;
 end;
-  
-end;
+
 
 procedure TfrmLogin.btnExitClick(Sender: TObject);
 begin
   close;
+end;
+
+procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    edtPassword.SetFocus
 end;
 
 procedure TfrmLogin.FormShow(Sender: TObject);

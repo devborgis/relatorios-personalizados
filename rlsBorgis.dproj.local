@@ -18,8 +18,30 @@
     <Transaction>2024/03/22 09:36:07.000.558,C:\GitHub\relatorios-personalizados-delphi\Unit1.pas=C:\GitHub\relatorios-personalizados-delphi\dmIntegracao.pas</Transaction>
     <Transaction>2024/03/22 09:36:07.000.558,C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm=C:\GitHub\relatorios-personalizados-delphi\dmIntegracao.dfm</Transaction>
     <Transaction>2024/03/22 10:42:17.000.044,=C:\GitHub\relatorios-personalizados-delphi\Unit1.pas</Transaction>
-    <Transaction>2024/03/22 10:42:32.000.268,C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm=C:\GitHub\relatorios-personalizados-delphi\dmSystem.dfm</Transaction>
     <Transaction>2024/03/22 10:42:32.000.268,C:\GitHub\relatorios-personalizados-delphi\Unit1.pas=C:\GitHub\relatorios-personalizados-delphi\dmSystem.pas</Transaction>
+    <Transaction>2024/03/22 10:42:32.000.268,C:\GitHub\relatorios-personalizados-delphi\Unit1.dfm=C:\GitHub\relatorios-personalizados-delphi\dmSystem.dfm</Transaction>
     <Transaction>2024/03/25 15:05:35.000.545,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\rlsBorgis.dproj</Transaction>
+    <Transaction>2024/03/27 08:21:06.000.056,=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/27 08:36:37.000.222,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uCadUser.dfm</Transaction>
+    <Transaction>2024/03/27 08:36:37.000.222,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uCadUser.pas</Transaction>
+    <Transaction>2024/03/28 17:10:57.000.859,=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>2024/03/28 17:11:51.000.094,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uCadReport.pas</Transaction>
+    <Transaction>2024/03/28 17:11:51.000.094,C:\Users\ADM\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uCadReport.dfm</Transaction>
   </Transactions>
+	<ProjectSortOrder AutoSort="0" SortType="0">
+    <File Path="dmSystem.pas"/>
+    <File Path="dmSystem.dfm"/>
+    <File Path="dmIntegracao.pas"/>
+    <File Path="dmIntegracao.dfm"/>
+    <File Path="uCadReport.pas"/>
+    <File Path="uCadReport.dfm"/>
+    <File Path="uCadUser.pas"/>
+    <File Path="uCadUser.dfm"/>
+    <File Path="uConfig.pas"/>
+    <File Path="uConfig.dfm"/>
+    <File Path="uLogin.pas"/>
+    <File Path="uLogin.dfm"/>
+    <File Path="uSystem.pas"/>
+    <File Path="uSystem.dfm"/>
+  </ProjectSortOrder>
 </BorlandProject>

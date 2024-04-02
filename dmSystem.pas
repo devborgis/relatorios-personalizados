@@ -39,12 +39,14 @@ type
     qryLogin: TFDQuery;
     qryUsers: TFDQuery;
     qryReports: TFDQuery;
+    qryCadUser: TFDQuery;
     dsUsers: TDataSource;
     dsReports: TDataSource;
     qryReportsID: TIntegerField;
     qryReportsDESCRIÇÃO: TStringField;
     qryReportsGRUPO: TStringField;
-    procedure DataModuleCreate(Sender: TObject);
+    qryUserPermission: TFDQuery;
+    qryCadPermission: TFDQuery;
   private
     { Private declarations }
   public
@@ -59,10 +61,5 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
-
-procedure TmSystem.DataModuleCreate(Sender: TObject);
-begin
-  conSystem.Params.Database := ExtractFilePath(ParamStr(0)) + '.system\' + 'borgis.db';
-end;
 
 end.

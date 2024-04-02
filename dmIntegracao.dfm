@@ -6,11 +6,10 @@ object mIntegracao: TmIntegracao
     Catalog = ''
     Properties.Strings = (
       'controls_cp=CP_UTF16')
-    Connected = True
-    HostName = '127.0.0.1'
+    HostName = ''
     Port = 0
-    Database = 'C:\projeto\BORGIS.FDB'
-    User = 'SYSDBA'
+    Database = ''
+    User = ''
     Password = 'masterkey'
     Protocol = 'firebird-2.0'
     LibraryLocation = 'C:\Program Files (x86)\Firebird\Firebird_2_0\bin\fbclient.dll'
@@ -24,7 +23,6 @@ object mIntegracao: TmIntegracao
   end
   object ZQuery1: TZQuery
     Connection = conIntegracao
-    Active = True
     SQL.Strings = (
       'select * from receber')
     Params = <>

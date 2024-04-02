@@ -2,11 +2,13 @@ program rlsBorgis;
 
 uses
   Vcl.Forms,
-  uLogin in 'C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uLogin.pas' {frmLogin},
-  uConfig in 'C:\Users\ADM\Documents\Embarcadero\Studio\Projects\uConfig.pas' {frmConfig},
+  uLogin in 'uLogin.pas' {frmLogin},
+  uConfig in 'uConfig.pas' {frmConfig},
   uSystem in 'uSystem.pas' {frmSystem},
   dmIntegracao in 'dmIntegracao.pas' {mIntegracao: TDataModule},
-  dmSystem in 'dmSystem.pas' {mSystem: TDataModule};
+  dmSystem in 'dmSystem.pas' {mSystem: TDataModule},
+  uCadUser in 'uCadUser.pas' {frmCadUser},
+  uCadReport in 'uCadReport.pas' {Form1};
 
 {$R *.res}
 
@@ -18,5 +20,7 @@ begin
   Application.CreateForm(TfrmSystem, frmSystem);
   Application.CreateForm(TmIntegracao, mIntegracao);
   Application.CreateForm(TmSystem, mSystem);
+  Application.CreateForm(TfrmCadUser, frmCadUser);
+  Application.CreateForm(TForm1, Form1);
   Application.Run;
 end.
