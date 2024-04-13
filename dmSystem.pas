@@ -43,10 +43,19 @@ type
     dsUsers: TDataSource;
     dsReports: TDataSource;
     qryReportsID: TIntegerField;
-    qryReportsDESCRIÇÃO: TStringField;
     qryReportsGRUPO: TStringField;
     qryUserPermission: TFDQuery;
     qryCadPermission: TFDQuery;
+    qryCadReport: TFDQuery;
+    qryGroupsReport: TFDQuery;
+    qryGroupsReportID: TIntegerField;
+    qryGroupsReportDESCRIPTION: TStringField;
+    dsGroupsReport: TDataSource;
+    qryCadGroupReport: TFDQuery;
+    IntegerField1: TIntegerField;
+    StringField1: TStringField;
+    qryReportsPATH_REPORT: TStringField;
+    qryReportsNOME: TStringField;
   private
     { Private declarations }
   public

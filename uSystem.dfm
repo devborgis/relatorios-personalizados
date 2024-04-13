@@ -781,7 +781,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EDITAR  '
             Color = 8454143
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -798,6 +797,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnEdtReportClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -903,6 +903,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnPrintReportClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -992,7 +993,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EXCLUIR  '
             Color = 8618239
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1009,6 +1009,7 @@ object frmSystem: TfrmSystem
             ShowHint = False
             TextAlign = ttaRight
             Transparent = False
+            OnClick = btnDeleteReportClick
             Glyph.Data = {
               42090000424D4209000000000000420000002800000018000000180000000100
               20000300000000090000130B0000130B000000000000000000000000FF0000FF
@@ -1098,7 +1099,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'ADICIONAR '
             Color = 9437056
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1233,8 +1233,8 @@ object frmSystem: TfrmSystem
           GradientEndColor = clAqua
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
+          Font.Height = -20
+          Font.Name = 'Segoe UI'
           Font.Style = []
           Options = [dgTitles, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTitleClick, dgTitleHotTrack]
           ParentBiDiMode = False
@@ -1249,6 +1249,7 @@ object frmSystem: TfrmSystem
           TitleFont.Name = 'Segoe UI'
           TitleFont.Style = [fsBold]
           StyleElements = []
+          OnMouseMove = dbgReportsMouseMove
         end
       end
       object tsUsers: TTabSheet
@@ -1624,7 +1625,7 @@ object frmSystem: TfrmSystem
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -20
-          Font.Name = 'Tahoma'
+          Font.Name = 'Segoe UI'
           Font.Style = []
           Options = [dgTitles, dgColumnResize, dgColLines, dgTabs, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTitleClick, dgTitleHotTrack]
           ParentBiDiMode = False
@@ -1635,9 +1636,9 @@ object frmSystem: TfrmSystem
           TabOrder = 1
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
-          TitleFont.Height = -11
-          TitleFont.Name = 'Tahoma'
-          TitleFont.Style = []
+          TitleFont.Height = -13
+          TitleFont.Name = 'Segoe UI'
+          TitleFont.Style = [fsBold]
           StyleElements = []
         end
       end

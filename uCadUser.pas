@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
-  JvExControls, JvButton, JvTransparentButton, Data.DB, Vcl.Grids, Vcl.DBGrids, dmSystem;
+  JvExControls, JvButton, JvTransparentButton, Data.DB, Vcl.Grids, Vcl.DBGrids, dmSystem,
+  System.ImageList, Vcl.ImgList;
 
 type
   TfrmCadUser = class(TForm)
@@ -34,6 +35,8 @@ type
     btnCancelCad: TJvTransparentButton;
     cbbStatus: TComboBox;
     lbInfo: TLabel;
+    btnShowPassword: TJvTransparentButton;
+    ImageList1: TImageList;
     procedure FormShow(Sender: TObject);
     procedure btnDadosUserClick(Sender: TObject);
     procedure btnPReportsClick(Sender: TObject);
@@ -41,6 +44,7 @@ type
     procedure edtNameUserKeyPress(Sender: TObject; var Key: Char);
     procedure edtLoginUserKeyPress(Sender: TObject; var Key: Char);
     procedure btnSaveCadUserClick(Sender: TObject);
+    procedure btnShowPasswordClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -61,21 +65,48 @@ uses StrUtils,
 {Bloco para preencher os campos do cadastro do usuarios quando o tipo for alterar}
 procedure TfrmCadUser.PreencheDadosUser(ID: Integer);
 begin
+  with mSystem.qryCadUser do
+  begin
+    Close;
+    SQL.Clear;
+    SQL.Add('SELECT ');
+    SQL.Add('    U.*,');
+    SQL.Add('    UPU.`ALTER` AS USU_ALTER,');
+    SQL.Add('    UPU.`DELETE` AS USU_DELETE,');
+    SQL.Add('    UPU.`CREATE` AS USU_CREATE,');
+    SQL.Add('    UPR.`ALTER` AS REP_ALTER,');
+    SQL.Add('    UPR.`DELETE` AS REP_DELETE,');
+    SQL.Add('    UPR.`CREATE` AS REP_CREATE ');
+    SQL.Add('FROM ');
+    SQL.Add('    `tb_users` AS U ');
+    SQL.Add('    LEFT JOIN `TB_USER_PERMISSION` AS UPU ON UPU.`ID_USER` = U.`ID` AND UPU.`DESC_PERMISSION` = ''SystemUser'' ');
+    SQL.Add('    LEFT JOIN `TB_USER_PERMISSION` AS UPR ON UPR.`ID_USER` = U.`ID` AND UPR.`DESC_PERMISSION` = ''SystemReport'' ');
+    SQL.Add('WHERE ');
+    SQL.Add('    `id` = :id_user');
 
-    with mSystem.qryCadUser do
+    ParamByName('id_user').AsInteger := ID;
+    Open;
+
+    // Verifica se o conjunto de dados não está vazio
+    if not IsEmpty then
     begin
-      Close;
-      SQL.Clear;
-      SQL.Add('SELECT * FROM tb_users WHERE id = :id_user');
-      ParamByName('id_user').AsInteger := ID;
-      Open;
-      edtIdUser.text := FieldByName('ID').AsString;
+      edtIdUser.Text := FieldByName('ID').AsString;
       edtNameUser.Text := FieldByName('NAME').AsString;
-      edtLoginUser.Text :=  FieldByName('LOGIN').AsString;
+      edtLoginUser.Text := FieldByName('LOGIN').AsString;
       edtPasswordUser.Text := FieldByName('PASSWORD').AsString;
-      cbbStatus.ItemIndex := StrToInt(FieldByName('STATUS').AsString);
-    end;
+      cbbStatus.ItemIndex := StrToIntDef(FieldByName('STATUS').AsString, -1);
 
+      // Verificações de permissão para usuário
+      ckAlterUser.Checked := FieldByName('USU_ALTER').AsString = 'S';
+      ckDeleteUser.Checked := FieldByName('USU_DELETE').AsString = 'S';
+      ckCreateUser.Checked := FieldByName('USU_CREATE').AsString = 'S';
+
+      // Verificações de permissão para relatório
+      ckReportAlter.Checked := FieldByName('REP_ALTER').AsString = 'S';
+      ckReportDelete.Checked := FieldByName('REP_DELETE').AsString = 'S';
+      ckReportCreate.Checked := FieldByName('REP_CREATE').AsString = 'S';
+    end;
+  end;
 end;
 
 procedure TfrmCadUser.btnCancelCadClick(Sender: TObject);
@@ -139,7 +170,6 @@ begin
 
           ExecSQL;
         end;
-          Close;
     end else
       begin
         with mSystem.qryCadUser do
@@ -177,6 +207,22 @@ begin
       Open;
     end;
 
+    Close;
+
+end;
+
+procedure TfrmCadUser.btnShowPasswordClick(Sender: TObject);
+begin
+  if edtPasswordUser.PasswordChar <> #0 then
+  begin
+    btnShowPassword.Images.ActiveIndex := 1;
+    edtPasswordUser.PasswordChar := #0;
+  end
+  else
+  begin
+    btnShowPassword.Images.ActiveIndex := 0;
+    edtPasswordUser.PasswordChar := '•';
+  end;
 end;
 
 procedure TfrmCadUser.edtLoginUserKeyPress(Sender: TObject; var Key: Char);

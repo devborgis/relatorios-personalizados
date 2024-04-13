@@ -10,9 +10,8 @@ object mIntegracao: TmIntegracao
     Port = 0
     Database = ''
     User = ''
-    Password = 'masterkey'
+    Password = ''
     Protocol = 'firebird-2.0'
-    LibraryLocation = 'C:\Program Files (x86)\Firebird\Firebird_2_0\bin\fbclient.dll'
     Left = 80
     Top = 32
   end

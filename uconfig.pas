@@ -86,13 +86,13 @@ begin
 
       if (edtBancoDeDados.Text <> '') and (edtDll.Text <> '') then
       begin
-        Ini.WriteString('CONEXAO', 'BANCO', edtBancoDeDados.Text);
+        Ini.WriteString('CONEXAO', 'DATABASE', edtBancoDeDados.Text);
         Ini.WriteString('CONEXAO', 'DLL', edtDll.Text);
 
         if edtPort.Text = '' then
-          Ini.WriteString('CONEXAO', 'PORTA', '3050')
+          Ini.WriteString('CONEXAO', 'PORT', '3050')
         else
-          Ini.WriteString('CONEXAO', 'PORTA', edtPort.Text);
+          Ini.WriteString('CONEXAO', 'PORT', edtPort.Text);
 
         if edtHost.Text = '' then
           Ini.WriteString('CONEXAO', 'HOST', '127.0.0.1')
@@ -100,14 +100,14 @@ begin
           Ini.WriteString('CONEXAO', 'HOST', edtHost.Text);
 
         if edtUser.Text = '' then
-          Ini.WriteString('CONEXAO', 'USUARIO', 'sysdba')
+          Ini.WriteString('CONEXAO', 'USER', 'sysdba')
         else
-          Ini.WriteString('CONEXAO', 'USUARIO', edtUser.Text);
+          Ini.WriteString('CONEXAO', 'USER', edtUser.Text);
 
         if edtPassword.Text = '' then
-          Ini.WriteString('CONEXAO', 'SENHA', 'masterkey')
+          Ini.WriteString('CONEXAO', 'PASSWORD', 'masterkey')
         else
-          Ini.WriteString('CONEXAO', 'SENHA', edtPassword.Text);
+          Ini.WriteString('CONEXAO', 'PASSWORD', edtPassword.Text);
       end
       else
       begin

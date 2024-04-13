@@ -1,6 +1,6 @@
 object mFastReport: TmFastReport
-  Height = 234
-  Width = 788
+  Height = 282
+  Width = 720
   object frxReport1: TfrxReport
     Version = '6.9.14'
     DotMatrixReport = False
@@ -128,10 +128,10 @@ object mFastReport: TmFastReport
     Params.Strings = (
       'password=masterkey'
       'user_name=sysdba'
-      'lc_ctype=UTF8')
+      'lc_ctype=BIG_5')
     LoginPrompt = False
     ServerType = 'IBServer'
-    Left = 200
+    Left = 208
     Top = 24
   end
   object frxDesigner1: TfrxDesigner
@@ -153,7 +153,7 @@ object mFastReport: TmFastReport
     Restrictions = []
     RTLLanguage = False
     MemoParentFont = False
-    Left = 252
+    Left = 276
     Top = 24
   end
   object frxPDFExport1: TfrxPDFExport
@@ -221,5 +221,53 @@ object mFastReport: TmFastReport
     ForcedQuotes = False
     Left = 120
     Top = 152
+  end
+  object frxBarCodeObject1: TfrxBarCodeObject
+    Left = 624
+    Top = 88
+  end
+  object frxOLEObject1: TfrxOLEObject
+    Left = 528
+    Top = 88
+  end
+  object frxRichObject1: TfrxRichObject
+    Left = 624
+    Top = 24
+  end
+  object frxCrossObject1: TfrxCrossObject
+    Left = 528
+    Top = 144
+  end
+  object frxGaugeObject1: TfrxGaugeObject
+    Left = 400
+    Top = 88
+  end
+  object frxReportTableObject1: TfrxReportTableObject
+    Left = 624
+    Top = 144
+  end
+  object frxMapObject1: TfrxMapObject
+    Left = 528
+    Top = 24
+  end
+  object frxReportCellularTextObject1: TfrxReportCellularTextObject
+    Left = 400
+    Top = 24
+  end
+  object frxCheckBoxObject1: TfrxCheckBoxObject
+    Left = 624
+    Top = 200
+  end
+  object frxGradientObject1: TfrxGradientObject
+    Left = 400
+    Top = 144
+  end
+  object frxDialogControls1: TfrxDialogControls
+    Left = 400
+    Top = 200
+  end
+  object frxChartObject1: TfrxChartObject
+    Left = 528
+    Top = 200
   end
 end

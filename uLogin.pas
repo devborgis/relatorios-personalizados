@@ -45,11 +45,13 @@ type
     btnEnter: TJvTransparentButton;
     btnExit: TJvTransparentButton;
     Label4: TLabel;
+    btnShowPassword: TJvTransparentButton;
     procedure btnExitClick(Sender: TObject);
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
+    procedure btnShowPasswordClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -90,6 +92,7 @@ begin
           mSystem.conSystem.Connected := True;
           mSystem.qryUsers.Active := True;
           mSystem.qryReports.Active := True;
+          mSystem.qryGroupsReport.Active := True;
           frmSystem.ShowModal;
           frmLogin.Close;
         end;
@@ -113,6 +116,20 @@ begin
   close;
 end;
 
+procedure TfrmLogin.btnShowPasswordClick(Sender: TObject);
+begin
+  if edtPassword.PasswordChar <> #0 then
+  begin
+    btnShowPassword.Images.ActiveIndex := 1;
+    edtPassword.PasswordChar := #0;
+  end
+  else
+  begin
+    btnShowPassword.Images.ActiveIndex := 0;
+    edtPassword.PasswordChar := '•';
+  end;
+end;
+
 procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
 begin
   if key = #13 then
@@ -127,6 +144,8 @@ begin
   IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
   DatabasePath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';
   DLLPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'firebird.dll';
+
+  dmSystem.mSystem.conSystem.Params.Database := ExtractFilePath(ParamStr(0)) + '.system\' + 'borgis.db';
 
   if not FileExists(IniPath) then
   begin

@@ -46,7 +46,8 @@ object frmCadGroupReport: TfrmCadGroupReport
     Left = 103
     Top = 49
     Width = 338
-    Height = 25
+    Height = 23
+    CharCase = ecUpperCase
     TabOrder = 1
   end
   object Panel1: TPanel
@@ -59,9 +60,8 @@ object frmCadGroupReport: TfrmCadGroupReport
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 2
-    ExplicitLeft = 176
-    ExplicitTop = 64
-    ExplicitWidth = 185
+    ExplicitTop = 114
+    ExplicitWidth = 450
     object btnSaveCad: TJvTransparentButton
       Left = 368
       Top = 0

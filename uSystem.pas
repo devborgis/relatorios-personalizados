@@ -33,7 +33,7 @@ uses
   frxADOComponents, dmIntegracao, dmSystem, frxDBSet, frxDBXComponents,
   Data.Win.ADODB, FireDAC.Phys.ODBC, FireDAC.Phys.ODBCDef, frxDCtrl,
   JvExControls, JvButton, JvTransparentButton, uCadUser, frxIBXComponents,
-  IBX.IBDatabase, IBX.IBCustomDataSet, IniFiles, dmFastReport;
+  IBX.IBDatabase, IBX.IBCustomDataSet, IniFiles, dmFastReport, uCadReport;
 
 type
   TfrmSystem = class(TForm)
@@ -76,9 +76,15 @@ type
     procedure edtFilterNameUserChange(Sender: TObject);
     procedure edtFilterDescReportChange(Sender: TObject);
     procedure btnAddReportClick(Sender: TObject);
+    procedure btnEdtReportClick(Sender: TObject);
+    procedure btnDeleteReportClick(Sender: TObject);
+    procedure btnPrintReportClick(Sender: TObject);
+    procedure dbgReportsMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { Private declarations }
     procedure PermissionUser;
+    procedure PermissionReport;
   public
     { Public declarations }
   end;
@@ -88,43 +94,82 @@ var
 
 implementation
 
+uses
+  StrUtils,
+  Math;
+
 {$R *.dfm}
+
+procedure TfrmSystem.PermissionReport;
+var
+repAlter, repCreate, repDelete: String;
+begin
+  with mSystem.qryUserPermission do
+  begin
+    Close;
+    ParamByName('id_login').AsInteger := mSystem.qryLogin.FieldByName('id').AsInteger;
+    ParamByName('p_type').AsString := 'SystemReport';
+    Open;
+
+      repAlter := FieldByName('ALTER').AsString;
+      repCreate := FieldByName('CREATE').AsString;
+      repDelete := FieldByName('DELETE').AsString;
+
+      // Verificações de permissão para relatórios
+      if repAlter = 'S' then
+        btnEdtReport.Enabled := True
+      else
+        btnEdtReport.Enabled := False;
+
+      if repCreate = 'S' then
+        btnAddReport.Enabled := True
+      else
+        btnAddReport.Enabled := False;
+
+      if repDelete = 'S' then
+        btnDeleteReport.Enabled := True
+      else
+        btnDeleteReport.Enabled := False;
+    end;
+end;
 
 procedure TfrmSystem.PermissionUser;
 var
-canAlter, canCreate, canDelete: String;
+usuAlter, usuCreate, usuDelete: String;
 begin
   with mSystem.qryUserPermission do
-    begin
-      Close;
-      ParamByName('id_login').AsInteger := mSystem.qryLogin.FieldByName('id').AsInteger;
-      Open;
+  begin
+    Close;
+    ParamByName('id_login').AsInteger := mSystem.qryLogin.FieldByName('id').AsInteger;
+    ParamByName('p_type').AsString := 'SystemUser';
+    Open;
 
-      // Armazenando os valores das permissões
-      canAlter := FieldByName('ALTER').AsString;
-      canCreate := FieldByName('CREATE').AsString;
-      canDelete := FieldByName('DELETE').AsString;
+      usuAlter := FieldByName('ALTER').AsString;
+      usuCreate := FieldByName('CREATE').AsString;
+      usuDelete := FieldByName('DELETE').AsString;
 
       // Verificações de permissão para usuários
-      btnEdtUser.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (canAlter = 'N'));
-      btnCreateUser.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (canCreate = 'N'));
-      btnDeleteUser.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (canDelete = 'N'));
+      if usuAlter = 'S' then
+        btnEdtUser.Enabled := True
+      else
+        btnEdtUser.Enabled := False;
 
-      // Verificações de permissão para relatórios
-      btnEdtReport.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (canAlter = 'N'));
-      btnAddReport.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (canCreate = 'N'));
-      btnDeleteReport.Enabled := not ((FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (canDelete = 'N'));
+      if usuCreate = 'S' then
+        btnCreateUser.Enabled := True
+      else
+        btnCreateUser.Enabled := False;
+
+      if usuDelete = 'S' then
+        btnDeleteUser.Enabled := True
+      else
+        btnDeleteUser.Enabled := False;
     end;
 end;
 
 procedure TfrmSystem.btnAddReportClick(Sender: TObject);
-var
-  IniPath: string;
-  Ini: TInifile;
-  StringDB: String;
-  ParamsDB: TStringList;
+
 begin
-  IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
+  {IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
 
   ParamsDB := TStringList.Create;
   try
@@ -150,7 +195,13 @@ begin
     end;
   finally
     ParamsDB.Free;
-  end;
+  end;}
+  frmCadReport.caption := 'Manutenção de Relatórios - INCLUIR';
+  frmCadReport.edtIdReport.Text := 'NOVO';
+  frmCadReport.edtNameReport.Clear;
+  frmCadReport.edtPathReport.Clear;
+  frmCadReport.cbbGroupReport.KeyValue := -1;
+  frmCadReport.showmodal;
 end;
 
 procedure TfrmSystem.btnCreateUserClick(Sender: TObject);
@@ -163,16 +214,16 @@ begin
   frmCadUser.ShowModal;
 end;
 
-procedure TfrmSystem.btnDeleteUserClick(Sender: TObject);
+procedure TfrmSystem.btnDeleteReportClick(Sender: TObject);
 begin
-    if MessageDlg('Essa ação é irreversivel deseja continuar ?', mtInformation, [mbYes, mbNo], 0) = mrYes then
+  if MessageDlg('Essa ação é irreversivel deseja continuar ?', mtInformation, [mbYes, mbNo], 0) = mrYes then
     begin
-      with mSystem.qryCadUser do
+      with mSystem.qryCadReport do
         begin
           Close;
           SQL.Clear;
-          SQL.Add('DELETE FROM tb_users WHERE ID = :id_user');
-          ParamByName('id_user').AsInteger := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
+          SQL.Add('DELETE FROM TB_REPORTS WHERE ID = :id_report');
+          ParamByName('id_report').AsInteger := dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger;
           Open;
         end;
     end else
@@ -181,10 +232,47 @@ begin
       end;
 end;
 
+procedure TfrmSystem.btnDeleteUserClick(Sender: TObject);
+begin
+    if MessageDlg('Essa ação é irreversivel deseja continuar ?', mtInformation, [mbYes, mbNo], 0) = mrYes then
+    begin
+      with mSystem.qryCadUser do
+        begin
+
+          Close;
+          SQL.Clear;
+          SQL.Add('DELETE FROM tb_user_permission WHERE ID_USER = :id_user');
+          ParamByName('id_user').AsInteger := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
+          ExecSQL;
+
+          Close;
+          SQL.Clear;
+          SQL.Add('DELETE FROM tb_users WHERE ID = :id_user');
+          ParamByName('id_user').AsInteger := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
+          ExecSQL;
+        end;
+          dbgUsers.DataSource.DataSet.Refresh;
+    end else
+      begin
+        exit;
+      end;
+end;
+
+procedure TfrmSystem.btnEdtReportClick(Sender: TObject);
+var IdSelect:Integer;
+begin
+
+  IdSelect := dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger;
+
+  frmCadReport.caption := 'Manutenção de Relatórios - ALTERAR';
+  frmCadReport.btnEdtReport.Visible := True;
+  frmCadReport.PreencheDadosReport(IdSelect);
+  frmCadReport.showmodal;
+end;
+
 procedure TfrmSystem.btnEdtUserClick(Sender: TObject);
 var IdSelect: Integer;
 begin
-
   IdSelect := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
 
   frmCadUser.Caption := 'Manutenção de usuários - ALTERAR';
@@ -210,6 +298,10 @@ end;
 procedure TfrmSystem.FormShow(Sender: TObject);
 var pages: Integer;
 canAlter, canCreate, canDelete: String;
+  IniPath: string;
+  Ini: TInifile;
+  StringDB: String;
+  ParamsDB: TStringList;
 begin
 
   imgMenu.top := (self.Height div 2) - (imgMenu.height div 2);
@@ -221,6 +313,31 @@ begin
     end;
   pgcSystem.ActivePage := pgcSystem.Pages[2];
   PermissionUser;
+
+  IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
+
+  ParamsDB := TStringList.Create;
+  try
+    Ini := TIniFile.Create(IniPath);
+    try
+      ParamsDB.Add('password=' + Ini.ReadString('CONEXAO', 'PASSWORD', ''));
+      ParamsDB.Add('user_name=' + Ini.ReadString('CONEXAO', 'USER', ''));
+      ParamsDB.Add('lc_ctype=BIG_5');
+
+      StringDB := Ini.ReadString('CONEXAO', 'HOST', '') + '/' +
+                  Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
+                  Ini.ReadString('CONEXAO', 'DATABASE', '');
+
+      mFastReport.conFast.Params := ParamsDB;
+
+      mFastReport.conFast.DatabaseName := StringDB;
+      mFastReport.conFast.Connected := True;
+    finally
+      Ini.Free;
+    end;
+  finally
+    ParamsDB.Free;
+  end;
 end;
 
 procedure TfrmSystem.btnShowUsersClick(Sender: TObject);
@@ -228,6 +345,13 @@ begin
   pgcSystem.ActivePageIndex := 1;
   edtFilterDescReport.Clear;
   PermissionUser;
+end;
+
+procedure TfrmSystem.dbgReportsMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if (dbgReports.Columns.Count > 3) then
+    dbgReports.Columns[3].Visible := False;
 end;
 
 procedure TfrmSystem.edtFilterDescReportChange(Sender: TObject);
@@ -238,7 +362,7 @@ begin
   end
   else
   begin
-    mSystem.qryReports.Filter := 'Nome LIKE ' + QuotedStr('%' + edtFilterDescReport.Text + '%');
+    mSystem.qryReports.Filter := 'NOME LIKE ' + QuotedStr('%' + edtFilterDescReport.Text + '%');
     mSystem.qryReports.Filtered := True;
   end;
 end;
@@ -263,11 +387,35 @@ begin
   edtFilterNameUser.Clear;
 end;
 
+procedure TfrmSystem.btnPrintReportClick(Sender: TObject);
+var
+  PathReport: WideString;
+begin
+  // Obtenha o caminho do relatório do campo PATH_REPORT do dataset do DBGReports
+  PathReport := dbgReports.DataSource.DataSet.FieldByName('PATH_REPORT').AsString;
+
+  // Verifica se o arquivo do caminho do relatório existe
+  if FileExists(PathReport) then
+  begin
+    // Se o arquivo existir, carrega o relatório, prepara e mostra o relatório
+    mFastReport.frxReport1.LoadFromFile(PathReport);
+    //mFastReport.frxReport1.PrepareReport();
+    mFastReport.frxReport1.ShowReport();
+  end
+  else
+  begin
+    // Se o arquivo não existir, exibe uma mensagem de erro
+    ShowMessage('Erro ao carregar o relatório. Verifique o caminho do arquivo FR3: ' + PathReport);
+  end;
+end;
+
 procedure TfrmSystem.btnShowReportsClick(Sender: TObject);
 begin
   pgcSystem.ActivePageIndex := 0;
   edtFilterNameUser.Clear;
-  PermissionUser;
+  PermissionReport;
+  if (dbgReports.Columns.Count > 3) then
+    dbgReports.Columns[3].Visible := False;
 end;
 
 procedure TfrmSystem.SpeedButton1Click(Sender: TObject);
