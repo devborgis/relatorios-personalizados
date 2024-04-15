@@ -258,42 +258,6 @@ begin
   edtNameUser.SetFocus;
   cbbStatus.ItemIndex := 1;
 
-  if edtIdUser.Text <> 'NOVO' then
-  begin
-    with mSystem.qryCadPermission do
-    begin
-      Close;
-      ParamByName('id_sel').AsString := edtIdUser.Text;
-      Open;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (FieldByName('ALTER').AsString = 'N' ) then
-        ckAlterUser.Checked := False
-      else
-        ckAlterUser.Checked := True;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (FieldByName('CREATE').AsString = 'N' ) then
-        ckCreateUser.Checked := False
-      else
-        ckCreateUser.Checked := True;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemUser') and (FieldByName('DELETE').AsString = 'N' ) then
-        ckDeleteUser.Checked := False
-      else
-        ckDeleteUser.Checked := True;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (FieldByName('ALTER').AsString = 'N' ) then
-        ckReportAlter.Checked := False
-      else
-        ckReportAlter.Checked := True;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (FieldByName('CREATE').AsString = 'N' ) then
-        ckReportCreate.Checked := False
-      else
-        ckReportCreate.Checked := True;
-      if (FieldByName('DESC_PERMISSION').AsString = 'SystemReport') and (FieldByName('DELETE').AsString = 'N' ) then
-        ckReportDelete.Checked := False
-      else
-        ckReportDelete.Checked := True;
-
-    end;
-  end;
-
-
 end;
 
 end.

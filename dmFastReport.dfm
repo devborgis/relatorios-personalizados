@@ -128,7 +128,7 @@ object mFastReport: TmFastReport
     Params.Strings = (
       'password=masterkey'
       'user_name=sysdba'
-      'lc_ctype=BIG_5')
+      'lc_ctype=WIN1252')
     LoginPrompt = False
     ServerType = 'IBServer'
     Left = 208

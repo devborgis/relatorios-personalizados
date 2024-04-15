@@ -169,33 +169,6 @@ end;
 procedure TfrmSystem.btnAddReportClick(Sender: TObject);
 
 begin
-  {IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
-
-  ParamsDB := TStringList.Create;
-  try
-    Ini := TIniFile.Create(IniPath);
-    try
-      ParamsDB.Add('password=' + Ini.ReadString('CONEXAO', 'PASSWORD', ''));
-      ParamsDB.Add('user_name=' + Ini.ReadString('CONEXAO', 'USER', ''));
-      ParamsDB.Add('lc_ctype=UTF8');
-
-      StringDB := Ini.ReadString('CONEXAO', 'HOST', '') + '/' +
-                  Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
-                  Ini.ReadString('CONEXAO', 'DATABASE', '');
-
-      mFastReport.conFast.Params := ParamsDB;
-
-      mFastReport.conFast.DatabaseName := StringDB;
-      mFastReport.conFast.Connected := True;
-
-      mFastReport.frxReport1.LoadFromFile(ExtractFilePath(ParamStr(0)) + '.system\Rel.fr3');
-      mFastReport.frxReport1.DesignReport();
-    finally
-      Ini.Free;
-    end;
-  finally
-    ParamsDB.Free;
-  end;}
   frmCadReport.caption := 'Manutenção de Relatórios - INCLUIR';
   frmCadReport.edtIdReport.Text := 'NOVO';
   frmCadReport.edtNameReport.Clear;
@@ -322,7 +295,7 @@ begin
     try
       ParamsDB.Add('password=' + Ini.ReadString('CONEXAO', 'PASSWORD', ''));
       ParamsDB.Add('user_name=' + Ini.ReadString('CONEXAO', 'USER', ''));
-      ParamsDB.Add('lc_ctype=BIG_5');
+      ParamsDB.Add('lc_ctype=WIN1252');
 
       StringDB := Ini.ReadString('CONEXAO', 'HOST', '') + '/' +
                   Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
