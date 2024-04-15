@@ -1,0 +1,7 @@
+﻿[Module Settings]
+ModelLayerNames="Provider=IBProvider.1;Data Source=C:\Borgis\BORGIS.FDB;User ID=SYSDBA;Password=masterkey;"
+
+[]
+LayerNames=
+Visible=True
+
