@@ -26,7 +26,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
-  JvExControls, JvSpeedButton, JvButton, JvTransparentButton, dmIntegracao, dmSystem, IniFiles;
+  JvExControls, JvSpeedButton, JvButton, JvTransparentButton, dmIntegracao, dmSystem, IniFiles,
+  Vcl.DBCtrls;
 
 type
   TfrmConfig = class(TForm)
@@ -50,6 +51,8 @@ type
     dlgDll: TJvTransparentButton;
     Label7: TLabel;
     edtUser: TEdit;
+    Label8: TLabel;
+    dbCharset: TComboBox;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
     procedure dlgDllClick(Sender: TObject);
@@ -108,6 +111,11 @@ begin
           Ini.WriteString('CONEXAO', 'PASSWORD', 'masterkey')
         else
           Ini.WriteString('CONEXAO', 'PASSWORD', edtPassword.Text);
+
+        if dbCharset.Text = '' then
+          Ini.WriteString('FASTREPORT', 'CHARSET', 'WIN1252')
+        else
+          Ini.WriteString('FASTREPORT', 'CHARSET', dbCharset.Text);
       end
       else
       begin
@@ -264,10 +272,11 @@ begin
   try
     edtBancoDeDados.text := Ini.ReadString('CONEXAO', 'DATABASE', '');
     edtDll.text := Ini.ReadString('CONEXAO', 'DLL', '');
-    edtPort.text := Ini.ReadString('CONEXAO', 'PORT', '0');
+    edtPort.text := Ini.ReadString('CONEXAO', 'PORT', '');
     edtHost.text := Ini.ReadString('CONEXAO', 'HOST', '');
     edtUser.text := Ini.ReadString('CONEXAO', 'USER', '');
     edtPassword.text := Ini.ReadString('CONEXAO', 'PASSWORD', '');
+    dbCharset.text := Ini.ReadString('FASTREPORT', 'CHARSET', '');
   finally
     Ini.Free;
   end;

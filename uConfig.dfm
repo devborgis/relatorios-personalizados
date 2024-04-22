@@ -4,8 +4,8 @@ object frmConfig: TfrmConfig
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Configura'#231#245'es do arquivo INI'
-  ClientHeight = 278
-  ClientWidth = 393
+  ClientHeight = 272
+  ClientWidth = 360
   Color = clInactiveBorder
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object frmConfig: TfrmConfig
   OnShow = FormShow
   TextHeight = 13
   object Label3: TLabel
-    Left = 31
-    Top = 100
+    Left = 11
+    Top = 71
     Width = 18
     Height = 17
     Caption = 'Dll:'
@@ -31,11 +31,11 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label2: TLabel
-    Left = 31
-    Top = 60
-    Width = 98
+    Left = 11
+    Top = 31
+    Width = 95
     Height = 17
-    Caption = 'Banco de dados:'
+    Caption = 'Nome/Caminho:'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -45,8 +45,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label1: TLabel
-    Left = 31
-    Top = 40
+    Left = 11
+    Top = 11
     Width = 236
     Height = 17
     Caption = 'Configurar banco de dados integra'#231#227'o'
@@ -59,8 +59,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label4: TLabel
-    Left = 31
-    Top = 140
+    Left = 11
+    Top = 111
     Width = 30
     Height = 17
     Caption = 'Host:'
@@ -73,8 +73,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label5: TLabel
-    Left = 192
-    Top = 140
+    Left = 172
+    Top = 111
     Width = 34
     Height = 17
     Caption = 'Porta:'
@@ -87,8 +87,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label6: TLabel
-    Left = 192
-    Top = 180
+    Left = 172
+    Top = 151
     Width = 38
     Height = 17
     Caption = 'Senha:'
@@ -101,8 +101,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object btnTestaIntegracao: TJvTransparentButton
-    Left = 31
-    Top = 232
+    Left = 11
+    Top = 238
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -130,8 +130,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object btnSaveConf: TJvTransparentButton
-    Left = 192
-    Top = 232
+    Left = 172
+    Top = 238
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -159,7 +159,7 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object btnExitConf: TJvTransparentButton
-    Left = 337
+    Left = 304
     Top = 8
     Width = 48
     Height = 22
@@ -263,8 +263,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object dlgDatabase: TJvTransparentButton
-    Left = 342
-    Top = 78
+    Left = 322
+    Top = 49
     Width = 27
     Height = 22
     Cursor = crHandPoint
@@ -367,8 +367,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object dlgDll: TJvTransparentButton
-    Left = 342
-    Top = 116
+    Left = 322
+    Top = 87
     Width = 27
     Height = 22
     Cursor = crHandPoint
@@ -471,8 +471,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object Label7: TLabel
-    Left = 31
-    Top = 180
+    Left = 11
+    Top = 151
     Width = 45
     Height = 17
     Caption = 'Usu'#225'rio'
@@ -484,9 +484,23 @@ object frmConfig: TfrmConfig
     ParentFont = False
     StyleElements = []
   end
+  object Label8: TLabel
+    Left = 11
+    Top = 191
+    Width = 44
+    Height = 17
+    Caption = 'Charset'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    StyleElements = []
+  end
   object edtDll: TEdit
-    Left = 31
-    Top = 116
+    Left = 11
+    Top = 87
     Width = 305
     Height = 21
     TabOrder = 0
@@ -494,8 +508,8 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtDllKeyPress
   end
   object edtBancoDeDados: TEdit
-    Left = 31
-    Top = 79
+    Left = 11
+    Top = 50
     Width = 305
     Height = 21
     TabOrder = 1
@@ -503,8 +517,8 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtBancoDeDadosKeyPress
   end
   object edtHost: TEdit
-    Left = 31
-    Top = 156
+    Left = 11
+    Top = 127
     Width = 144
     Height = 21
     TabOrder = 2
@@ -512,8 +526,8 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtHostKeyPress
   end
   object edtPort: TEdit
-    Left = 192
-    Top = 156
+    Left = 172
+    Top = 127
     Width = 144
     Height = 21
     TabOrder = 3
@@ -521,28 +535,49 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtPortKeyPress
   end
   object edtPassword: TEdit
-    Left = 192
-    Top = 196
+    Left = 172
+    Top = 167
     Width = 144
     Height = 21
     TabOrder = 4
     StyleElements = []
   end
   object edtUser: TEdit
-    Left = 31
-    Top = 196
+    Left = 11
+    Top = 167
     Width = 144
     Height = 21
     TabOrder = 5
     StyleElements = []
     OnKeyPress = edtUserKeyPress
   end
+  object dbCharset: TComboBox
+    Left = 11
+    Top = 211
+    Width = 305
+    Height = 21
+    Hint = 
+      'Selecione o charset adequado para garantir uma conex'#227'o sem erros' +
+      ' de caracteres e acentos. Alguns bancos de dados podem n'#227'o possu' +
+      'ir um charset definido. Por padr'#227'o o WIN1252 funciona para essas' +
+      ' situa'#231#245'es.'
+    CharCase = ecUpperCase
+    ItemIndex = 0
+    TabOrder = 6
+    Text = 'WIN1252'
+    Items.Strings = (
+      'WIN1252'
+      'UTF8'
+      'ASCII'
+      'BIG_5'
+      'UNICODE_FSS')
+  end
   object odlgDatabase: TOpenDialog
-    Left = 288
-    Top = 8
+    Left = 56
+    Top = 296
   end
   object odlgDll: TOpenDialog
-    Left = 224
-    Top = 8
+    Left = 16
+    Top = 296
   end
 end

@@ -100,6 +100,26 @@ object mFastReport: TmFastReport
         pTop = 106
         Parameters = <>
       end
+      object DBXDatabase1: TfrxDBXDatabase
+        ConnectionName = 'ASAConnection'
+        DriverName = 'ASA'
+        Params.Strings = (
+          'DriverName=ASA'
+          'HostName=ServerName'
+          'Database=DBNAME'
+          'User_Name=user'
+          'Password=password'
+          'DBHostName='
+          'Port='
+          'RowSetSize=20'
+          'ConnectionString='
+          'BlobSize=-1'
+          'ErrorResourceFile='
+          'LocaleCode=0000'
+          'IsolationLevel=ReadCommitted')
+        pLeft = 327
+        pTop = 106
+      end
     end
     object Page1: TfrxReportPage
       Font.Charset = DEFAULT_CHARSET
@@ -128,7 +148,7 @@ object mFastReport: TmFastReport
     Params.Strings = (
       'password=masterkey'
       'user_name=sysdba'
-      'lc_ctype=WIN1252')
+      'lc_ctype=UNICODE_FSS')
     LoginPrompt = False
     ServerType = 'IBServer'
     Left = 208

@@ -3,15 +3,18 @@ object mIntegracao: TmIntegracao
   Width = 365
   object conIntegracao: TZConnection
     ControlsCodePage = cCP_UTF16
+    ClientCodepage = 'WIN1252'
     Catalog = ''
     Properties.Strings = (
-      'controls_cp=CP_UTF16')
+      'controls_cp=CP_UTF16'
+      'codepage=WIN1252')
+    DisableSavepoints = False
     HostName = ''
     Port = 0
     Database = ''
     User = ''
     Password = ''
-    Protocol = 'firebird-2.0'
+    Protocol = 'firebird'
     Left = 80
     Top = 32
   end

@@ -127,6 +127,7 @@ object frmCadUser: TfrmCadUser
         Top = 88
         Width = 369
         Height = 23
+        CharCase = ecUpperCase
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText

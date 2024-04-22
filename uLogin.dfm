@@ -2,7 +2,7 @@ object frmLogin: TfrmLogin
   Left = 0
   Top = 0
   BorderStyle = bsNone
-  Caption = 'frmLogin'
+  Caption = 'Borgis - Relat'#243'rios Personalizados'
   ClientHeight = 484
   ClientWidth = 766
   Color = clInactiveBorder
