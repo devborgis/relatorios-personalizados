@@ -49,7 +49,7 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em funcio
 
 - Zeos Connection
   ```
-  - Para a conexão com o banco de integração (terceiros), usamos o Zeos na versão 7.0 e superior.
+  - Para a conexão com o banco de integração (terceiros), usamos o Zeos na versão 8.0 (versões anteriores não serão compativeis com a versão 5.0 do firebird).
   ```
 
 ### Compilação
@@ -74,7 +74,7 @@ Utilize em ambas as telas as opções de cadastro, exclusão, inclusão e adiç�
 
 ## Implantação
 
-Para implantar a aplicação em um sistema de terceiros, basta agrupar o executável compilado e as pastas `.system` e `.integracao` em um lugar só (Ex C:Borgis) e fazer a ligação com o banco de dados no arquivo `conf`.
+Para implantar a aplicação em um sistema de terceiros, basta agrupar o executável compilado e as pastas `.system` e `.integracao` em um lugar só (Ex C:\Borgis) e fazer a ligação com o banco de dados no arquivo `conf`.
 
 ## Construído com
 
