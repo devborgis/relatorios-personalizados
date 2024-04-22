@@ -159,6 +159,7 @@ begin
         Ini.ReadString('CONEXAO', 'HOST', '127.0.0.1');
         Ini.ReadString('CONEXAO', 'USER', 'sysdba');
         Ini.ReadString('CONEXAO', 'PASSWORD', 'masterkey');
+        Ini.ReadString('FASTREPORT', 'CHARSET', 'WIN1252');
         Ini.UpdateFile;
 
         mIntegracao.ConfConnection;
