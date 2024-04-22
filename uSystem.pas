@@ -295,7 +295,7 @@ begin
     try
       ParamsDB.Add('password=' + Ini.ReadString('CONEXAO', 'PASSWORD', ''));
       ParamsDB.Add('user_name=' + Ini.ReadString('CONEXAO', 'USER', ''));
-      ParamsDB.Add('lc_ctype=WIN1252');
+      ParamsDB.Add('lc_ctype=' + ini.ReadString('FASTREPORT', 'CHARSET', ''));
 
       StringDB := Ini.ReadString('CONEXAO', 'HOST', '') + '/' +
                   Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
