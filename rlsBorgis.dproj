@@ -104,42 +104,35 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="uLogin.pas">
+        <DCCReference Include="forms\sistema\uLogin.pas">
             <Form>frmLogin</Form>
         </DCCReference>
-        <DCCReference Include="uConfig.pas">
+        <DCCReference Include="forms\sistema\uConfig.pas">
             <Form>frmConfig</Form>
         </DCCReference>
-        <DCCReference Include="uSystem.pas">
+        <DCCReference Include="forms\sistema\uSystem.pas">
             <Form>frmSystem</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dmIntegracao.pas">
+        <DCCReference Include="data\integracao\dmIntegracao.pas">
             <Form>mIntegracao</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="dmSystem.pas">
+        <DCCReference Include="data\sistema\dmSystem.pas">
             <Form>mSystem</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="uCadUser.pas">
+        <DCCReference Include="forms\cadastros\uCadUser.pas">
             <Form>frmCadUser</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="uCadReport.pas">
+        <DCCReference Include="forms\cadastros\uCadReport.pas">
             <Form>frmCadReport</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="dmFastReport.pas">
+        <DCCReference Include="data\fastreport\dmFastReport.pas">
             <Form>mFastReport</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="uCadGroupReport.pas">
+        <DCCReference Include="forms\cadastros\uCadGroupReport.pas">
             <Form>frmCadGroupReport</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
