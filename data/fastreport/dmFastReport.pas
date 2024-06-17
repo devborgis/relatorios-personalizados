@@ -7,7 +7,7 @@ uses
   frxClass, frxExportBaseDialog, frxExportPDF, frxDesgn, Data.DB,
   IBX.IBDatabase, frxIBXComponents, frxGradient, frxChBox,
   frxCellularTextObject, frxMap, frxTableObject, frxGaugeView, frxCross,
-  frxRich, frxOLE, frxBarcode, frxChart, frxDCtrl;
+  frxRich, frxOLE, frxBarcode, frxChart, frxDCtrl, frxFDComponents;
 
 type
   TmFastReport = class(TDataModule)
@@ -31,6 +31,7 @@ type
     frxGradientObject1: TfrxGradientObject;
     frxDialogControls1: TfrxDialogControls;
     frxChartObject1: TfrxChartObject;
+    frxFDComponents1: TfrxFDComponents;
   private
     { Private declarations }
   public

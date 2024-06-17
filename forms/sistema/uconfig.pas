@@ -44,7 +44,6 @@ type
     edtPassword: TEdit;
     btnTestaIntegracao: TJvTransparentButton;
     btnSaveConf: TJvTransparentButton;
-    btnExitConf: TJvTransparentButton;
     odlgDatabase: TOpenDialog;
     odlgDll: TOpenDialog;
     dlgDatabase: TJvTransparentButton;
@@ -53,6 +52,10 @@ type
     edtUser: TEdit;
     Label8: TLabel;
     dbCharset: TComboBox;
+    pnlButtons: TPanel;
+    JvTransparentButton1: TJvTransparentButton;
+    JvTransparentButton2: TJvTransparentButton;
+    btnExitConf: TJvTransparentButton;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
     procedure dlgDllClick(Sender: TObject);

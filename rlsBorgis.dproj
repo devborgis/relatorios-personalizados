@@ -107,7 +107,7 @@
         <DCCReference Include="forms\sistema\uLogin.pas">
             <Form>frmLogin</Form>
         </DCCReference>
-        <DCCReference Include="forms\sistema\uConfig.pas">
+        <DCCReference Include="forms\sistema\uconfig.pas">
             <Form>frmConfig</Form>
         </DCCReference>
         <DCCReference Include="forms\sistema\uSystem.pas">

@@ -2,7 +2,7 @@ object mFastReport: TmFastReport
   Height = 282
   Width = 720
   object frxReport1: TfrxReport
-    Version = '6.9.14'
+    Version = '2022.1.3'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbSave, pbExport, pbZoom, pbFind, pbNavigator, pbExportQuick, pbNoFullScreen, pbCopy, pbSelection]
@@ -89,6 +89,7 @@ object mFastReport: TmFastReport
         UserName = 'IBXQuery1'
         CloseDataSource = True
         BCDToCurrency = False
+        DataSetOptions = []
         IgnoreDupParams = False
         Params = <>
         SQL.Strings = (
@@ -99,26 +100,6 @@ object mFastReport: TmFastReport
         pLeft = 168
         pTop = 106
         Parameters = <>
-      end
-      object DBXDatabase1: TfrxDBXDatabase
-        ConnectionName = 'ASAConnection'
-        DriverName = 'ASA'
-        Params.Strings = (
-          'DriverName=ASA'
-          'HostName=ServerName'
-          'Database=DBNAME'
-          'User_Name=user'
-          'Password=password'
-          'DBHostName='
-          'Port='
-          'RowSetSize=20'
-          'ConnectionString='
-          'BlobSize=-1'
-          'ErrorResourceFile='
-          'LocaleCode=0000'
-          'IsolationLevel=ReadCommitted')
-        pLeft = 327
-        pTop = 106
       end
     end
     object Page1: TfrxReportPage
@@ -194,6 +175,7 @@ object mFastReport: TmFastReport
     Transparency = False
     Author = 'FastReport'
     Subject = 'FastReport PDF export'
+    Creator = 'FastReport'
     ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
     HideToolbar = False
     HideMenubar = False
@@ -225,6 +207,7 @@ object mFastReport: TmFastReport
     DataOnly = False
     OpenAfterExport = False
     PictureType = gpPNG
+    ExportType = dxTable
     Left = 32
     Top = 152
   end
@@ -289,5 +272,9 @@ object mFastReport: TmFastReport
   object frxChartObject1: TfrxChartObject
     Left = 528
     Top = 200
+  end
+  object frxFDComponents1: TfrxFDComponents
+    Left = 248
+    Top = 104
   end
 end
