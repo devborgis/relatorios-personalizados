@@ -35,7 +35,6 @@ type
     edtDll: TEdit;
     edtBancoDeDados: TEdit;
     Label2: TLabel;
-    Label1: TLabel;
     Label4: TLabel;
     edtHost: TEdit;
     Label5: TLabel;
@@ -53,9 +52,11 @@ type
     Label8: TLabel;
     dbCharset: TComboBox;
     pnlButtons: TPanel;
-    JvTransparentButton1: TJvTransparentButton;
-    JvTransparentButton2: TJvTransparentButton;
     btnExitConf: TJvTransparentButton;
+    Label1: TLabel;
+    cbbProtocolo: TComboBox;
+    Label9: TLabel;
+    CheckBox1: TCheckBox;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
     procedure dlgDllClick(Sender: TObject);
