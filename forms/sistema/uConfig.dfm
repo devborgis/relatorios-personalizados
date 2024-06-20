@@ -6,15 +6,15 @@ object frmConfig: TfrmConfig
   Margins.Right = 0
   Margins.Bottom = 0
   BorderIcons = []
-  BorderStyle = bsDialog
+  BorderStyle = bsNone
   Caption = 'Configura'#231#245'es do arquivo INI'
-  ClientHeight = 688
-  ClientWidth = 947
+  ClientHeight = 727
+  ClientWidth = 963
   Color = clInactiveBorder
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'Segoe UI'
   Font.Style = []
   Icon.Data = {
     0000010001004242000001002000504700001600000028000000420000008400
@@ -621,26 +621,12 @@ object frmConfig: TfrmConfig
     ParentFont = False
     StyleElements = []
   end
-  object Label1: TLabel
-    Left = 8
-    Top = 67
-    Width = 236
-    Height = 17
-    Caption = 'Configurar banco de dados integra'#231#227'o'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Segoe UI'
-    Font.Style = [fsBold]
-    ParentFont = False
-    StyleElements = []
-  end
   object Label4: TLabel
     Left = 8
-    Top = 167
-    Width = 30
+    Top = 213
+    Width = 66
     Height = 17
-    Caption = 'Host:'
+    Caption = 'Host/Porta:'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -650,8 +636,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label5: TLabel
-    Left = 169
-    Top = 167
+    Left = 479
+    Top = 71
     Width = 34
     Height = 17
     Caption = 'Porta:'
@@ -665,7 +651,7 @@ object frmConfig: TfrmConfig
   end
   object Label6: TLabel
     Left = 169
-    Top = 207
+    Top = 213
     Width = 38
     Height = 17
     Caption = 'Senha:'
@@ -679,7 +665,7 @@ object frmConfig: TfrmConfig
   end
   object btnTestaIntegracao: TJvTransparentButton
     Left = 8
-    Top = 294
+    Top = 310
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -708,7 +694,7 @@ object frmConfig: TfrmConfig
   end
   object btnSaveConf: TJvTransparentButton
     Left = 169
-    Top = 294
+    Top = 310
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -945,7 +931,7 @@ object frmConfig: TfrmConfig
   end
   object Label7: TLabel
     Left = 8
-    Top = 207
+    Top = 256
     Width = 45
     Height = 17
     Caption = 'Usu'#225'rio'
@@ -958,11 +944,25 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label8: TLabel
-    Left = 8
-    Top = 247
+    Left = 169
+    Top = 166
     Width = 44
     Height = 17
     Caption = 'Charset'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlack
+    Font.Height = -13
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    StyleElements = []
+  end
+  object Label9: TLabel
+    Left = 8
+    Top = 170
+    Width = 60
+    Height = 17
+    Caption = 'Protocolo:'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -991,7 +991,7 @@ object frmConfig: TfrmConfig
   end
   object edtHost: TEdit
     Left = 8
-    Top = 183
+    Top = 229
     Width = 144
     Height = 21
     TabOrder = 2
@@ -999,8 +999,8 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtHostKeyPress
   end
   object edtPort: TEdit
-    Left = 169
-    Top = 183
+    Left = 479
+    Top = 87
     Width = 144
     Height = 21
     TabOrder = 3
@@ -1009,7 +1009,7 @@ object frmConfig: TfrmConfig
   end
   object edtPassword: TEdit
     Left = 169
-    Top = 223
+    Top = 229
     Width = 144
     Height = 21
     TabOrder = 4
@@ -1017,7 +1017,7 @@ object frmConfig: TfrmConfig
   end
   object edtUser: TEdit
     Left = 8
-    Top = 223
+    Top = 272
     Width = 144
     Height = 21
     TabOrder = 5
@@ -1025,9 +1025,9 @@ object frmConfig: TfrmConfig
     OnKeyPress = edtUserKeyPress
   end
   object dbCharset: TComboBox
-    Left = 8
-    Top = 267
-    Width = 305
+    Left = 169
+    Top = 186
+    Width = 144
     Height = 21
     Hint = 
       'Selecione o charset adequado para garantir uma conex'#227'o sem erros' +
@@ -1035,7 +1035,13 @@ object frmConfig: TfrmConfig
       'ir um charset definido. Por padr'#227'o o WIN1252 funciona para essas' +
       ' situa'#231#245'es.'
     CharCase = ecUpperCase
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Segoe UI'
+    Font.Style = []
     ItemIndex = 0
+    ParentFont = False
     TabOrder = 6
     Text = 'WIN1252'
     Items.Strings = (
@@ -1048,7 +1054,7 @@ object frmConfig: TfrmConfig
   object pnlButtons: TPanel
     Left = 0
     Top = 0
-    Width = 947
+    Width = 963
     Height = 48
     Align = alTop
     BevelOuter = bvNone
@@ -1056,67 +1062,9 @@ object frmConfig: TfrmConfig
     ParentBackground = False
     ShowCaption = False
     TabOrder = 7
-    ExplicitLeft = 8
-    ExplicitWidth = 433
-    object JvTransparentButton1: TJvTransparentButton
-      Left = 137
-      Top = 0
-      Width = 137
-      Height = 48
-      Cursor = crHandPoint
-      ParentCustomHint = False
-      StyleElements = []
-      Align = alLeft
-      AutoGray = False
-      Caption = 'FastReport'
-      Color = clMaroon
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWhite
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -13
-      HotTrackFont.Name = 'Segoe UI Semibold'
-      HotTrackFont.Style = []
-      FrameStyle = fsNone
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = False
-      Transparent = False
-      ExplicitLeft = 0
-    end
-    object JvTransparentButton2: TJvTransparentButton
-      Left = 0
-      Top = 0
-      Width = 137
-      Height = 48
-      Cursor = crHandPoint
-      ParentCustomHint = False
-      StyleElements = []
-      Align = alLeft
-      AutoGray = False
-      Caption = 'Banco de Dados'
-      Color = 16755027
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Segoe UI Semibold'
-      Font.Style = [fsBold]
-      HotTrackFont.Charset = ANSI_CHARSET
-      HotTrackFont.Color = clWindowText
-      HotTrackFont.Height = -13
-      HotTrackFont.Name = 'Segoe UI Semibold'
-      HotTrackFont.Style = []
-      FrameStyle = fsNone
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = False
-      Transparent = False
-    end
+    ExplicitWidth = 947
     object btnExitConf: TJvTransparentButton
-      Left = 899
+      Left = 915
       Top = 0
       Width = 48
       Height = 48
@@ -1223,6 +1171,51 @@ object frmConfig: TfrmConfig
       ExplicitTop = 18
       ExplicitHeight = 22
     end
+    object Label1: TLabel
+      Left = 8
+      Top = 5
+      Width = 408
+      Height = 28
+      Caption = 'Configura'#231#245'es do banco de dados e Fastreport'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -20
+      Font.Name = 'Segoe UI'
+      Font.Style = []
+      ParentFont = False
+      StyleElements = []
+    end
+  end
+  object cbbProtocolo: TComboBox
+    Left = 8
+    Top = 186
+    Width = 145
+    Height = 21
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 8
+    Items.Strings = (
+      'Firebird'
+      'Postgres'
+      'MySQL')
+  end
+  object CheckBox1: TCheckBox
+    Left = 169
+    Top = 274
+    Width = 144
+    Height = 17
+    Caption = 'IBX Para Gdoor'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Courier'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 9
   end
   object odlgDatabase: TOpenDialog
     Left = 53
