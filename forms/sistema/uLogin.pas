@@ -29,7 +29,7 @@ uses
   ZConnection, frxDesgn, frxClass, Vcl.Buttons, Vcl.Imaging.pngimage,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, uConfig, uSystem, dmIntegracao, dmSystem,
   Vcl.Imaging.jpeg, JvExControls, JvButton, JvTransparentButton, JvExStdCtrls,
-  JvEdit, IniFiles;
+  JvEdit, IniFiles, uUtils;
 
 type
   TfrmLogin = class(TForm)
@@ -50,7 +50,6 @@ type
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
     procedure btnShowPasswordClick(Sender: TObject);
   private
     { Private declarations }
@@ -70,52 +69,40 @@ begin
   frmConfig.ShowModal;
 end;
 
+{***************************************************
+Verificando se tem permissão de login usando a função da
+unit utils, se for libera o sistema se não barra
+***************************************************}
 procedure TfrmLogin.btnEnterClick(Sender: TObject);
 begin
-  try
-    with mSystem.qryLogin do
+  if Util.vldLogin(edtLogin.Text, edtPassword.Text) then
     begin
-      Close;
-      SQL.Clear;
-      SQL.Add('SELECT * FROM TB_USERS WHERE LOGIN = :login AND PASSWORD = :password');
-      ParamByName('login').AsString := edtLogin.Text;
-      ParamByName('password').AsString := edtPassword.Text;
-      Open;
-      if not IsEmpty then // Verifica se a consulta retornou algum registro
+      try
+        mSystem.conSystem.Connected := True;
+        mSystem.qryUsers.Active := True;
+        mSystem.qryReports.Active := True;
+        mSystem.qryGroupsReport.Active := True;
+        frmSystem.ShowModal;
+        frmLogin.Close;
+      except
+        on E: Exception do
+        ShowMessage('Erro ao abrir o sistema: ' + #13#10 + #13#10 + E.Message);
+      end;
+    end else
       begin
-        if FieldByName('STATUS').AsString = '0' then // Ajuste aqui para usar FieldByName para obter o campo 'STATUS'
-        begin
-          ShowMessage('O Usuário não tem permissão para acessar o sistema, verifique!');
-        end
-        else
-        begin
-          mSystem.conSystem.Connected := True;
-          mSystem.qryUsers.Active := True;
-          mSystem.qryReports.Active := True;
-          mSystem.qryGroupsReport.Active := True;
-          frmSystem.ShowModal;
-          frmLogin.Close;
-        end;
-      end
-      else
-      begin
-        ShowMessage('Usuário e/ou senha incorretos, verifique');
+        ShowMessage('Usuário e/ou senha incorretos, ou o usuário não tem permissão para acessar o sistema.');
         edtPassword.Text := '';
         edtLogin.SetFocus;
       end;
-    end;
-  except
-    on E: Exception do
-      ShowMessage('Erro ao fazer login no sistema: ' + #13#10 + #13#10 + E.Message);
-  end;
 end;
 
-
+//Fechando a tela de login
 procedure TfrmLogin.btnExitClick(Sender: TObject);
 begin
   close;
 end;
 
+// Mostrar ou cultar a senha
 procedure TfrmLogin.btnShowPasswordClick(Sender: TObject);
 begin
   if edtPassword.PasswordChar <> #0 then
@@ -130,18 +117,17 @@ begin
   end;
 end;
 
-procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
-begin
-  if key = #13 then
-    edtPassword.SetFocus
-end;
-
+// Tratativas do OnShow da tela de login (assim que a tela é carregada)
 procedure TfrmLogin.FormShow(Sender: TObject);
 var
   IniPath, DatabasePath, DLLPath: string;
   Ini: TIniFile;
 begin
-  IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
+
+  Util.testes;
+  Util.vldConfExiste;
+
+  {IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
   DatabasePath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';
   DLLPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'firebird.dll';
 
@@ -189,7 +175,7 @@ begin
   except
     on E: Exception do
       MessageDlg('Erro na conexão com o banco de dados: ' + #13#10 + E.Message, mtError, [mbOK], 0);
-  end;
+  end;}
 end;
 
 end.

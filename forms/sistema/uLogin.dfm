@@ -8167,7 +8167,6 @@ object frmLogin: TfrmLogin
     ParentCtl3D = False
     ParentFont = False
     TabOrder = 0
-    OnKeyPress = edtLoginKeyPress
   end
   object edtPassword: TEdit
     Left = 417
