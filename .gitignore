@@ -43,7 +43,7 @@ __recovery/
 *.ipch
 *.tvsconfig
 *.code-workspace
-
+win32/
 
 #others
 
