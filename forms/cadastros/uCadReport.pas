@@ -166,7 +166,7 @@ begin
     begin
       try
         mFastReport.frxReport1.LoadFromFile(ReportPath);
-        mFastReport.frxReport1.DesignReport();
+        mFastReport.frxReport1.DesignReport(true);
       except
         on E: Exception do
           ShowMessage('Erro ao carregar o relatório: ' + E.Message);

@@ -7,11 +7,13 @@ uses
   frxClass, frxExportBaseDialog, frxExportPDF, frxDesgn, Data.DB,
   IBX.IBDatabase, frxIBXComponents, frxGradient, frxChBox,
   frxCellularTextObject, frxMap, frxTableObject, frxGaugeView, frxCross,
-  frxRich, frxOLE, frxBarcode, frxChart, frxDCtrl, frxFDComponents;
+  frxRich, frxOLE, frxBarcode, frxChart, frxDCtrl, frxFDComponents,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
+  FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
+  FireDAC.Phys, FireDAC.VCLUI.Wait, FireDAC.Comp.Client;
 
 type
   TmFastReport = class(TDataModule)
-    frxReport1: TfrxReport;
     frxIBXComponents1: TfrxIBXComponents;
     conFast: TIBDatabase;
     frxDesigner1: TfrxDesigner;
@@ -32,6 +34,9 @@ type
     frxDialogControls1: TfrxDialogControls;
     frxChartObject1: TfrxChartObject;
     frxFDComponents1: TfrxFDComponents;
+    FDconFast: TFDConnection;
+    frxReport1: TfrxReport;
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,5 +51,10 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+procedure TmFastReport.DataModuleCreate(Sender: TObject);
+begin
+  IBXComponents.Free;
+end;
 
 end.

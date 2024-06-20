@@ -197,7 +197,7 @@ begin
           SQL.Clear;
           SQL.Add('DELETE FROM TB_REPORTS WHERE ID = :id_report');
           ParamByName('id_report').AsInteger := dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger;
-          Open;
+          ExecSQL;
         end;
     end else
       begin

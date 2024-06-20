@@ -1,124 +1,6 @@
 object mFastReport: TmFastReport
-  Height = 282
-  Width = 720
-  object frxReport1: TfrxReport
-    Version = '2022.1.3'
-    DotMatrixReport = False
-    IniFile = '\Software\Fast Reports'
-    PreviewOptions.Buttons = [pbPrint, pbSave, pbExport, pbZoom, pbFind, pbNavigator, pbExportQuick, pbNoFullScreen, pbCopy, pbSelection]
-    PreviewOptions.Zoom = 1.000000000000000000
-    PrintOptions.Printer = 'Default'
-    PrintOptions.PrintOnSheet = 0
-    ReportOptions.CreateDate = 45384.660465196800000000
-    ReportOptions.LastChange = 45384.689145185200000000
-    ScriptLanguage = 'PascalScript'
-    ScriptText.Strings = (
-      'begin'
-      ''
-      'end.')
-    Left = 32
-    Top = 24
-    Datasets = <
-      item
-        DataSet = frxReport1.IBXQuery1
-        DataSetName = 'IBXQuery1'
-      end>
-    Variables = <>
-    Style = <
-      item
-        Name = 'Title'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWhite
-        Font.Height = -16
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        Frame.Typ = []
-        Fill.BackColor = clGray
-      end
-      item
-        Name = 'Header'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clMaroon
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        Frame.Typ = []
-      end
-      item
-        Name = 'Group header'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clMaroon
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        Frame.Typ = []
-        Fill.BackColor = 16053492
-      end
-      item
-        Name = 'Data'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = []
-        Frame.Typ = []
-      end
-      item
-        Name = 'Group footer'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        Frame.Typ = []
-      end
-      item
-        Name = 'Header line'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Arial'
-        Font.Style = []
-        Frame.Typ = [ftBottom]
-        Frame.Width = 2.000000000000000000
-      end>
-    object Data: TfrxDataPage
-      Height = 1000.000000000000000000
-      Width = 1000.000000000000000000
-      object IBXQuery1: TfrxIBXQuery
-        UserName = 'IBXQuery1'
-        CloseDataSource = True
-        BCDToCurrency = False
-        DataSetOptions = []
-        IgnoreDupParams = False
-        Params = <>
-        SQL.Strings = (
-          'select distinct(NOM_CLIENTE) from receber'
-          
-            'order by nom_cliente                                            ' +
-            '                               ')
-        pLeft = 168
-        pTop = 106
-        Parameters = <>
-      end
-    end
-    object Page1: TfrxReportPage
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clRed
-      Font.Height = -13
-      Font.Name = 'Arial'
-      Font.Style = []
-      PaperWidth = 210.000000000000000000
-      PaperHeight = 297.000000000000000000
-      PaperSize = 9
-      LeftMargin = 10.000000000000000000
-      RightMargin = 10.000000000000000000
-      TopMargin = 10.000000000000000000
-      BottomMargin = 10.000000000000000000
-      Frame.Typ = []
-      MirrorMode = []
-    end
-  end
+  Height = 277
+  Width = 743
   object frxIBXComponents1: TfrxIBXComponents
     DefaultDatabase = conFast
     Left = 120
@@ -274,7 +156,32 @@ object mFastReport: TmFastReport
     Top = 200
   end
   object frxFDComponents1: TfrxFDComponents
-    Left = 248
-    Top = 104
+    Left = 120
+    Top = 208
+  end
+  object FDconFast: TFDConnection
+    Left = 224
+    Top = 208
+  end
+  object frxReport1: TfrxReport
+    Version = '2022.1.3'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Padr'#227'o'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 45461.639418067130000000
+    ReportOptions.LastChange = 45461.639418067130000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 32
+    Top = 16
+    Datasets = <>
+    Variables = <>
+    Style = <>
   end
 end
