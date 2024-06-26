@@ -13,6 +13,7 @@ object frmLogin: TfrmLogin
   Font.Style = [fsBold]
   Position = poScreenCenter
   StyleElements = []
+  OnKeyDown = FormKeyDown
   OnShow = FormShow
   TextHeight = 17
   object Label1: TLabel
@@ -8097,7 +8098,7 @@ object frmLogin: TfrmLogin
     ParentCustomHint = False
     StyleElements = []
     AutoGray = False
-    Caption = 'Cancelar'
+    Caption = 'Cancelar (ESC)'
     Color = clGradientInactiveCaption
     Font.Charset = ANSI_CHARSET
     Font.Color = 8355711

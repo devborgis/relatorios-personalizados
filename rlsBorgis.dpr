@@ -11,7 +11,8 @@ uses
   uCadReport in 'forms\cadastros\uCadReport.pas' {frmCadReport},
   dmFastReport in 'data\fastreport\dmFastReport.pas' {mFastReport: TDataModule},
   uCadGroupReport in 'forms\cadastros\uCadGroupReport.pas' {frmCadGroupReport},
-  uUtils in 'uUtils.pas';
+  uUtils in 'uUtils.pas',
+  uConf in 'uConf.pas';
 
 {$R *.res}
 

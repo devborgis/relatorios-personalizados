@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
   JvExControls, JvButton, JvTransparentButton, Data.DB, Vcl.Grids, Vcl.DBGrids, dmSystem,
-  System.ImageList, Vcl.ImgList;
+  System.ImageList, Vcl.ImgList, JvExComCtrls, JvDBTreeView;
 
 type
   TfrmCadUser = class(TForm)
@@ -37,6 +37,7 @@ type
     lbInfo: TLabel;
     btnShowPassword: TJvTransparentButton;
     ImageList1: TImageList;
+    JvDBTreeView1: TJvDBTreeView;
     procedure FormShow(Sender: TObject);
     procedure btnDadosUserClick(Sender: TObject);
     procedure btnPReportsClick(Sender: TObject);

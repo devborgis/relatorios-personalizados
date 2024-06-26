@@ -27,7 +27,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
   JvExControls, JvSpeedButton, JvButton, JvTransparentButton, dmIntegracao, dmSystem, IniFiles,
-  Vcl.DBCtrls;
+  Vcl.DBCtrls, uConf;
 
 type
   TfrmConfig = class(TForm)
@@ -57,6 +57,7 @@ type
     cbbProtocolo: TComboBox;
     Label9: TLabel;
     CheckBox1: TCheckBox;
+    Button1: TButton;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
     procedure dlgDllClick(Sender: TObject);
@@ -68,6 +69,7 @@ type
     procedure edtHostKeyPress(Sender: TObject; var Key: Char);
     procedure edtPortKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
   private
     procedure WriteConf;
   public
@@ -190,6 +192,15 @@ begin
           MessageDlg('Erro na conexão com o banco de dados: ' + E.Message, mtError, [mbOK], 0);
     end;
 
+end;
+
+procedure TfrmConfig.Button1Click(Sender: TObject);
+begin
+ try
+   Conf.setDefaultConf;
+ finally
+   ShowMessage('Em teoria tudo certo');
+ end;
 end;
 
 procedure TfrmConfig.dlgDatabaseClick(Sender: TObject);

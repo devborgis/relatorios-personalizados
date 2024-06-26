@@ -135,6 +135,7 @@
             <Form>frmCadGroupReport</Form>
         </DCCReference>
         <DCCReference Include="uUtils.pas"/>
+        <DCCReference Include="uConf.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

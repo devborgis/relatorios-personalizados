@@ -51,6 +51,7 @@ type
     procedure btnEnterClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnShowPasswordClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Private declarations }
   public
@@ -118,6 +119,16 @@ begin
 end;
 
 // Tratativas do OnShow da tela de login (assim que a tela é carregada)
+procedure TfrmLogin.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+  begin
+    btnExit.Click; // Fechar o formulário ao pressionar Esc
+  end;
+
+end;
+
 procedure TfrmLogin.FormShow(Sender: TObject);
 var
   IniPath, DatabasePath, DLLPath: string;
@@ -125,7 +136,7 @@ var
 begin
 
   Util.testes;
-  Util.vldConfExiste;
+  //Util.vldConfExiste;
 
   {IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
   DatabasePath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';

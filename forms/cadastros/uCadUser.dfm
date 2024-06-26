@@ -4,7 +4,7 @@ object frmCadUser: TfrmCadUser
   BorderStyle = bsDialog
   Caption = 'Manuten'#231#227'o de usu'#225'rios'
   ClientHeight = 468
-  ClientWidth = 490
+  ClientWidth = 831
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object frmCadUser: TfrmCadUser
   object pgcCadUser: TPageControl
     Left = 0
     Top = 41
-    Width = 490
+    Width = 831
     Height = 375
     ActivePage = TabSheet1
     Align = alClient
@@ -245,12 +245,23 @@ object frmCadUser: TfrmCadUser
           'INATIVO'
           'ATIVO')
       end
+      object JvDBTreeView1: TJvDBTreeView
+        Left = 496
+        Top = 0
+        Width = 324
+        Height = 342
+        UseFilter = False
+        PersistentNode = False
+        Indent = 19
+        TabOrder = 7
+        Mirror = False
+      end
     end
   end
   object pnlButtons: TPanel
     Left = 0
     Top = 0
-    Width = 490
+    Width = 831
     Height = 41
     ParentCustomHint = False
     Align = alTop
@@ -301,7 +312,7 @@ object frmCadUser: TfrmCadUser
   object pnlFooter: TPanel
     Left = 0
     Top = 416
-    Width = 490
+    Width = 831
     Height = 52
     ParentCustomHint = False
     Align = alBottom
@@ -327,7 +338,7 @@ object frmCadUser: TfrmCadUser
     ExplicitTop = 415
     ExplicitWidth = 486
     object btnSaveCadUser: TJvTransparentButton
-      Left = 392
+      Left = 733
       Top = 1
       Width = 97
       Height = 50
@@ -486,9 +497,10 @@ object frmCadUser: TfrmCadUser
         0000000000000000000000000000000000000000000000000000000000000000
         000000000000}
       KeepMouseLeavePressed = True
+      ExplicitLeft = 392
     end
     object btnCancelCad: TJvTransparentButton
-      Left = 272
+      Left = 613
       Top = 1
       Width = 120
       Height = 50
@@ -831,6 +843,7 @@ object frmCadUser: TfrmCadUser
         0000000000000000000000000000000000000000000000000000000000000000
         00000000000000000000000000000000000000000000}
       KeepMouseLeavePressed = True
+      ExplicitLeft = 272
     end
   end
   object ImageList1: TImageList

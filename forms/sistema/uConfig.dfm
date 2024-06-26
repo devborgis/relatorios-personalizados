@@ -1062,7 +1062,6 @@ object frmConfig: TfrmConfig
     ParentBackground = False
     ShowCaption = False
     TabOrder = 7
-    ExplicitWidth = 947
     object btnExitConf: TJvTransparentButton
       Left = 915
       Top = 0
@@ -1216,6 +1215,15 @@ object frmConfig: TfrmConfig
     Font.Style = []
     ParentFont = False
     TabOrder = 9
+  end
+  object Button1: TButton
+    Left = 368
+    Top = 227
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 10
+    OnClick = Button1Click
   end
   object odlgDatabase: TOpenDialog
     Left = 53
