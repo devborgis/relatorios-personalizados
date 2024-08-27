@@ -38,6 +38,8 @@ type
     function getCharset: String;
     function getIBX: String;
     function getProtocol: String;
+    function getSRV: String;
+    function getConfExiste: Boolean;
     {procedures para definir o conf}
     procedure setDefaultConf;
     procedure setPathDatabase(PathDatabase: String);
@@ -47,6 +49,7 @@ type
     procedure setCharSet(CharSet: String);
     procedure setIBX(IBX: String);
     procedure setProtocol(Protocol: String);
+    procedure setSRV(SRV: String);
   end;
 
 var
@@ -63,6 +66,15 @@ Funções para ler os valores do arquivo INI
 function TuConf.getCharset: String;
 begin
   Result := Ini.ReadString('FASTREPORT', 'CHARSET', '');
+end;
+
+function TuConf.getConfExiste: Boolean;
+begin
+  if not FileExists(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI') then
+    begin Result := False
+      end else
+        begin Result := True
+    end;
 end;
 
 function TuConf.getIBX: String;
@@ -82,12 +94,17 @@ end;
 
 function TuConf.getPathDll: String;
 begin
-  Result := Ini.ReadString('CONEXAO', 'SRV', '');
+  Result := Ini.ReadString('CONEXAO', 'DLL', '');
 end;
 
 function TuConf.getProtocol: String;
 begin
   Result := Ini.ReadString('CONEXAO', 'PROTOCOL', '');
+end;
+
+function TuConf.getSRV: String;
+begin
+  Result := Ini.ReadString('CONEXAO', 'SRV', '');
 end;
 
 function TuConf.getUser: String;
@@ -106,6 +123,7 @@ begin
     Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
     try
       Ini.WriteString('CONEXAO', 'PROTOCOL', 'Firebird');
+      Ini.WriteString('CONEXAO', 'SRV', '127.0.0.1/3050');
       Ini.WriteString('CONEXAO', 'DATABASE', ExtractFilePath(ParamStr(0)) + '.integracao\' + 'INTEGRACAO.FDB');
       Ini.WriteString('CONEXAO', 'DLL', ExtractFilePath(ParamStr(0)) + '.integracao\' + 'gds32.dll');
       Ini.WriteString('CONEXAO', 'USER', 'SYSDBA');
@@ -149,6 +167,11 @@ end;
 procedure TuConf.setProtocol(Protocol: String);
 begin
   Ini.WriteString('CONEXAO', 'PROTOCOL', Protocol)
+end;
+
+procedure TuConf.setSRV(SRV: String);
+begin
+  Ini.WriteString('CONEXAO', 'SRV', SRV)
 end;
 
 procedure TuConf.setUser(User: String);

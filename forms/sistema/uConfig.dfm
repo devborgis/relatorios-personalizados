@@ -1197,12 +1197,13 @@ object frmConfig: TfrmConfig
     Font.Style = []
     ParentFont = False
     TabOrder = 8
+    OnSelect = cbbProtocoloSelect
     Items.Strings = (
       'Firebird'
       'Postgres'
       'MySQL')
   end
-  object CheckBox1: TCheckBox
+  object ckAtivaIBX: TCheckBox
     Left = 169
     Top = 274
     Width = 144

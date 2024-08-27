@@ -56,7 +56,7 @@ type
     Label1: TLabel;
     cbbProtocolo: TComboBox;
     Label9: TLabel;
-    CheckBox1: TCheckBox;
+    ckAtivaIBX: TCheckBox;
     Button1: TButton;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
@@ -70,8 +70,10 @@ type
     procedure edtPortKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyPress(Sender: TObject; var Key: Char);
     procedure Button1Click(Sender: TObject);
+    procedure cbbProtocoloSelect(Sender: TObject);
   private
     procedure WriteConf;
+    procedure confCamposIBX;
   public
     { Public declarations }
   end;
@@ -297,6 +299,40 @@ begin
   end;
   edtBancoDeDados.SetFocus;
   btnSaveConf.Enabled := False;
+end;
+
+procedure TfrmConfig.cbbProtocoloSelect(Sender: TObject);
+begin
+  confCamposIBX;
+end;
+
+procedure TfrmConfig.confCamposIBX;
+begin
+  if cbbProtocolo.Text = 'Firebird' then
+   begin
+     dbCharset.Items.Clear;
+     dbCharset.Items.Add('WIN1252');
+     dbCharset.Items.Add('UTF8');
+     dbCharset.Items.Add('ASCII');
+     dbCharset.Items.Add('BIG_5');
+     dbCharset.Items.Add('UNICODE_FSS');
+     ckAtivaIBX.Enabled := True;
+   end else if cbbProtocolo.Text = 'Postgres' then
+    begin
+      dbCharset.Items.Clear;
+      dbCharset.Items.Add('WIN1252');
+      dbCharset.Items.Add('UTF8');
+      dbCharset.Items.Add('SQL_ASCII');
+      dbCharset.Items.Add('BIG_5');
+      ckAtivaIBX.Enabled := False;
+    end else if cbbProtocolo.Text = 'MySQL' then
+      begin
+        dbCharset.Items.Clear;
+        dbCharset.Items.Add('utf8');
+        dbCharset.Items.Add('ascii');
+        dbCharset.Items.Add(('big5');
+        ckAtivaIBX.Enabled := False;
+      end;
 end;
 
 procedure TfrmConfig.btnExitConfClick(Sender: TObject);

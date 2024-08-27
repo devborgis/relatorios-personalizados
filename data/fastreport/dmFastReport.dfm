@@ -2,11 +2,11 @@ object mFastReport: TmFastReport
   Height = 277
   Width = 743
   object frxIBXComponents1: TfrxIBXComponents
-    DefaultDatabase = conFast
+    DefaultDatabase = IBXFast
     Left = 120
     Top = 24
   end
-  object conFast: TIBDatabase
+  object IBXFast: TIBDatabase
     DatabaseName = 'localhost/3050:C:\Borgis\BORGIS.FDB'
     Params.Strings = (
       'password=masterkey'
@@ -159,7 +159,11 @@ object mFastReport: TmFastReport
     Left = 120
     Top = 208
   end
-  object FDconFast: TFDConnection
+  object FDCFast: TFDConnection
+    Params.Strings = (
+      'DriverID=FB'
+      'User_Name=sysdba'
+      'Password=masterkey')
     Left = 224
     Top = 208
   end
@@ -183,5 +187,20 @@ object mFastReport: TmFastReport
     Datasets = <>
     Variables = <>
     Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+      MirrorMode = []
+    end
   end
 end

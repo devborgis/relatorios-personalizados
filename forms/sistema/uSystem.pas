@@ -301,10 +301,10 @@ begin
                   Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
                   Ini.ReadString('CONEXAO', 'DATABASE', '');
 
-      mFastReport.conFast.Params := ParamsDB;
+      {mFastReport.conFast.Params := ParamsDB;
 
       mFastReport.conFast.DatabaseName := StringDB;
-      mFastReport.conFast.Connected := True;
+      mFastReport.conFast.Connected := True;}
     finally
       Ini.Free;
     end;
