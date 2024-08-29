@@ -25,56 +25,48 @@ interface
 
 uses
   System.SysUtils, System.Classes, ZAbstractConnection, ZConnection, Data.DB,
-  ZAbstractRODataset, ZAbstractDataset, ZDataset, IniFiles;
+  ZAbstractRODataset, ZAbstractDataset, ZDataset, IniFiles, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
+  FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
+  FireDAC.VCLUI.Wait, FireDAC.Comp.Client, frxDesgn, frxClass, IBX.IBDatabase,
+  frxExportCSV, frxExportImage, frxExportHTML, frxExportPDF, frxExportPPTX,
+  frxExportBaseDialog, frxExportXLSX, frxFDComponents, frxIBXComponents,
+  frxPDFViewer, frxChart, frxDCtrl, frxDMPExport, frxGradient, frxChBox,
+  frxCellularTextObject, frxMap, frxTableObject, frxGaugeView, frxCross,
+  frxRich, frxOLE, frxBarcode, uConf, Dialogs;
 
 type
   TmIntegracao = class(TDataModule)
-    conIntegracao: TZConnection;
-    DataSource1: TDataSource;
-    ZQuery1: TZQuery;
-    ZQuery1DOCUMENTO: TWideStringField;
-    ZQuery1HISTORICO: TWideStringField;
-    ZQuery1COD_CLIENTE: TWideStringField;
-    ZQuery1NOM_CLIENTE: TWideStringField;
-    ZQuery1EMISSAO: TDateField;
-    ZQuery1VENCIMENTO: TDateField;
-    ZQuery1VALOR_DUP: TExtendedField;
-    ZQuery1RECEBIMENTO: TDateField;
-    ZQuery1VALOR_REC: TExtendedField;
-    ZQuery1VALOR_JUR: TExtendedField;
-    ZQuery1VALOR_DES: TExtendedField;
-    ZQuery1ESPECIE: TWideStringField;
-    ZQuery1CTO_CUSTO: TWideStringField;
-    ZQuery1PORTADOR: TWideStringField;
-    ZQuery1TIPO_DOC: TWideStringField;
-    ZQuery1COMP: TWideStringField;
-    ZQuery1BANCO: TWideStringField;
-    ZQuery1AGENCIA: TWideStringField;
-    ZQuery1CONTA: TWideStringField;
-    ZQuery1CHEQUE: TWideStringField;
-    ZQuery1OBSERVACOES: TWideMemoField;
-    ZQuery1NOSSO_NUM: TWideStringField;
-    ZQuery1CONTA_BANCARIA_ID: TIntegerField;
-    ZQuery1NOVO_DOC: TWideStringField;
-    ZQuery1VENDAS_ID: TIntegerField;
-    ZQuery1ID_DEVOLUCAO_FINANCEIRO: TIntegerField;
-    ZQuery1VALOR_REC_CREDITO: TExtendedField;
-    ZQuery1NRO_PDV: TWideStringField;
-    ZQuery1DUPLICATA_DESCONTO: TExtendedField;
-    ZQuery1DUPLICATA_DESCONTO_DATA: TDateField;
-    ZQuery1ID: TIntegerField;
-    ZQuery1ID_MOVIMENTACAO_CARTAO: TIntegerField;
-    ZQuery1PERC_TAXA: TExtendedField;
-    ZQuery1PERC_TAXA_ANTECIPACAO: TExtendedField;
-    ZQuery1VALOR_TAXA: TExtendedField;
-    ZQuery1VALOR_TAXA_OPERACAO: TExtendedField;
-    ZQuery1ID_EXTRATO_CREDITO: TIntegerField;
-    ZQuery1ID_DOCUMENTO: TIntegerField;
-    ZQuery1CODIGO_BANCO: TIntegerField;
+    DBIntegracao: TFDConnection;
+    IBXIntegracao: TIBDatabase;
+    fReport: TfrxReport;
+    fReportDesigner: TfrxDesigner;
+    frxXLSXExport1: TfrxXLSXExport;
+    frxPPTXExport1: TfrxPPTXExport;
+    frxPDFExport1: TfrxPDFExport;
+    frxHTMLExport1: TfrxHTMLExport;
+    frxPNGExport1: TfrxPNGExport;
+    frxCSVExport1: TfrxCSVExport;
+    frxBarCodeObject1: TfrxBarCodeObject;
+    frxOLEObject1: TfrxOLEObject;
+    frxRichObject1: TfrxRichObject;
+    frxCrossObject1: TfrxCrossObject;
+    frxGaugeObject1: TfrxGaugeObject;
+    frxReportTableObject1: TfrxReportTableObject;
+    frxMapObject1: TfrxMapObject;
+    frxReportCellularTextObject1: TfrxReportCellularTextObject;
+    frxCheckBoxObject1: TfrxCheckBoxObject;
+    frxGradientObject1: TfrxGradientObject;
+    frxDotMatrixExport1: TfrxDotMatrixExport;
+    frxDialogControls1: TfrxDialogControls;
+    frxChartObject1: TfrxChartObject;
+    frxPDFObject1: TfrxPDFObject;
+    frxIBXComponents1: TfrxIBXComponents;
+    frxFDComponents1: TfrxFDComponents;
   private
     { Private declarations }
   public
-    procedure ConfConnection;
+    procedure confFDIntegracao;
   end;
 
 var
@@ -86,25 +78,73 @@ implementation
 
 {$R *.dfm}
 
-procedure TmIntegracao.ConfConnection;
+{ TmIntegracao }
+
+procedure TmIntegracao.confFDIntegracao;
 var
-  Ini: TIniFile;
-  IniFile: string;
+  ServerInfo, ServerIP, ServerPort: string;
+  DelimiterPos: Integer;
 begin
-  IniFile := ExtractFilePath(ParamStr(0)) + '\.integracao\config.ini';
-  Ini := TIniFile.Create(IniFile);
-
   try
-    conIntegracao.Database := Ini.ReadString('CONEXAO', 'DATABASE', '');
-    conIntegracao.LibraryLocation := Ini.ReadString('CONEXAO', 'DLL', '');
-    conIntegracao.Port := StrToInt(Ini.ReadString('CONEXAO', 'PORT', '0'));
-    conIntegracao.HostName := Ini.ReadString('CONEXAO', 'HOST', '');
-    conIntegracao.User := Ini.ReadString('CONEXAO', 'USER', '');
-    conIntegracao.Password := Ini.ReadString('CONEXAO', 'PASSWORD', '');
-  finally
-    Ini.Free;
-  end;
 
+    ServerInfo := Conf.getSRV; // Exemplo: retorna "192.168.1.100/5432"
+
+    // Separando o IP e a porta
+    DelimiterPos := Pos('/', ServerInfo); // Encontrar a posição do delimitador '/'
+    if DelimiterPos > 0 then
+    begin
+      ServerIP := Copy(ServerInfo, 1, DelimiterPos - 1); // Extrair o IP antes do '/'
+      ServerPort := Copy(ServerInfo, DelimiterPos + 1, Length(ServerInfo) - DelimiterPos); // Extrair a porta após o '/'
+    end
+    else
+    begin
+      ServerIP := ServerInfo; // Caso não haja porta, considere toda a string como IP
+      ServerPort := ''; // Porta vazia ou padrão dependendo do banco de dados
+    end;
+
+    if Conf.getProtocol = 'Firebird' then
+    begin
+      DBIntegracao.DriverName := 'FD';
+      DBIntegracao.Params.Values['Database'] := ServerIP + '/' + ServerPort + ':' + Conf.getPathDatabase; // Formar a string de conexão
+      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+      DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
+      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+      DBIntegracao.Connected := True;
+    end
+    else if Conf.getProtocol = 'Postgres' then
+    begin
+      DBIntegracao.DriverName := 'PG';
+      DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+      DBIntegracao.Params.Values['Server'] := ServerIP;
+      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+      if ServerPort <> '' then
+        DBIntegracao.Params.Values['Port'] := ServerPort
+      else
+        DBIntegracao.Params.Values['Port'] := '5432'; // Porta padrão do PostgreSQL
+        DBIntegracao.Connected := True;
+    end
+    else if Conf.getProtocol = 'MySql' then
+    begin
+      DBIntegracao.DriverName := 'MySQL';
+      DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+      DBIntegracao.Params.Values['Server'] := ServerIP;
+      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+      if ServerPort <> '' then
+        DBIntegracao.Params.Values['Port'] := ServerPort
+      else
+        DBIntegracao.Params.Values['Port'] := '3306'; // Porta padrão do MySQL
+      DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
+      DBIntegracao.Connected := True;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Erro ao configurar a conexão: ' + E.Message);
+  end;
 end;
 
 end.
