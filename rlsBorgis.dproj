@@ -83,10 +83,10 @@
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Locale>1033</VerInfo_Locale>
-        <VerInfo_MajorVer>2</VerInfo_MajorVer>
+        <VerInfo_Locale>1046</VerInfo_Locale>
+        <VerInfo_MajorVer>3</VerInfo_MajorVer>
         <Icon_MainIcon>rlsBorgis_Icon.ico</Icon_MainIcon>
-        <VerInfo_Keys>CompanyName=Borgis &amp; Co. - Desenvolvimento;FileDescription=$(MSBuildProjectName);FileVersion=2.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=2.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Borgis &amp; Co. - Desenvolvimento;FileDescription=$(MSBuildProjectName);FileVersion=3.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=3.0.0;Comments=</VerInfo_Keys>
         <UWP_DelphiLogo44>..\..\..\..\Desktop\imgs\1x\Ativo 9.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>..\..\..\..\Desktop\imgs\1x\Ativo 8.png</UWP_DelphiLogo150>
     </PropertyGroup>
@@ -134,8 +134,8 @@
         <DCCReference Include="forms\cadastros\uCadGroupReport.pas">
             <Form>frmCadGroupReport</Form>
         </DCCReference>
-        <DCCReference Include="uUtils.pas"/>
-        <DCCReference Include="uConf.pas"/>
+        <DCCReference Include="classes\uUtils.pas"/>
+        <DCCReference Include="classes\uConf.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
