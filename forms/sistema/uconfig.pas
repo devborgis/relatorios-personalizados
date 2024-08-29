@@ -37,8 +37,6 @@ type
     Label2: TLabel;
     Label4: TLabel;
     edtHost: TEdit;
-    Label5: TLabel;
-    edtPort: TEdit;
     Label6: TLabel;
     edtPassword: TEdit;
     btnTestaIntegracao: TJvTransparentButton;
@@ -57,11 +55,9 @@ type
     cbbProtocolo: TComboBox;
     Label9: TLabel;
     ckAtivaIBX: TCheckBox;
-    Button1: TButton;
     procedure btnExitConfClick(Sender: TObject);
     procedure dlgDatabaseClick(Sender: TObject);
     procedure dlgDllClick(Sender: TObject);
-    procedure btnTestaIntegracaoClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnSaveConfClick(Sender: TObject);
     procedure edtBancoDeDadosKeyPress(Sender: TObject; var Key: Char);
@@ -69,7 +65,6 @@ type
     procedure edtHostKeyPress(Sender: TObject; var Key: Char);
     procedure edtPortKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyPress(Sender: TObject; var Key: Char);
-    procedure Button1Click(Sender: TObject);
     procedure cbbProtocoloSelect(Sender: TObject);
   private
     procedure WriteConf;
@@ -100,10 +95,12 @@ begin
         Ini.WriteString('CONEXAO', 'DATABASE', edtBancoDeDados.Text);
         Ini.WriteString('CONEXAO', 'DLL', edtDll.Text);
 
-        if edtPort.Text = '' then
+      {trecho inativo agora a porta fica junto ao host separado por /
+
+      if edtPort.Text = '' then
           Ini.WriteString('CONEXAO', 'PORT', '3050')
         else
-          Ini.WriteString('CONEXAO', 'PORT', edtPort.Text);
+          Ini.WriteString('CONEXAO', 'PORT', edtPort.Text);}
 
         if edtHost.Text = '' then
           Ini.WriteString('CONEXAO', 'HOST', '127.0.0.1')
@@ -145,12 +142,13 @@ end;
 procedure TfrmConfig.btnSaveConfClick(Sender: TObject);
 begin
   WriteConf;
-  mIntegracao.ConfConnection;
-  mIntegracao.conIntegracao.Connected := True;
+  mIntegracao.confFDIntegracao;
+  mIntegracao.DBIntegracao.Connected := False;
+  mIntegracao.DBIntegracao.Connected := True;
   Close;
 end;
 
-procedure TfrmConfig.btnTestaIntegracaoClick(Sender: TObject);
+{procedure TfrmConfig.btnTestaIntegracaoClick(Sender: TObject);
 begin
   if edtBancoDeDados.Text = '' then
   begin
@@ -172,9 +170,9 @@ begin
     edtHost.text := '127.0.0.1';
     mIntegracao.conIntegracao.HostName := edtHost.text;
 
-  if edtPort.text = '' then
-    edtPort.text := '3050';
-    mIntegracao.conIntegracao.Port := StrToInt(edtPort.text);
+  //if edtPort.text = '' then
+  //edtPort.text := '3050';
+  //Integracao.conIntegracao.Port := StrToInt(edtPort.text);
 
   if edtUser.text = '' then
     edtUser.text := 'sysdba';
@@ -194,16 +192,7 @@ begin
           MessageDlg('Erro na conexão com o banco de dados: ' + E.Message, mtError, [mbOK], 0);
     end;
 
-end;
-
-procedure TfrmConfig.Button1Click(Sender: TObject);
-begin
- try
-   Conf.setDefaultConf;
- finally
-   ShowMessage('Em teoria tudo certo');
- end;
-end;
+end;}
 
 procedure TfrmConfig.dlgDatabaseClick(Sender: TObject);
 begin
@@ -258,7 +247,7 @@ procedure TfrmConfig.edtHostKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
      begin
-     edtPort.SetFocus;
+     edtPassword.SetFocus;
      end;
 end;
 
@@ -289,7 +278,7 @@ begin
   try
     edtBancoDeDados.text := Ini.ReadString('CONEXAO', 'DATABASE', '');
     edtDll.text := Ini.ReadString('CONEXAO', 'DLL', '');
-    edtPort.text := Ini.ReadString('CONEXAO', 'PORT', '');
+    {edtPort.text := Ini.ReadString('CONEXAO', 'PORT', '');}
     edtHost.text := Ini.ReadString('CONEXAO', 'HOST', '');
     edtUser.text := Ini.ReadString('CONEXAO', 'USER', '');
     edtPassword.text := Ini.ReadString('CONEXAO', 'PASSWORD', '');
@@ -298,7 +287,6 @@ begin
     Ini.Free;
   end;
   edtBancoDeDados.SetFocus;
-  btnSaveConf.Enabled := False;
 end;
 
 procedure TfrmConfig.cbbProtocoloSelect(Sender: TObject);
@@ -330,7 +318,7 @@ begin
         dbCharset.Items.Clear;
         dbCharset.Items.Add('utf8');
         dbCharset.Items.Add('ascii');
-        dbCharset.Items.Add(('big5');
+        dbCharset.Items.Add('big5');
         ckAtivaIBX.Enabled := False;
       end;
 end;

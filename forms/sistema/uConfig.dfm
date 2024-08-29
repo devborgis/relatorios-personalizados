@@ -8,8 +8,8 @@ object frmConfig: TfrmConfig
   BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Configura'#231#245'es do arquivo INI'
-  ClientHeight = 727
-  ClientWidth = 963
+  ClientHeight = 343
+  ClientWidth = 483
   Color = clInactiveBorder
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -594,8 +594,8 @@ object frmConfig: TfrmConfig
   OnShow = FormShow
   TextHeight = 13
   object Label3: TLabel
-    Left = 8
-    Top = 127
+    Left = 72
+    Top = 103
     Width = 18
     Height = 17
     Caption = 'Dll:'
@@ -608,8 +608,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label2: TLabel
-    Left = 8
-    Top = 87
+    Left = 72
+    Top = 63
     Width = 95
     Height = 17
     Caption = 'Nome/Caminho:'
@@ -622,8 +622,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label4: TLabel
-    Left = 8
-    Top = 213
+    Left = 72
+    Top = 189
     Width = 66
     Height = 17
     Caption = 'Host/Porta:'
@@ -635,23 +635,9 @@ object frmConfig: TfrmConfig
     ParentFont = False
     StyleElements = []
   end
-  object Label5: TLabel
-    Left = 479
-    Top = 71
-    Width = 34
-    Height = 17
-    Caption = 'Porta:'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Segoe UI'
-    Font.Style = []
-    ParentFont = False
-    StyleElements = []
-  end
   object Label6: TLabel
-    Left = 169
-    Top = 213
+    Left = 233
+    Top = 189
     Width = 38
     Height = 17
     Caption = 'Senha:'
@@ -664,8 +650,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object btnTestaIntegracao: TJvTransparentButton
-    Left = 8
-    Top = 310
+    Left = 72
+    Top = 286
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -689,12 +675,11 @@ object frmConfig: TfrmConfig
     ParentFont = False
     ParentShowHint = False
     ShowHint = False
-    OnClick = btnTestaIntegracaoClick
     KeepMouseLeavePressed = True
   end
   object btnSaveConf: TJvTransparentButton
-    Left = 169
-    Top = 310
+    Left = 233
+    Top = 286
     Width = 144
     Height = 22
     Cursor = crHandPoint
@@ -722,8 +707,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object dlgDatabase: TJvTransparentButton
-    Left = 319
-    Top = 105
+    Left = 383
+    Top = 81
     Width = 27
     Height = 22
     Cursor = crHandPoint
@@ -826,8 +811,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object dlgDll: TJvTransparentButton
-    Left = 319
-    Top = 143
+    Left = 383
+    Top = 119
     Width = 27
     Height = 22
     Cursor = crHandPoint
@@ -930,8 +915,8 @@ object frmConfig: TfrmConfig
     KeepMouseLeavePressed = True
   end
   object Label7: TLabel
-    Left = 8
-    Top = 256
+    Left = 72
+    Top = 232
     Width = 45
     Height = 17
     Caption = 'Usu'#225'rio'
@@ -944,8 +929,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label8: TLabel
-    Left = 169
-    Top = 166
+    Left = 233
+    Top = 142
     Width = 44
     Height = 17
     Caption = 'Charset'
@@ -958,8 +943,8 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object Label9: TLabel
-    Left = 8
-    Top = 170
+    Left = 72
+    Top = 146
     Width = 60
     Height = 17
     Caption = 'Protocolo:'
@@ -972,61 +957,57 @@ object frmConfig: TfrmConfig
     StyleElements = []
   end
   object edtDll: TEdit
-    Left = 8
-    Top = 143
+    Left = 72
+    Top = 119
     Width = 305
     Height = 21
     TabOrder = 0
+    TextHint = 'C:\Borgis\DLL.DLL'
     StyleElements = []
     OnKeyPress = edtDllKeyPress
   end
   object edtBancoDeDados: TEdit
-    Left = 8
-    Top = 106
+    Left = 72
+    Top = 82
     Width = 305
     Height = 21
     TabOrder = 1
+    TextHint = 'C:\Borgis\BancoDeDados.DB'
     StyleElements = []
     OnKeyPress = edtBancoDeDadosKeyPress
   end
   object edtHost: TEdit
-    Left = 8
-    Top = 229
+    Left = 72
+    Top = 205
     Width = 144
     Height = 21
     TabOrder = 2
+    TextHint = '127.0.0.1/4050'
     StyleElements = []
     OnKeyPress = edtHostKeyPress
   end
-  object edtPort: TEdit
-    Left = 479
-    Top = 87
+  object edtPassword: TEdit
+    Left = 233
+    Top = 205
     Width = 144
     Height = 21
     TabOrder = 3
-    StyleElements = []
-    OnKeyPress = edtPortKeyPress
-  end
-  object edtPassword: TEdit
-    Left = 169
-    Top = 229
-    Width = 144
-    Height = 21
-    TabOrder = 4
+    TextHint = 'Password'
     StyleElements = []
   end
   object edtUser: TEdit
-    Left = 8
-    Top = 272
+    Left = 72
+    Top = 248
     Width = 144
     Height = 21
-    TabOrder = 5
+    TabOrder = 4
+    TextHint = 'User'
     StyleElements = []
     OnKeyPress = edtUserKeyPress
   end
   object dbCharset: TComboBox
-    Left = 169
-    Top = 186
+    Left = 233
+    Top = 162
     Width = 144
     Height = 21
     Hint = 
@@ -1042,7 +1023,7 @@ object frmConfig: TfrmConfig
     Font.Style = []
     ItemIndex = 0
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
     Text = 'WIN1252'
     Items.Strings = (
       'WIN1252'
@@ -1054,16 +1035,16 @@ object frmConfig: TfrmConfig
   object pnlButtons: TPanel
     Left = 0
     Top = 0
-    Width = 963
+    Width = 483
     Height = 48
     Align = alTop
     BevelOuter = bvNone
     Color = 14671839
     ParentBackground = False
     ShowCaption = False
-    TabOrder = 7
+    TabOrder = 6
     object btnExitConf: TJvTransparentButton
-      Left = 915
+      Left = 435
       Top = 0
       Width = 48
       Height = 48
@@ -1186,8 +1167,8 @@ object frmConfig: TfrmConfig
     end
   end
   object cbbProtocolo: TComboBox
-    Left = 8
-    Top = 186
+    Left = 72
+    Top = 162
     Width = 145
     Height = 21
     Font.Charset = DEFAULT_CHARSET
@@ -1196,7 +1177,7 @@ object frmConfig: TfrmConfig
     Font.Name = 'Segoe UI'
     Font.Style = []
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 7
     OnSelect = cbbProtocoloSelect
     Items.Strings = (
       'Firebird'
@@ -1204,34 +1185,28 @@ object frmConfig: TfrmConfig
       'MySQL')
   end
   object ckAtivaIBX: TCheckBox
-    Left = 169
-    Top = 274
-    Width = 144
+    Left = 233
+    Top = 250
+    Width = 177
     Height = 17
-    Caption = 'IBX Para Gdoor'
+    Hint = 
+      'Somente dispon'#237'vel em banco de dados Firebird. O GDOOR utiliza p' +
+      'ara gerar os relat'#243'rios em seu sistema'
+    Caption = 'IBX Compatibilidade'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
     Font.Name = 'Courier'
     Font.Style = []
     ParentFont = False
-    TabOrder = 9
-  end
-  object Button1: TButton
-    Left = 368
-    Top = 227
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
-    TabOrder = 10
-    OnClick = Button1Click
+    TabOrder = 8
   end
   object odlgDatabase: TOpenDialog
-    Left = 53
-    Top = 352
+    Left = 69
+    Top = 320
   end
   object odlgDll: TOpenDialog
-    Left = 13
-    Top = 352
+    Left = 29
+    Top = 320
   end
 end

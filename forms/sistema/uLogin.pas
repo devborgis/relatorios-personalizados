@@ -67,7 +67,9 @@ implementation
 
 procedure TfrmLogin.btnConfigClick(Sender: TObject);
 begin
-  frmConfig.ShowModal;
+  if not Assigned(frmConfig) then
+    frmConfig := TfrmConfig.Create(Self);
+  frmConfig.Show;
 end;
 
 {***************************************************
