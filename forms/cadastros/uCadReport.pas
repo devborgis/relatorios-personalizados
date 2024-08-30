@@ -32,6 +32,7 @@ type
     procedure btnAddGroupReportClick(Sender: TObject);
     procedure bntFileReportClick(Sender: TObject);
     procedure btnEdtReportClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -198,6 +199,11 @@ procedure TfrmCadReport.edtNameReportKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
     cbbGroupReport.SetFocus
+end;
+
+procedure TfrmCadReport.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
 end;
 
 procedure TfrmCadReport.FormShow(Sender: TObject);

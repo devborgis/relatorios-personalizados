@@ -11,6 +11,7 @@ object frmCadReport: TfrmCadReport
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  OnClose = FormClose
   OnShow = FormShow
   TextHeight = 15
   object Label1: TLabel
