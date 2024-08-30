@@ -66,6 +66,7 @@ type
     procedure edtPortKeyPress(Sender: TObject; var Key: Char);
     procedure edtUserKeyPress(Sender: TObject; var Key: Char);
     procedure cbbProtocoloSelect(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     procedure WriteConf;
     procedure confCamposIBX;
@@ -265,6 +266,11 @@ begin
      begin
      edtPassword.SetFocus;
      end;
+end;
+
+procedure TfrmConfig.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  action := caFree;
 end;
 
 procedure TfrmConfig.FormShow(Sender: TObject);

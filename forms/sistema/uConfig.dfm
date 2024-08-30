@@ -591,6 +591,7 @@ object frmConfig: TfrmConfig
     FFFFC0000000}
   Position = poScreenCenter
   StyleElements = []
+  OnClose = FormClose
   OnShow = FormShow
   TextHeight = 13
   object Label3: TLabel
