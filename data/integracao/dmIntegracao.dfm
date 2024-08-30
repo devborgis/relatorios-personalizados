@@ -2,6 +2,7 @@ object mIntegracao: TmIntegracao
   Height = 421
   Width = 781
   object DBIntegracao: TFDConnection
+    LoginPrompt = False
     Left = 32
     Top = 24
   end
@@ -94,7 +95,6 @@ object mIntegracao: TmIntegracao
     ShowProgress = True
     OverwritePrompt = False
     DataOnly = False
-    EmbedFontsIfProtected = False
     InteractiveFormsFontSubset = 'A-Z,a-z,0-9,#43-#47 '
     OpenAfterExport = False
     PrintOptimized = False

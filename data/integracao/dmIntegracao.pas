@@ -33,7 +33,9 @@ uses
   frxExportBaseDialog, frxExportXLSX, frxFDComponents, frxIBXComponents,
   frxPDFViewer, frxChart, frxDCtrl, frxDMPExport, frxGradient, frxChBox,
   frxCellularTextObject, frxMap, frxTableObject, frxGaugeView, frxCross,
-  frxRich, frxOLE, frxBarcode, uConf, Dialogs;
+  frxRich, frxOLE, frxBarcode, uConf, Dialogs, FireDAC.Phys.MySQLDef,
+  FireDAC.Phys.FBDef, FireDAC.Phys.PGDef, FireDAC.Phys.PG, FireDAC.Phys.IBBase,
+  FireDAC.Phys.FB, FireDAC.Phys.MySQL;
 
 type
   TmIntegracao = class(TDataModule)
@@ -64,6 +66,9 @@ type
     frxIBXComponents1: TfrxIBXComponents;
     frxFDComponents1: TfrxFDComponents;
   private
+    procedure ConfiguraFirebird(const ServerIP, ServerPort: string);
+    procedure ConfiguraMySql(const ServerIP, ServerPort: string);
+    procedure ConfiguraPostgres(const ServerIP, ServerPort: string);
     { Private declarations }
   public
     procedure confFDIntegracao;
@@ -86,65 +91,73 @@ var
   DelimiterPos: Integer;
 begin
   try
-
-    ServerInfo := Conf.getSRV; // Exemplo: retorna "192.168.1.100/5432"
-
-    // Separando o IP e a porta
-    DelimiterPos := Pos('/', ServerInfo); // Encontrar a posição do delimitador '/'
+    // Separar IP e Porta
+    ServerInfo := Conf.getSRV;
+    DelimiterPos := Pos('/', ServerInfo);
     if DelimiterPos > 0 then
     begin
-      ServerIP := Copy(ServerInfo, 1, DelimiterPos - 1); // Extrair o IP antes do '/'
-      ServerPort := Copy(ServerInfo, DelimiterPos + 1, Length(ServerInfo) - DelimiterPos); // Extrair a porta após o '/'
+      ServerIP := Copy(ServerInfo, 1, DelimiterPos - 1);
+      ServerPort := Copy(ServerInfo, DelimiterPos + 1, Length(ServerInfo) - DelimiterPos);
     end
     else
     begin
-      ServerIP := ServerInfo; // Caso não haja porta, considere toda a string como IP
-      ServerPort := ''; // Porta vazia ou padrão dependendo do banco de dados
+      ServerIP := ServerInfo;
+      ServerPort := '';
     end;
-
+    // Configuração de acordo com o protocolo
     if Conf.getProtocol = 'Firebird' then
-    begin
-      DBIntegracao.DriverName := 'FD';
-      DBIntegracao.Params.Values['Database'] := ServerIP + '/' + ServerPort + ':' + Conf.getPathDatabase; // Formar a string de conexão
-      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-      DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
-      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-      DBIntegracao.Connected := True;
-    end
+      ConfiguraFirebird(ServerIP, ServerPort)
     else if Conf.getProtocol = 'Postgres' then
-    begin
-      DBIntegracao.DriverName := 'PG';
-      DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
-      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-      DBIntegracao.Params.Values['Server'] := ServerIP;
-      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-      if ServerPort <> '' then
-        DBIntegracao.Params.Values['Port'] := ServerPort
-      else
-        DBIntegracao.Params.Values['Port'] := '5432'; // Porta padrão do PostgreSQL
-        DBIntegracao.Connected := True;
-    end
+      ConfiguraPostgres(ServerIP, ServerPort)
     else if Conf.getProtocol = 'MySql' then
-    begin
-      DBIntegracao.DriverName := 'MySQL';
-      DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
-      DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-      DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-      DBIntegracao.Params.Values['Server'] := ServerIP;
-      DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-      if ServerPort <> '' then
-        DBIntegracao.Params.Values['Port'] := ServerPort
-      else
-        DBIntegracao.Params.Values['Port'] := '3306'; // Porta padrão do MySQL
-      DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
-      DBIntegracao.Connected := True;
-    end;
+      ConfiguraMySql(ServerIP, ServerPort);
   except
     on E: Exception do
       ShowMessage('Erro ao configurar a conexão: ' + E.Message);
   end;
+end;
+procedure TmIntegracao.ConfiguraFirebird(const ServerIP, ServerPort: string);
+begin
+  DBIntegracao.DriverName := 'FB';
+  DBIntegracao.Params.Values['Database'] := ServerIP + '/' + ServerPort + ':' + Conf.getPathDatabase;
+  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+  if ServerPort <> '' then
+    DBIntegracao.Params.Values['Port'] := ServerPort
+  else
+    DBIntegracao.Params.Values['Port'] := '3050'; // Porta padrão do Firebird
+  DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
+  DBIntegracao.Connected := True;
+end;
+procedure TmIntegracao.ConfiguraPostgres(const ServerIP, ServerPort: string);
+begin
+  DBIntegracao.DriverName := 'PG';
+  DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+  DBIntegracao.Params.Values['Server'] := ServerIP;
+  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+  if ServerPort <> '' then
+    DBIntegracao.Params.Values['Port'] := ServerPort
+  else
+    DBIntegracao.Params.Values['Port'] := '5432'; // Porta padrão do PostgreSQL
+  DBIntegracao.Connected := True;
+end;
+procedure TmIntegracao.ConfiguraMySql(const ServerIP, ServerPort: string);
+begin
+  DBIntegracao.DriverName := 'MySQL';
+  DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+  DBIntegracao.Params.Values['Server'] := ServerIP;
+  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+  if ServerPort <> '' then
+    DBIntegracao.Params.Values['Port'] := ServerPort
+  else
+    DBIntegracao.Params.Values['Port'] := '3306'; // Porta padrão do MySQL
+  DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
+  DBIntegracao.Connected := True;
 end;
 
 end.
