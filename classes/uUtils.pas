@@ -30,11 +30,9 @@ type
   private
     //
   public
-    procedure testes;
-    function vldLogin(login, password: String): Boolean;
-    function getPathConf: String;
-    function getPathDbIntegracao: String;
-    function getPathDllFirebird: String;
+    function vldLogin(login, senha: String): Boolean;
+    procedure excRelatorio(idRel: Integer);
+    procedure excUsuario(idUsu: Integer);
   end;
 
 var
@@ -46,10 +44,6 @@ implementation
 
 uses dmIntegracao, dmFastReport, dmSystem;
 
-procedure TuUtils.testes;
-begin
-  ShowMessage('Aqui tem uma show message');
-end;
 
 {******************************************
 Função para validar o login (somente tela de login)
@@ -57,21 +51,49 @@ porém penso em utilizar essa função para uma especie
 de logoff dentro da ferramenta, podendo trocar de
 usuario sem ter que fechar e abrir o sistema
 *******************************************}
-function TuUtils.vldLogin(login: string; password: string): Boolean;
+procedure TuUtils.excRelatorio(idRel: Integer);
+begin
+  try
+    with mSystem.qryExcluirRel do
+    begin
+      Close;
+      ParamByName('ID_REL').AsInteger := idRel;
+      ExecSQL;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Erro ao excluir o relatório: ' + E.Message);
+  end;
+end;
+
+procedure TuUtils.excUsuario(idUsu: Integer);
+begin
+  try
+    with mSystem.qryExcluirUsuario do
+    begin
+      Close;
+      ParamByName('ID_USU').AsInteger := idUsu;
+      ExecSQL;
+    end;
+  except
+    on E: Exception do
+      ShowMessage('Erro ao excluir o usuário: ' + E.Message);
+  end;
+end;
+
+function TuUtils.vldLogin(login: string; senha: string): Boolean;
 begin
   Result := False;
   try
     with mSystem.qryLogin do
     begin
       Close;
-      SQL.Clear;
-      SQL.Add('SELECT * FROM TB_USERS WHERE LOGIN = :login AND PASSWORD = :password');
       ParamByName('login').AsString := login;
-      ParamByName('password').AsString := password;
+      ParamByName('senha').AsString := senha;
       Open;
       if not IsEmpty then // Verifica se a consulta retornou algum registro
       begin
-        if FieldByName('STATUS').AsString <> '0' then // Verifica se o usuário está ativo
+        if FieldByName('STATUS').AsInteger = 1 then // Verifica se o usuário está ativo
         begin
           Result := True;
         end;
@@ -81,25 +103,6 @@ begin
     on E: Exception do
       ShowMessage('Erro ao verificar credenciais: ' + #13#10 + #13#10 + E.Message);
   end;
-end;
-
-{*************************************
-Functions para obter os caminhos padrões
-para a aplicação como dll e outros arquivos
-**************************************}
-function TuUtils.getPathConf: string;
-begin
-  Result := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
-end;
-
-function TuUtils.getPathDbIntegracao: string;
-begin
-  Result := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';
-end;
-
-function TuUtils.getPathDllFirebird: string;
-begin
-  Result := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'gds32.dll';
 end;
 
 end.
