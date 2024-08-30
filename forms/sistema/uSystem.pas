@@ -33,7 +33,7 @@ uses
   frxADOComponents, dmIntegracao, dmSystem, frxDBSet, frxDBXComponents,
   Data.Win.ADODB, FireDAC.Phys.ODBC, FireDAC.Phys.ODBCDef, frxDCtrl,
   JvExControls, JvButton, JvTransparentButton, uCadUser, frxIBXComponents,
-  IBX.IBDatabase, IBX.IBCustomDataSet, IniFiles, dmFastReport, uCadReport;
+  IBX.IBDatabase, IBX.IBCustomDataSet, IniFiles, dmFastReport, uCadReport, uUtils;
 
 type
   TfrmSystem = class(TForm)
@@ -83,8 +83,6 @@ type
       Y: Integer);
   private
     { Private declarations }
-    procedure PermissionUser;
-    procedure PermissionReport;
   public
     { Public declarations }
   end;
@@ -99,76 +97,12 @@ uses
   Math;
 
 {$R *.dfm}
-
-procedure TfrmSystem.PermissionReport;
-var
-repAlter, repCreate, repDelete: String;
-begin
-  with mSystem.qryUserPermission do
-  begin
-    Close;
-    ParamByName('id_login').AsInteger := mSystem.qryLogin.FieldByName('id').AsInteger;
-    ParamByName('p_type').AsString := 'SystemReport';
-    Open;
-
-      repAlter := FieldByName('ALTER').AsString;
-      repCreate := FieldByName('CREATE').AsString;
-      repDelete := FieldByName('DELETE').AsString;
-
-      // Verificações de permissão para relatórios
-      if repAlter = 'S' then
-        btnEdtReport.Enabled := True
-      else
-        btnEdtReport.Enabled := False;
-
-      if repCreate = 'S' then
-        btnAddReport.Enabled := True
-      else
-        btnAddReport.Enabled := False;
-
-      if repDelete = 'S' then
-        btnDeleteReport.Enabled := True
-      else
-        btnDeleteReport.Enabled := False;
-    end;
-end;
-
-procedure TfrmSystem.PermissionUser;
-var
-usuAlter, usuCreate, usuDelete: String;
-begin
-  with mSystem.qryUserPermission do
-  begin
-    Close;
-    ParamByName('id_login').AsInteger := mSystem.qryLogin.FieldByName('id').AsInteger;
-    ParamByName('p_type').AsString := 'SystemUser';
-    Open;
-
-      usuAlter := FieldByName('ALTER').AsString;
-      usuCreate := FieldByName('CREATE').AsString;
-      usuDelete := FieldByName('DELETE').AsString;
-
-      // Verificações de permissão para usuários
-      if usuAlter = 'S' then
-        btnEdtUser.Enabled := True
-      else
-        btnEdtUser.Enabled := False;
-
-      if usuCreate = 'S' then
-        btnCreateUser.Enabled := True
-      else
-        btnCreateUser.Enabled := False;
-
-      if usuDelete = 'S' then
-        btnDeleteUser.Enabled := True
-      else
-        btnDeleteUser.Enabled := False;
-    end;
-end;
-
+// adicionar relatorio
 procedure TfrmSystem.btnAddReportClick(Sender: TObject);
 
 begin
+
+  frmCadReport := TfrmCadReport.Create(Self);
   frmCadReport.caption := 'Manutenção de Relatórios - INCLUIR';
   frmCadReport.edtIdReport.Text := 'NOVO';
   frmCadReport.edtNameReport.Clear;
@@ -176,9 +110,10 @@ begin
   frmCadReport.cbbGroupReport.KeyValue := -1;
   frmCadReport.showmodal;
 end;
-
+// adicionar usuario
 procedure TfrmSystem.btnCreateUserClick(Sender: TObject);
 begin
+  frmCadUser := TfrmCadUser.Create(Self);
   frmCadUser.Caption := 'Manutenção de usuários - INCLUIR';
   frmCadUser.edtIdUser.Text := 'NOVO';
   frmCadUser.lbInfo.Visible := True;
@@ -186,68 +121,48 @@ begin
   frmCadUser.GroupBox2.Visible := False;
   frmCadUser.ShowModal;
 end;
-
+// excluir relatorio - procedure na classe utils
 procedure TfrmSystem.btnDeleteReportClick(Sender: TObject);
 begin
   if MessageDlg('Essa ação é irreversivel deseja continuar ?', mtInformation, [mbYes, mbNo], 0) = mrYes then
     begin
-      with mSystem.qryCadReport do
-        begin
-          Close;
-          SQL.Clear;
-          SQL.Add('DELETE FROM TB_REPORTS WHERE ID = :id_report');
-          ParamByName('id_report').AsInteger := dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger;
-          ExecSQL;
-        end;
+      Util.excRelatorio(dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger);
+      dbgReports.DataSource.DataSet.Refresh;
     end else
       begin
         exit;
       end;
 end;
-
+// excluir usuario - procedure na classe utils
 procedure TfrmSystem.btnDeleteUserClick(Sender: TObject);
 begin
     if MessageDlg('Essa ação é irreversivel deseja continuar ?', mtInformation, [mbYes, mbNo], 0) = mrYes then
     begin
-      with mSystem.qryCadUser do
-        begin
-
-          Close;
-          SQL.Clear;
-          SQL.Add('DELETE FROM tb_user_permission WHERE ID_USER = :id_user');
-          ParamByName('id_user').AsInteger := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
-          ExecSQL;
-
-          Close;
-          SQL.Clear;
-          SQL.Add('DELETE FROM tb_users WHERE ID = :id_user');
-          ParamByName('id_user').AsInteger := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
-          ExecSQL;
-        end;
-          dbgUsers.DataSource.DataSet.Refresh;
+      Util.excUsuario(dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger);
+      dbgUsers.DataSource.DataSet.Refresh;
     end else
       begin
         exit;
       end;
 end;
-
+// editar relatorio
 procedure TfrmSystem.btnEdtReportClick(Sender: TObject);
 var IdSelect:Integer;
 begin
 
   IdSelect := dbgReports.DataSource.DataSet.FieldByName('ID').AsInteger;
-
+  frmCadReport := TfrmCadReport.Create(Self);
   frmCadReport.caption := 'Manutenção de Relatórios - ALTERAR';
   frmCadReport.btnEdtReport.Visible := True;
   frmCadReport.PreencheDadosReport(IdSelect);
   frmCadReport.showmodal;
 end;
-
+// editar usuario
 procedure TfrmSystem.btnEdtUserClick(Sender: TObject);
 var IdSelect: Integer;
 begin
   IdSelect := dbgUsers.DataSource.DataSet.FieldByName('ID').AsInteger;
-
+  frmCadUser := TfrmCadUser.Create(Self);
   frmCadUser.Caption := 'Manutenção de usuários - ALTERAR';
   frmCadUser.PreencheDadosUser(IdSelect);
   frmCadUser.lbInfo.Visible := false;
@@ -255,19 +170,19 @@ begin
   frmCadUser.GroupBox2.Visible := True;
   frmCadUser.ShowModal;
 end;
-
+// sair do sistema
 procedure TfrmSystem.btnExitSystemClick(Sender: TObject);
 begin
 
   if MessageDlg('Tem certeza que deseja sair do sistema?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
   begin
-     Close;
+     Application.Terminate;
   end else
   begin
     Exit;
   end;
 end;
-
+// Show do formulario o codigo ajusta a imagem no centro e esconde os titulos das paginas
 procedure TfrmSystem.FormShow(Sender: TObject);
 var pages: Integer;
 canAlter, canCreate, canDelete: String;
@@ -285,48 +200,21 @@ begin
       pgcSystem.pages[pages].TabVisible := False;
     end;
   pgcSystem.ActivePage := pgcSystem.Pages[2];
-  PermissionUser;
-
-  IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
-
-  ParamsDB := TStringList.Create;
-  try
-    Ini := TIniFile.Create(IniPath);
-    try
-      ParamsDB.Add('password=' + Ini.ReadString('CONEXAO', 'PASSWORD', ''));
-      ParamsDB.Add('user_name=' + Ini.ReadString('CONEXAO', 'USER', ''));
-      ParamsDB.Add('lc_ctype=' + ini.ReadString('FASTREPORT', 'CHARSET', ''));
-
-      StringDB := Ini.ReadString('CONEXAO', 'HOST', '') + '/' +
-                  Ini.ReadString('CONEXAO', 'PORT', '') + ':' +
-                  Ini.ReadString('CONEXAO', 'DATABASE', '');
-
-      {mFastReport.conFast.Params := ParamsDB;
-
-      mFastReport.conFast.DatabaseName := StringDB;
-      mFastReport.conFast.Connected := True;}
-    finally
-      Ini.Free;
-    end;
-  finally
-    ParamsDB.Free;
-  end;
 end;
-
+// codigo reposnsavel por trocar de pagina já que não tem os titulos no pagecontrol
 procedure TfrmSystem.btnShowUsersClick(Sender: TObject);
 begin
   pgcSystem.ActivePageIndex := 1;
   edtFilterDescReport.Clear;
-  PermissionUser;
 end;
-
+// o sql de relatorios trás uma coluna errada quando dou um refreesh isso será resolvido
 procedure TfrmSystem.dbgReportsMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
   if (dbgReports.Columns.Count > 3) then
     dbgReports.Columns[3].Visible := False;
 end;
-
+// filtrando rapidamente um relatorio
 procedure TfrmSystem.edtFilterDescReportChange(Sender: TObject);
 begin
   if Trim(edtFilterDescReport.Text) = '' then
@@ -339,7 +227,7 @@ begin
     mSystem.qryReports.Filtered := True;
   end;
 end;
-
+// filtrando rapidamente um usuario
 procedure TfrmSystem.edtFilterNameUserChange(Sender: TObject);
 begin
   if Trim(edtFilterNameUser.Text) = '' then
@@ -352,14 +240,14 @@ begin
     mSystem.qryUsers.Filtered := True;
   end;
 end;
-
+// voltando para tela principal
 procedure TfrmSystem.btnHomeClick(Sender: TObject);
 begin
   pgcSystem.ActivePageIndex := 2;
   edtFilterDescReport.Clear;
   edtFilterNameUser.Clear;
 end;
-
+// imprimir um relatorio esse codigo é temporario com o novo banco de dados vou salvar o fr3 em um blob
 procedure TfrmSystem.btnPrintReportClick(Sender: TObject);
 var
   PathReport: WideString;
@@ -381,12 +269,11 @@ begin
     ShowMessage('Erro ao carregar o relatório. Verifique o caminho do arquivo FR3: ' + PathReport);
   end;
 end;
-
+// assim que abro a visualização defino que a coluna errada não deve aparecer isso será mudado
 procedure TfrmSystem.btnShowReportsClick(Sender: TObject);
 begin
   pgcSystem.ActivePageIndex := 0;
   edtFilterNameUser.Clear;
-  PermissionReport;
   if (dbgReports.Columns.Count > 3) then
     dbgReports.Columns[3].Visible := False;
 end;

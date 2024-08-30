@@ -1275,7 +1275,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EDITAR  '
             Color = 8454143
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1382,7 +1381,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'ADICIONAR '
             Color = 9437056
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1489,7 +1487,6 @@ object frmSystem: TfrmSystem
             AutoGray = False
             Caption = 'EXCLUIR  '
             Color = 8618239
-            Enabled = False
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
