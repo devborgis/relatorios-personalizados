@@ -12,6 +12,7 @@ object frmCadUser: TfrmCadUser
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poMainFormCenter
+  OnClose = FormClose
   OnShow = FormShow
   TextHeight = 15
   object pgcCadUser: TPageControl
@@ -22,7 +23,7 @@ object frmCadUser: TfrmCadUser
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 486
+    ExplicitWidth = 827
     ExplicitHeight = 374
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
@@ -285,7 +286,7 @@ object frmCadUser: TfrmCadUser
     ShowHint = False
     TabOrder = 1
     StyleElements = []
-    ExplicitWidth = 486
+    ExplicitWidth = 827
     object btnDadosUser: TJvTransparentButton
       Left = 0
       Top = 0
@@ -336,7 +337,7 @@ object frmCadUser: TfrmCadUser
     TabOrder = 2
     StyleElements = []
     ExplicitTop = 415
-    ExplicitWidth = 486
+    ExplicitWidth = 827
     object btnSaveCadUser: TJvTransparentButton
       Left = 733
       Top = 1

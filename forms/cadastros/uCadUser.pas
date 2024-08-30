@@ -46,6 +46,7 @@ type
     procedure edtLoginUserKeyPress(Sender: TObject; var Key: Char);
     procedure btnSaveCadUserClick(Sender: TObject);
     procedure btnShowPasswordClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -245,6 +246,11 @@ procedure TfrmCadUser.edtNameUserKeyPress(Sender: TObject; var Key: Char);
 begin
   if key = #13 then
     edtLoginUser.SetFocus
+end;
+
+procedure TfrmCadUser.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
 end;
 
 procedure TfrmCadUser.FormShow(Sender: TObject);
