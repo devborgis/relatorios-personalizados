@@ -63,11 +63,6 @@ implementation
 Funções para ler os valores do arquivo INI
 ************************************}
 
-function TuConf.getCharset: String;
-begin
-  Result := Ini.ReadString('FASTREPORT', 'CHARSET', '');
-end;
-
 function TuConf.getConfExiste: Boolean;
 begin
   if not FileExists(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI') then
@@ -77,39 +72,100 @@ begin
     end;
 end;
 
-function TuConf.getIBX: String;
+function TuConf.getCharset: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('FASTREPORT', 'IBX', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('FASTREPORT', 'CHARSET', '');
+  finally
+    Ini.Free;
+  end;
+end;
+
+function TuConf.getIBX: String;
+var
+  Ini: TIniFile;
+begin
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('FASTREPORT', 'IBX', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getPassWord: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'PASSWORD', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'PASSWORD', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getPathDatabase: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'DATABASE', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'DATABASE', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getPathDll: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'DLL', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'DLL', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getProtocol: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'PROTOCOL', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'PROTOCOL', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getSRV: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'SRV', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'SRV', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 function TuConf.getUser: String;
+var
+  Ini: TIniFile;
 begin
-  Result := Ini.ReadString('CONEXAO', 'USER', '');
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Result := Ini.ReadString('CONEXAO', 'USER', '');
+  finally
+    Ini.Free;
+  end;
 end;
 
 {***********************************
@@ -140,43 +196,99 @@ begin
 end;
 
 procedure TuConf.setCharSet(CharSet: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('FASTREPORT', 'CHARSET', CharSet)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('FASTREPORT', 'CHARSET', CharSet);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setIBX(IBX: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('FASTREPORT', 'IBX', IBX)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('FASTREPORT', 'IBX', IBX);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setPassWord(PassWord: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'PASSWORD', PassWord)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'PASSWORD', PassWord);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setPathDatabase(PathDatabase: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'DATABASE', PathDatabase)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'DATABASE', PathDatabase);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setPathDll(PathDll: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'DLL', PathDll)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'DLL', PathDll);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setProtocol(Protocol: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'PROTOCOL', Protocol)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'PROTOCOL', Protocol);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setSRV(SRV: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'SRV', SRV)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'SRV', SRV);
+  finally
+    Ini.Free;
+  end;
 end;
 
 procedure TuConf.setUser(User: String);
+var
+  Ini: TIniFile;
 begin
-  Ini.WriteString('CONEXAO', 'USER', User)
+  Ini := TIniFile.Create(ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI');
+  try
+    Ini.WriteString('CONEXAO', 'USER', User);
+  finally
+    Ini.Free;
+  end;
 end;
 
 end.
