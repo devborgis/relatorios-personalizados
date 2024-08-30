@@ -1,6 +1,7 @@
 object frmLogin: TfrmLogin
   Left = 0
   Top = 0
+  BorderIcons = []
   BorderStyle = bsNone
   Caption = 'Borgis - Relat'#243'rios Personalizados'
   ClientHeight = 484
@@ -13,8 +14,8 @@ object frmLogin: TfrmLogin
   Font.Style = [fsBold]
   Position = poScreenCenter
   StyleElements = []
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
-  OnShow = FormShow
   TextHeight = 17
   object Label1: TLabel
     Left = 418

@@ -49,9 +49,9 @@ type
     procedure btnExitClick(Sender: TObject);
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
     procedure btnShowPasswordClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -65,6 +65,24 @@ implementation
 
 {$R *.dfm}
 
+// conectando ao banco de dados da aplicação
+// habilitando o key preview assim o fomrulario consegue trabalhar com açõs como "ESC" para sair
+procedure TfrmLogin.FormCreate(Sender: TObject);
+begin
+  KeyPreview := True;
+  mSystem.conSystem.Connected := True;
+end;
+
+procedure TfrmLogin.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = VK_ESCAPE then
+    begin
+      btnExit.Click; // Fechar o formulário ao pressionar Esc
+  end;
+end;
+
+// criando formulario e abrindo configurações
 procedure TfrmLogin.btnConfigClick(Sender: TObject);
 begin
   if not Assigned(frmConfig) then
@@ -81,10 +99,7 @@ begin
   if Util.vldLogin(edtLogin.Text, edtPassword.Text) then
     begin
       try
-        mSystem.conSystem.Connected := True;
-        mSystem.qryUsers.Active := True;
-        mSystem.qryReports.Active := True;
-        mSystem.qryGroupsReport.Active := True;
+        frmSystem := TfrmSystem.Create(self);
         frmSystem.ShowModal;
         frmLogin.Close;
       except
@@ -93,7 +108,7 @@ begin
       end;
     end else
       begin
-        ShowMessage('Usuário e/ou senha incorretos, ou o usuário não tem permissão para acessar o sistema.');
+        ShowMessage('Usuário e/ou senha incorretos, usuário não tem permissão para acessar o sistema.');
         edtPassword.Text := '';
         edtLogin.SetFocus;
       end;
@@ -102,7 +117,7 @@ end;
 //Fechando a tela de login
 procedure TfrmLogin.btnExitClick(Sender: TObject);
 begin
-  close;
+  Application.Terminate;
 end;
 
 // Mostrar ou cultar a senha
@@ -118,77 +133,6 @@ begin
     btnShowPassword.Images.ActiveIndex := 0;
     edtPassword.PasswordChar := '•';
   end;
-end;
-
-// Tratativas do OnShow da tela de login (assim que a tela é carregada)
-procedure TfrmLogin.FormKeyDown(Sender: TObject; var Key: Word;
-  Shift: TShiftState);
-begin
-  if Key = VK_ESCAPE then
-  begin
-    btnExit.Click; // Fechar o formulário ao pressionar Esc
-  end;
-
-end;
-
-procedure TfrmLogin.FormShow(Sender: TObject);
-var
-  IniPath, DatabasePath, DLLPath: string;
-  Ini: TIniFile;
-begin
-
-  Util.testes;
-  //Util.vldConfExiste;
-
-  {IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
-  DatabasePath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';
-  DLLPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'firebird.dll';
-
-  dmSystem.mSystem.conSystem.Params.Database := ExtractFilePath(ParamStr(0)) + '.system\' + 'borgis.db';
-
-  if not FileExists(IniPath) then
-  begin
-    if MessageDlg('Arquivo INI não encontrado. Deseja criar com as configurações padrão?', mtInformation, [mbYes, mbNo], 0) = mrYes then
-    begin
-      Ini := TIniFile.Create(IniPath);
-      try
-        Ini.ReadString('CONEXAO', 'DATABASE', DatabasePath);
-        Ini.ReadString('CONEXAO', 'DLL', DLLPath);
-        Ini.ReadString('CONEXAO', 'PORT', '3050');
-        Ini.ReadString('CONEXAO', 'HOST', '127.0.0.1');
-        Ini.ReadString('CONEXAO', 'USER', 'sysdba');
-        Ini.ReadString('CONEXAO', 'PASSWORD', 'masterkey');
-        Ini.ReadString('FASTREPORT', 'CHARSET', 'WIN1252');
-        Ini.UpdateFile;
-
-        mIntegracao.ConfConnection;
-
-        try
-          mIntegracao.conIntegracao.Connected := True;
-          mIntegracao.conIntegracao.Connected := False;
-        except
-          on E: Exception do
-            MessageDlg('Erro na conexão com o banco de dados: ' + E.Message, mtError, [mbOK], 0);
-        end;
-      finally
-        Ini.Free;
-      end;
-    end
-    else
-    begin
-      uConfig.frmConfig.ShowModal;
-    end;
-  end;
-
-  mIntegracao.ConfConnection;
-
-  try
-    mIntegracao.conIntegracao.Connected := True;
-    mIntegracao.conIntegracao.Connected := False;
-  except
-    on E: Exception do
-      MessageDlg('Erro na conexão com o banco de dados: ' + #13#10 + E.Message, mtError, [mbOK], 0);
-  end;}
 end;
 
 end.
