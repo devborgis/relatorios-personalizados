@@ -56,6 +56,8 @@ type
     StringField1: TStringField;
     qryReportsPATH_REPORT: TStringField;
     qryReportsNOME: TStringField;
+    qryExcluirRel: TFDQuery;
+    qryExcluirUsuario: TFDQuery;
   private
     { Private declarations }
   public
@@ -70,5 +72,6 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
 
 end.

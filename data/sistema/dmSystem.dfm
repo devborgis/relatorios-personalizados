@@ -1,9 +1,10 @@
 object mSystem: TmSystem
-  Height = 265
-  Width = 484
+  Height = 448
+  Width = 883
   object conSystem: TFDConnection
     Params.Strings = (
-      'Database=C:\Borgis\borgis.db'
+      'Database=C:\Borgis\SYS.db'
+      'MonitorBy=S'
       'DriverID=SQLite')
     LoginPrompt = False
     Left = 56
@@ -12,9 +13,19 @@ object mSystem: TmSystem
   object qryLogin: TFDQuery
     Connection = conSystem
     SQL.Strings = (
-      'select * from tb_users')
+      'select * from TB_USUARIO where LOGIN = :login and SENHA = :senha')
     Left = 128
     Top = 40
+    ParamData = <
+      item
+        Name = 'LOGIN'
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'SENHA'
+        ParamType = ptInput
+      end>
   end
   object qryUsers: TFDQuery
     Connection = conSystem
@@ -177,5 +188,31 @@ object mSystem: TmSystem
       Origin = 'DESCRIPTION'
       Size = 60
     end
+  end
+  object qryExcluirRel: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'DELETE FROM TB_USU_PERMISSAO WHERE ID_RELATORIO = :ID_REL;'
+      'DELETE FROM TB_RELATORIO WHERE ID = :ID_REL;')
+    Left = 384
+    Top = 104
+    ParamData = <
+      item
+        Name = 'ID_REL'
+        ParamType = ptInput
+      end>
+  end
+  object qryExcluirUsuario: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'DELETE FROM TB_USU_PERMISSAO WHERE ID_USU = :ID_USU;'
+      'DELETE FROM TB_USUARIO WHERE ID = :ID_USU;')
+    Left = 384
+    Top = 168
+    ParamData = <
+      item
+        Name = 'ID_USU'
+        ParamType = ptInput
+      end>
   end
 end
