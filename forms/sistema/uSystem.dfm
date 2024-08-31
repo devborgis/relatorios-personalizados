@@ -722,7 +722,7 @@ object frmSystem: TfrmSystem
         Align = alLeft
         Alignment = taCenter
         AutoSize = False
-        Caption = 'v2.0.0'
+        Caption = 'v3.0.0'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWhite
         Font.Height = -13
@@ -1227,7 +1227,7 @@ object frmSystem: TfrmSystem
           BorderStyle = bsNone
           Color = clWhite
           Ctl3D = False
-          DataSource = mSystem.dsReports
+          DataSource = mSystem.dsRelLista
           DrawingStyle = gdsClassic
           FixedColor = 4227327
           GradientEndColor = clAqua
@@ -1615,7 +1615,6 @@ object frmSystem: TfrmSystem
           BorderStyle = bsNone
           Color = clWhite
           Ctl3D = False
-          DataSource = mSystem.dsUsers
           DrawingStyle = gdsClassic
           FixedColor = 4227327
           GradientEndColor = clAqua

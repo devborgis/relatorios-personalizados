@@ -26,14 +26,9 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
-  Vcl.Imaging.pngimage, Vcl.ComCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
-  FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
-  FireDAC.Phys, FireDAC.VCLUI.Wait, FireDAC.Comp.Client, frxDesgn, frxClass,
-  frxADOComponents, dmIntegracao, dmSystem, frxDBSet, frxDBXComponents,
-  Data.Win.ADODB, FireDAC.Phys.ODBC, FireDAC.Phys.ODBCDef, frxDCtrl,
-  JvExControls, JvButton, JvTransparentButton, uCadUser, frxIBXComponents,
-  IBX.IBDatabase, IBX.IBCustomDataSet, IniFiles, dmFastReport, uCadReport, uUtils;
+  Vcl.Imaging.pngimage, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, dmIntegracao, dmSystem,
+  JvExControls, JvButton, JvTransparentButton, uCadUser, uCadReport, uUtils,
+  Data.DB;
 
 type
   TfrmSystem = class(TForm)
@@ -64,7 +59,6 @@ type
     btnEdtUser: TJvTransparentButton;
     btnCreateUser: TJvTransparentButton;
     btnDeleteUser: TJvTransparentButton;
-    procedure SpeedButton1Click(Sender: TObject);
     procedure btnExitSystemClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure btnShowReportsClick(Sender: TObject);
@@ -185,11 +179,6 @@ end;
 // Show do formulario o codigo ajusta a imagem no centro e esconde os titulos das paginas
 procedure TfrmSystem.FormShow(Sender: TObject);
 var pages: Integer;
-canAlter, canCreate, canDelete: String;
-  IniPath: string;
-  Ini: TInifile;
-  StringDB: String;
-  ParamsDB: TStringList;
 begin
 
   imgMenu.top := (self.Height div 2) - (imgMenu.height div 2);
@@ -201,6 +190,7 @@ begin
     end;
   pgcSystem.ActivePage := pgcSystem.Pages[2];
 end;
+
 // codigo reposnsavel por trocar de pagina já que não tem os titulos no pagecontrol
 procedure TfrmSystem.btnShowUsersClick(Sender: TObject);
 begin
@@ -219,12 +209,12 @@ procedure TfrmSystem.edtFilterDescReportChange(Sender: TObject);
 begin
   if Trim(edtFilterDescReport.Text) = '' then
   begin
-    mSystem.qryReports.Filtered := False;
+    mSystem.qryRelLista.Filtered := False;
   end
   else
   begin
-    mSystem.qryReports.Filter := 'NOME LIKE ' + QuotedStr('%' + edtFilterDescReport.Text + '%');
-    mSystem.qryReports.Filtered := True;
+    mSystem.qryRelLista.Filter := 'NOME LIKE ' + QuotedStr('%' + edtFilterDescReport.Text + '%');
+    mSystem.qryRelLista.Filtered := True;
   end;
 end;
 // filtrando rapidamente um usuario
@@ -232,12 +222,12 @@ procedure TfrmSystem.edtFilterNameUserChange(Sender: TObject);
 begin
   if Trim(edtFilterNameUser.Text) = '' then
   begin
-    mSystem.qryUsers.Filtered := False;
+    mSystem.qryUsuLista.Filtered := False;
   end
   else
   begin
-    mSystem.qryUsers.Filter := 'Nome LIKE ' + QuotedStr('%' + edtFilterNameUser.Text + '%');
-    mSystem.qryUsers.Filtered := True;
+    mSystem.qryUsuLista.Filter := 'Nome LIKE ' + QuotedStr('%' + edtFilterNameUser.Text + '%');
+    mSystem.qryUsuLista.Filtered := True;
   end;
 end;
 // voltando para tela principal
@@ -252,7 +242,7 @@ procedure TfrmSystem.btnPrintReportClick(Sender: TObject);
 var
   PathReport: WideString;
 begin
-  // Obtenha o caminho do relatório do campo PATH_REPORT do dataset do DBGReports
+  {// Obtenha o caminho do relatório do campo PATH_REPORT do dataset do DBGReports
   PathReport := dbgReports.DataSource.DataSet.FieldByName('PATH_REPORT').AsString;
 
   // Verifica se o arquivo do caminho do relatório existe
@@ -267,7 +257,7 @@ begin
   begin
     // Se o arquivo não existir, exibe uma mensagem de erro
     ShowMessage('Erro ao carregar o relatório. Verifique o caminho do arquivo FR3: ' + PathReport);
-  end;
+  end;}
 end;
 // assim que abro a visualização defino que a coluna errada não deve aparecer isso será mudado
 procedure TfrmSystem.btnShowReportsClick(Sender: TObject);
@@ -276,11 +266,6 @@ begin
   edtFilterNameUser.Clear;
   if (dbgReports.Columns.Count > 3) then
     dbgReports.Columns[3].Visible := False;
-end;
-
-procedure TfrmSystem.SpeedButton1Click(Sender: TObject);
-begin
- // frxReport1.DesignReport;
 end;
 
 end.
