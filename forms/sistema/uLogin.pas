@@ -101,6 +101,7 @@ begin
       try
         frmSystem := TfrmSystem.Create(self);
         frmSystem.ShowModal;
+        Util.listaRelatorios;
         frmLogin.Close;
       except
         on E: Exception do
