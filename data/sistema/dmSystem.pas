@@ -37,27 +37,31 @@ type
   TmSystem = class(TDataModule)
     conSystem: TFDConnection;
     qryLogin: TFDQuery;
-    qryUsers: TFDQuery;
-    qryReports: TFDQuery;
-    qryCadUser: TFDQuery;
-    dsUsers: TDataSource;
-    dsReports: TDataSource;
-    qryReportsID: TIntegerField;
-    qryReportsGRUPO: TStringField;
-    qryUserPermission: TFDQuery;
-    qryCadPermission: TFDQuery;
-    qryCadReport: TFDQuery;
-    qryGroupsReport: TFDQuery;
-    qryGroupsReportID: TIntegerField;
-    qryGroupsReportDESCRIPTION: TStringField;
-    dsGroupsReport: TDataSource;
-    qryCadGroupReport: TFDQuery;
+    qryUsuLista: TFDQuery;
+    qryRelLista: TFDQuery;
+    dsUsuLista: TDataSource;
+    dsRelLista: TDataSource;
+    qryUsuPermissao: TFDQuery;
+    qryGruRelLista: TFDQuery;
+    qryGruRelListaID: TIntegerField;
+    qryGruRelListaDESCRIPTION: TStringField;
+    dsGruRelLista: TDataSource;
+    qryCRUD: TFDQuery;
+    FDTransaction1: TFDTransaction;
+    dsUsuPermissao: TDataSource;
+    qrySubGrupRel: TFDQuery;
     IntegerField1: TIntegerField;
     StringField1: TStringField;
-    qryReportsPATH_REPORT: TStringField;
-    qryReportsNOME: TStringField;
-    qryExcluirRel: TFDQuery;
-    qryExcluirUsuario: TFDQuery;
+    dsSubGrupRel: TDataSource;
+    dsUsuLogado: TDataSource;
+    qryRelListaID: TFDAutoIncField;
+    qryRelListaNOME: TStringField;
+    qryRelListaDESCRICAO: TStringField;
+    qryRelListaID_GRUPO: TIntegerField;
+    qryRelListaID_SUB_GRUPO: TIntegerField;
+    qryRelListaFR3: TBlobField;
+    qryRelListaGRUPO: TStringField;
+    qryRelListaSUBGRUPO: TStringField;
   private
     { Private declarations }
   public

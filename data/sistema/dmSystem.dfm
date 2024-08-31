@@ -6,16 +6,18 @@ object mSystem: TmSystem
       'Database=C:\Borgis\SYS.db'
       'MonitorBy=S'
       'DriverID=SQLite')
+    Connected = True
     LoginPrompt = False
+    Transaction = FDTransaction1
     Left = 56
-    Top = 40
+    Top = 48
   end
   object qryLogin: TFDQuery
     Connection = conSystem
     SQL.Strings = (
       'select * from TB_USUARIO where LOGIN = :login and SENHA = :senha')
-    Left = 128
-    Top = 40
+    Left = 192
+    Top = 48
     ParamData = <
       item
         Name = 'LOGIN'
@@ -27,7 +29,7 @@ object mSystem: TmSystem
         ParamType = ptInput
       end>
   end
-  object qryUsers: TFDQuery
+  object qryUsuLista: TFDQuery
     Connection = conSystem
     SQL.Strings = (
       'SELECT '
@@ -35,93 +37,102 @@ object mSystem: TmSystem
       'NAME AS '#39'NOME'#39
       'FROM TB_USERS'
       '')
-    Left = 56
-    Top = 104
+    Left = 248
+    Top = 48
   end
-  object qryReports: TFDQuery
+  object qryRelLista: TFDQuery
     Connection = conSystem
     SQL.Strings = (
-      'SELECT '
-      'R.ID, '
-      'R.DESCRIPTION AS '#39'NOME'#39','
-      'RG.DESCRIPTION AS '#39'GRUPO'#39','
-      'R.PATH_REPORT'
-      'FROM TB_REPORTS AS R'
-      'LEFT JOIN TB_REPORTS_GROUP AS RG ON RG.ID = R.ID_GROUP')
-    Left = 120
-    Top = 104
-    object qryReportsID: TIntegerField
-      Alignment = taCenter
-      FieldName = 'ID'
-      Origin = 'ID'
-      ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
-    end
-    object qryReportsNOME: TStringField
-      FieldName = 'NOME'
-      Origin = 'DESCRIPTION'
-      Size = 100
-    end
-    object qryReportsGRUPO: TStringField
-      AutoGenerateValue = arDefault
-      FieldName = 'GRUPO'
-      Origin = 'DESCRIPTION'
-      ProviderFlags = []
-      ReadOnly = True
-      Size = 60
-    end
-    object qryReportsPATH_REPORT: TStringField
-      FieldName = 'PATH_REPORT'
-      Origin = 'PATH_REPORT'
-      Size = 260
-    end
-  end
-  object dsUsers: TDataSource
-    DataSet = qryUsers
-    Left = 56
-    Top = 168
-  end
-  object dsReports: TDataSource
-    DataSet = qryReports
-    Left = 120
-    Top = 168
-  end
-  object qryCadUser: TFDQuery
-    Connection = conSystem
-    SQL.Strings = (
-      'SELECT '
-      #9'U.*,'
-      #9'UPU.`ALTER` AS USU_ALTER,'
-      #9'UPU.`DELETE` AS USU_DELETE,'
-      #9'UPU.`CREATE` AS USU_CREATE,'
-      #9'UPR.`ALTER` AS REP_ALTER,'
-      #9'UPR.`DELETE` AS REP_DELETE,'
-      #9'UPR.`CREATE` AS REP_CREATE'
-      'FROM tb_users as U '
-      
-        'LEFT JOIN TB_USER_PERMISSION AS UPU ON UPU.ID_USER = U.ID AND UP' +
-        'U.DESC_PERMISSION = '#39'SystemUser'#39
-      
-        'LEFT JOIN TB_USER_PERMISSION AS UPR ON UPR.ID_USER = U.ID AND UP' +
-        'R.DESC_PERMISSION = '#39'SystemReport'#39
-      'WHERE id = :id_user')
-    Left = 304
-    Top = 40
+      'SELECT'
+      #9'R.*,'
+      #9'RG.DESCRICAO AS `GRUPO`,'
+      #9'RSG.DESCRICAO AS `SUB GRUPO` '
+      'FROM TB_RELATORIO R '
+      'INNER JOIN TB_USU_PERMISSAO UP ON UP.ID_RELATORIO = R.ID '
+      'LEFT JOIN TB_REL_GRUPO RG ON RG.ID = R.ID_GRUPO '
+      'LEFT JOIN TB_REL_SUB_GRUPO RSG ON RSG.ID = R.ID_SUB_GRUPO '
+      'WHERE UP.ID_USU = :USU_LOGADO'
+      'AND UP.VISUALIZAR = 1')
+    Left = 328
+    Top = 48
     ParamData = <
       item
-        Name = 'ID_USER'
+        Name = 'USU_LOGADO'
         DataType = ftInteger
         ParamType = ptInput
         Value = Null
       end>
+    object qryRelListaID: TFDAutoIncField
+      DisplayWidth = 3
+      FieldName = 'ID'
+      Origin = 'ID'
+      ProviderFlags = [pfInWhere, pfInKey]
+    end
+    object qryRelListaNOME: TStringField
+      DisplayWidth = 250
+      FieldName = 'NOME'
+      Origin = 'NOME'
+      Required = True
+      Size = 250
+    end
+    object qryRelListaDESCRICAO: TStringField
+      DisplayWidth = 250
+      FieldName = 'DESCRICAO'
+      Origin = 'DESCRICAO'
+      Size = 250
+    end
+    object qryRelListaID_GRUPO: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'ID_GRUPO'
+      Origin = 'ID_GRUPO'
+    end
+    object qryRelListaID_SUB_GRUPO: TIntegerField
+      DisplayWidth = 10
+      FieldName = 'ID_SUB_GRUPO'
+      Origin = 'ID_SUB_GRUPO'
+    end
+    object qryRelListaFR3: TBlobField
+      DisplayWidth = 10
+      FieldName = 'FR3'
+      Origin = 'FR3'
+    end
+    object qryRelListaGRUPO: TStringField
+      AutoGenerateValue = arDefault
+      DisplayWidth = 100
+      FieldName = 'GRUPO'
+      Origin = 'DESCRICAO'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 100
+    end
+    object qryRelListaSUBGRUPO: TStringField
+      AutoGenerateValue = arDefault
+      DisplayWidth = 100
+      FieldName = 'SUB GRUPO'
+      Origin = 'DESCRICAO'
+      ProviderFlags = []
+      ReadOnly = True
+      Size = 100
+    end
   end
-  object qryUserPermission: TFDQuery
+  object dsUsuLista: TDataSource
+    DataSet = qryUsuLista
+    Left = 248
+    Top = 112
+  end
+  object dsRelLista: TDataSource
+    DataSet = qryRelLista
+    Left = 328
+    Top = 112
+  end
+  object qryUsuPermissao: TFDQuery
     Connection = conSystem
     SQL.Strings = (
       'select * from tb_user_permission '
       'where ID_USER = :id_login'
       'and DESC_PERMISSION = :p_type')
-    Left = 216
-    Top = 40
+    Left = 520
+    Top = 48
     ParamData = <
       item
         Name = 'ID_LOGIN'
@@ -132,52 +143,61 @@ object mSystem: TmSystem
         ParamType = ptInput
       end>
   end
-  object qryCadPermission: TFDQuery
-    Connection = conSystem
-    SQL.Strings = (
-      'select * from tb_user_permission '
-      'where ID_USER = :id_sel')
-    Left = 304
-    Top = 104
-    ParamData = <
-      item
-        Name = 'ID_SEL'
-        ParamType = ptInput
-      end>
-  end
-  object qryCadReport: TFDQuery
-    Connection = conSystem
-    Left = 304
-    Top = 168
-  end
-  object qryGroupsReport: TFDQuery
+  object qryGruRelLista: TFDQuery
     Connection = conSystem
     SQL.Strings = (
       'SELECT * FROM TB_REPORTS_GROUP')
-    Left = 216
-    Top = 104
-    object qryGroupsReportID: TIntegerField
+    Left = 424
+    Top = 48
+    object qryGruRelListaID: TIntegerField
       FieldName = 'ID'
       Origin = 'ID'
       ProviderFlags = [pfInUpdate, pfInWhere, pfInKey]
     end
-    object qryGroupsReportDESCRIPTION: TStringField
+    object qryGruRelListaDESCRIPTION: TStringField
       FieldName = 'DESCRIPTION'
       Origin = 'DESCRIPTION'
       Size = 60
     end
   end
-  object dsGroupsReport: TDataSource
-    DataSet = qryGroupsReport
-    Left = 216
-    Top = 168
+  object dsGruRelLista: TDataSource
+    DataSet = qryGruRelLista
+    Left = 424
+    Top = 112
   end
-  object qryCadGroupReport: TFDQuery
+  object qryCRUD: TFDQuery
     Connection = conSystem
     SQL.Strings = (
-      '')
-    Left = 384
-    Top = 40
+      'select * from TB_USUARIO where LOGIN = :login and SENHA = :senha')
+    Left = 128
+    Top = 112
+    ParamData = <
+      item
+        Name = 'LOGIN'
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'SENHA'
+        ParamType = ptInput
+      end>
+  end
+  object FDTransaction1: TFDTransaction
+    Connection = conSystem
+    Left = 56
+    Top = 112
+  end
+  object dsUsuPermissao: TDataSource
+    DataSet = qryUsuPermissao
+    Left = 520
+    Top = 112
+  end
+  object qrySubGrupRel: TFDQuery
+    Connection = conSystem
+    SQL.Strings = (
+      'SELECT * FROM TB_REPORTS_GROUP')
+    Left = 624
+    Top = 48
     object IntegerField1: TIntegerField
       FieldName = 'ID'
       Origin = 'ID'
@@ -189,30 +209,14 @@ object mSystem: TmSystem
       Size = 60
     end
   end
-  object qryExcluirRel: TFDQuery
-    Connection = conSystem
-    SQL.Strings = (
-      'DELETE FROM TB_USU_PERMISSAO WHERE ID_RELATORIO = :ID_REL;'
-      'DELETE FROM TB_RELATORIO WHERE ID = :ID_REL;')
-    Left = 384
-    Top = 104
-    ParamData = <
-      item
-        Name = 'ID_REL'
-        ParamType = ptInput
-      end>
+  object dsSubGrupRel: TDataSource
+    DataSet = qrySubGrupRel
+    Left = 624
+    Top = 112
   end
-  object qryExcluirUsuario: TFDQuery
-    Connection = conSystem
-    SQL.Strings = (
-      'DELETE FROM TB_USU_PERMISSAO WHERE ID_USU = :ID_USU;'
-      'DELETE FROM TB_USUARIO WHERE ID = :ID_USU;')
-    Left = 384
-    Top = 168
-    ParamData = <
-      item
-        Name = 'ID_USU'
-        ParamType = ptInput
-      end>
+  object dsUsuLogado: TDataSource
+    DataSet = qryLogin
+    Left = 192
+    Top = 112
   end
 end
