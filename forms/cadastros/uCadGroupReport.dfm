@@ -4,8 +4,8 @@ object frmCadGroupReport: TfrmCadGroupReport
   Cursor = crHandPoint
   BorderStyle = bsDialog
   Caption = 'Manuten'#231#227'o de grupos - CADASTRAR'
-  ClientHeight = 156
-  ClientWidth = 454
+  ClientHeight = 155
+  ClientWidth = 450
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -52,16 +52,14 @@ object frmCadGroupReport: TfrmCadGroupReport
   end
   object Panel1: TPanel
     Left = 0
-    Top = 115
-    Width = 454
+    Top = 114
+    Width = 450
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 2
-    ExplicitTop = 114
-    ExplicitWidth = 450
     object btnSaveCad: TJvTransparentButton
       Left = 368
       Top = 0
