@@ -33,6 +33,11 @@ type
     function vldLogin(login, senha: String): Boolean;
     procedure excRelatorio(idRel: Integer);
     procedure excUsuario(idUsu: Integer);
+    procedure cadRelatorio(nom, des, cam: String; idGrp, idSGrp: Integer);
+    procedure cadUsuario(nom, log, sen: String; sta: Integer);
+    procedure attRelatorio(idRel, nom, des, cam: String; idGrp, idSGrp: Integer);
+    procedure attUsuario(nom, log, sen: String; sta: Integer);
+    procedure listaRelatorios;
   end;
 
 var
@@ -46,38 +51,250 @@ uses dmIntegracao, dmFastReport, dmSystem;
 
 
 {******************************************
-Função para validar o login (somente tela de login)
-porém penso em utilizar essa função para uma especie
-de logoff dentro da ferramenta, podendo trocar de
-usuario sem ter que fechar e abrir o sistema
+Funções do sistema
 *******************************************}
+procedure TuUtils.attRelatorio(idRel, nom, des, cam: String; idGrp,
+  idSGrp: Integer);
+begin
+  try
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('UPDATE TB_RELATORIO SET NOME = :nom, DESCRICAO = :des, CAMINHO = :cam, ID_GRUPO = :id_grp, ID_SUB_GRUPO = :id_sgrp;');
+        ParamByName('nom').AsString := nom;
+        ParamByName('des').AsString := des;
+        ParamByName('cam').AsString := cam;
+
+        if idGrp = 0 then
+          ParamByName('id_grp').Clear
+        else
+          ParamByName('id_grp').AsInteger := idGrp;
+
+        if idSGrp = 0 then
+          ParamByName('id_sgrp').Clear
+        else
+          ParamByName('id_sgrp').AsInteger := idSGrp;
+        ExecSQL;
+      end;
+
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao atualizar relatório: ' + E.Message);
+      end;
+    end;
+  finally
+    mSystem.qryCRUD.Close;
+  end;
+end;
+
+procedure TuUtils.attUsuario(nom, log, sen: String; sta: Integer);
+begin
+  try
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('UPDATE TB_USUARIO SET NOME = :nom, LOGIN = :log, SENHA = :sen, STATUS = :sta;');
+        ParamByName('nom').AsString := nom;
+        ParamByName('log').AsString := log;
+        ParamByName('sen').AsString := sen;
+        ParamByName('sta').AsInteger := sta;
+        if sta = 0 then
+          ParamByName('sta').Clear
+        else
+          ParamByName('sta').AsInteger := sta;
+
+        ExecSQL;
+      end;
+
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao atulizar usuario: ' + E.Message);
+      end;
+    end;
+  finally
+    mSystem.qryCRUD.Close;
+  end;
+end;
+
+procedure TuUtils.cadRelatorio(nom, des, cam: String; idGrp, idSGrp: Integer);
+var
+  idRel: Integer;
+begin
+  try
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('INSERT INTO TB_RELATORIO (NOME, DESCRICAO, CAMINHO, ID_GRUPO, ID_SUB_GRUPO) VALUES (:nom, :des, :cam, :id_grp, :id_sgrp);');
+        ParamByName('nom').AsString := nom;
+        ParamByName('des').AsString := des;
+        ParamByName('cam').AsString := cam;
+        if idGrp = 0 then
+          ParamByName('id_grp').Clear
+        else
+          ParamByName('id_grp').AsInteger := idGrp;
+
+        if idSGrp = 0 then
+          ParamByName('id_sgrp').Clear
+        else
+          ParamByName('id_sgrp').AsInteger := idSGrp;
+        ExecSQL;
+
+        SQL.Clear;
+        SQL.Add('SELECT last_insert_rowid() AS ID_RELATORIO;');
+        Open;
+        idRel := FieldByName('ID_RELATORIO').AsInteger;
+      end;
+
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('INSERT INTO TB_USU_PERMISSAO (ID_USUARIO, ID_RELATORIO, VISUALIZAR) ');
+        SQL.Add('SELECT ID_USUARIO, :id_rel, 1 FROM TB_USUARIO;');
+        ParamByName('id_rel').AsInteger := idRel;
+        ExecSQL;
+      end;
+
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao criar o relatório: ' + E.Message);
+      end;
+    end;
+  finally
+    mSystem.qryCRUD.Close;
+  end;
+end;
+
+
+procedure TuUtils.cadUsuario(nom, log, sen: String; sta: Integer);
+var
+  idUsu: Integer;
+begin
+  try
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('INSERT INTO TB_USUARIO (NOME, LOGIN, SENHA, STATUS) VALUES (:nom, :log, :sen, :sta);');
+        ParamByName('nom').AsString := nom;
+        ParamByName('log').AsString := log;
+        ParamByName('sen').AsString := sen;
+        ParamByName('sta').AsInteger := sta;
+        ExecSQL;
+
+        SQL.Clear;
+        SQL.Add('SELECT last_insert_rowid() AS ID_USUARIO;');
+        Open;
+        idUsu := FieldByName('ID_USUARIO').AsInteger;
+      end;
+
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('INSERT INTO TB_USU_PERMISSAO (ID_USUARIO, ID_FORM, VISUALIZAR, INCLUIR, EDITAR, EXCLUIR) ');
+        SQL.Add('SELECT :id_usu, ID, 1, 1, 1, 1 FROM TB_FORMULARIO;');
+        SQL.Add('INSERT INTO TB_USU_PERMISSAO (ID_USUARIO, ID_RELATORIO, VISUALIZAR) ');
+        SQL.Add('SELECT :id_usu, ID, 1 FROM TB_RELATORIO;');
+        ParamByName('id_usu').AsInteger := idUsu;
+        ExecSQL;
+      end;
+
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao criar usuario: ' + E.Message);
+      end;
+    end;
+  finally
+    mSystem.qryCRUD.Close;
+  end;
+end;
+
 procedure TuUtils.excRelatorio(idRel: Integer);
 begin
   try
-    with mSystem.qryExcluirRel do
-    begin
-      Close;
-      ParamByName('ID_REL').AsInteger := idRel;
-      ExecSQL;
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('DELETE FROM TB_USU_PERMISSAO WHERE ID_RELATORIO = :ID_REL ;');
+        SQL.Add('DELETE FROM TB_RELATORIO WHERE ID = :ID_REL ;');
+        ParamByName('ID_REL').AsInteger := idRel;
+        ExecSQL;
+      end;
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao excluir o relatório: ' + E.Message);
+      end;
     end;
-  except
-    on E: Exception do
-      ShowMessage('Erro ao excluir o relatório: ' + E.Message);
+  finally
+    mSystem.qryCRUD.Close;
   end;
 end;
 
 procedure TuUtils.excUsuario(idUsu: Integer);
 begin
   try
-    with mSystem.qryExcluirUsuario do
-    begin
-      Close;
-      ParamByName('ID_USU').AsInteger := idUsu;
-      ExecSQL;
+    mSystem.FDTransaction1.StartTransaction;
+    try
+      with mSystem.qryCRUD do
+      begin
+        Close;
+        SQL.Clear;
+        SQL.Add('DELETE FROM TB_USU_PERMISSAO WHERE ID_USU = :ID_USU ;');
+        SQL.Add('DELETE FROM TB_USUARIO WHERE ID = :ID_USU ;');
+        ParamByName('ID_REL').AsInteger := idUsu;
+        ExecSQL;
+      end;
+      mSystem.FDTransaction1.Commit;
+    except
+      on E: Exception do
+      begin
+        mSystem.FDTransaction1.Rollback;
+        ShowMessage('Erro ao excluir o usuário: ' + E.Message);
+      end;
     end;
-  except
-    on E: Exception do
-      ShowMessage('Erro ao excluir o usuário: ' + E.Message);
+  finally
+    mSystem.qryCRUD.Close;
+  end;
+end;
+
+
+procedure TuUtils.listaRelatorios;
+begin
+  with mSystem.qryRelLista do
+  begin
+    Close;
+    ParamByName('USU_LOGADO').AsInteger := mSystem.qryLogin.FieldByName('ID').AsInteger;
+    Open;
   end;
 end;
 
