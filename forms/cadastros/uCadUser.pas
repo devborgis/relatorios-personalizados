@@ -67,7 +67,7 @@ uses StrUtils,
 {Bloco para preencher os campos do cadastro do usuarios quando o tipo for alterar}
 procedure TfrmCadUser.PreencheDadosUser(ID: Integer);
 begin
-  with mSystem.qryCadUser do
+  {with mSystem.qryCadUser do
   begin
     Close;
     SQL.Clear;
@@ -108,7 +108,7 @@ begin
       ckReportDelete.Checked := FieldByName('REP_DELETE').AsString = 'S';
       ckReportCreate.Checked := FieldByName('REP_CREATE').AsString = 'S';
     end;
-  end;
+  end;}
 end;
 
 procedure TfrmCadUser.btnCancelCadClick(Sender: TObject);
@@ -140,7 +140,7 @@ end;
 procedure TfrmCadUser.btnSaveCadUserClick(Sender: TObject);
 begin
 
-  try
+  {try
     if edtIdUser.text <> 'NOVO' then
     begin
        with mSystem.qryCadUser do
@@ -209,7 +209,7 @@ begin
       Open;
     end;
 
-    Close;
+    Close; }
 
 end;
 

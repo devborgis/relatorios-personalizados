@@ -3,8 +3,8 @@ object frmCadUser: TfrmCadUser
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Manuten'#231#227'o de usu'#225'rios'
-  ClientHeight = 468
-  ClientWidth = 831
+  ClientHeight = 467
+  ClientWidth = 827
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,13 +18,11 @@ object frmCadUser: TfrmCadUser
   object pgcCadUser: TPageControl
     Left = 0
     Top = 41
-    Width = 831
-    Height = 375
+    Width = 827
+    Height = 374
     ActivePage = TabSheet1
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 827
-    ExplicitHeight = 374
     object TabSheet1: TTabSheet
       Caption = 'TabSheet1'
       object Label1: TLabel
@@ -262,7 +260,7 @@ object frmCadUser: TfrmCadUser
   object pnlButtons: TPanel
     Left = 0
     Top = 0
-    Width = 831
+    Width = 827
     Height = 41
     ParentCustomHint = False
     Align = alTop
@@ -286,7 +284,6 @@ object frmCadUser: TfrmCadUser
     ShowHint = False
     TabOrder = 1
     StyleElements = []
-    ExplicitWidth = 827
     object btnDadosUser: TJvTransparentButton
       Left = 0
       Top = 0
@@ -312,8 +309,8 @@ object frmCadUser: TfrmCadUser
   end
   object pnlFooter: TPanel
     Left = 0
-    Top = 416
-    Width = 831
+    Top = 415
+    Width = 827
     Height = 52
     ParentCustomHint = False
     Align = alBottom
@@ -336,8 +333,6 @@ object frmCadUser: TfrmCadUser
     ShowHint = False
     TabOrder = 2
     StyleElements = []
-    ExplicitTop = 415
-    ExplicitWidth = 827
     object btnSaveCadUser: TJvTransparentButton
       Left = 733
       Top = 1

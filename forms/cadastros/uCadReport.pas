@@ -24,6 +24,8 @@ type
     btnEdtReport: TJvTransparentButton;
     edtPathReport: TEdit;
     bntFileReport: TJvTransparentButton;
+    cbbSubGrupoReport: TDBLookupComboBox;
+    Label4: TLabel;
     procedure btnCancCadReportClick(Sender: TObject);
     procedure btnNewFr3Click(Sender: TObject);
     procedure bntSaveCadClick(Sender: TObject);
@@ -49,7 +51,7 @@ implementation
 
 procedure TfrmCadReport.PreencheDadosReport(IdReport: Integer);
 begin 
-  with mSystem.qryCadReport do
+  {with mSystem.qryCadReport do
     begin
       Close;
       SQL.Clear;
@@ -60,7 +62,7 @@ begin
       edtNameReport.Text := FieldByName('DESCRIPTION').AsString;
       cbbGroupReport.KeyValue :=  StrToInt(FieldByName('ID_GROUP').AsString);
       edtPathReport.Text := FieldByName('PATH_REPORT').AsString;
-    end;
+    end; }
 end;
 
 procedure TfrmCadReport.bntFileReportClick(Sender: TObject);
@@ -76,7 +78,7 @@ end;
 procedure TfrmCadReport.bntSaveCadClick(Sender: TObject);
 begin
 
-  try
+  {try
     if edtIdReport.text <> 'NOVO' then
     begin
       with mSystem.qryCadReport do
@@ -137,7 +139,7 @@ begin
   except
     on E: Exception do
       ShowMessage('Erro ao cadastrar relatório: ' + E.Message);
-  end;
+  end; }
 
 end;
 
