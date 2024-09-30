@@ -156,6 +156,7 @@ object mFastReport: TmFastReport
     Top = 200
   end
   object frxFDComponents1: TfrxFDComponents
+    DefaultDatabase = mIntegracao.DBIntegracao
     Left = 120
     Top = 208
   end
