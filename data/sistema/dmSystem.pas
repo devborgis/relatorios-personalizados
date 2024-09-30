@@ -43,15 +43,11 @@ type
     dsRelLista: TDataSource;
     qryUsuPermissao: TFDQuery;
     qryGruRelLista: TFDQuery;
-    qryGruRelListaID: TIntegerField;
-    qryGruRelListaDESCRIPTION: TStringField;
     dsGruRelLista: TDataSource;
     qryCRUD: TFDQuery;
     FDTransaction1: TFDTransaction;
     dsUsuPermissao: TDataSource;
     qrySubGrupRel: TFDQuery;
-    IntegerField1: TIntegerField;
-    StringField1: TStringField;
     dsSubGrupRel: TDataSource;
     dsUsuLogado: TDataSource;
     qryRelListaID: TFDAutoIncField;
@@ -59,9 +55,41 @@ type
     qryRelListaDESCRICAO: TStringField;
     qryRelListaID_GRUPO: TIntegerField;
     qryRelListaID_SUB_GRUPO: TIntegerField;
-    qryRelListaFR3: TBlobField;
     qryRelListaGRUPO: TStringField;
     qryRelListaSUBGRUPO: TStringField;
+    qryUsuListaID: TFDAutoIncField;
+    qryUsuListaSTATUS: TIntegerField;
+    qryUsuListaNOME: TStringField;
+    qryUsuListaLOGIN: TStringField;
+    qryUsuListaSENHA: TStringField;
+    qrySubGrupRelID: TFDAutoIncField;
+    qrySubGrupRelDESCRICAO: TStringField;
+    qryUsuPermissaoID: TFDAutoIncField;
+    qryUsuPermissaoID_USU: TIntegerField;
+    qryUsuPermissaoID_FORM: TIntegerField;
+    qryUsuPermissaoID_RELATORIO: TIntegerField;
+    qryUsuPermissaoVISUALIZAR: TIntegerField;
+    qryUsuPermissaoINCLUIR: TIntegerField;
+    qryUsuPermissaoEXCLUIR: TIntegerField;
+    qryUsuPermissaoEDITAR: TIntegerField;
+    qryGruRelListaID: TFDAutoIncField;
+    qryGruRelListaDESCRICAO: TStringField;
+    SQLiteDriverLink: TFDPhysSQLiteDriverLink;
+    qryRelListaFR3: TStringField;
+    qryUsuCadPermissao: TFDQuery;
+    dsUsuCadPermissao: TDataSource;
+    qryUsuCadPermissaoDESCRICAO: TStringField;
+    qryUsuCadPermissaoVISUALIZAR: TIntegerField;
+    qryUsuCadPermissaoEXCLUIR: TIntegerField;
+    qryUsuCadPermissaoEDITAR: TIntegerField;
+    qryUsuCadPermissaoINCLUIR: TIntegerField;
+    qryUsuCad: TFDQuery;
+    qryUsuCadID: TFDAutoIncField;
+    qryUsuCadSTATUS: TIntegerField;
+    qryUsuCadNOME: TStringField;
+    qryUsuCadLOGIN: TStringField;
+    qryUsuCadSENHA: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -77,5 +105,11 @@ implementation
 
 {$R *.dfm}
 
+
+procedure TmSystem.DataModuleCreate(Sender: TObject);
+var CaminhoDB: String;
+begin
+  SQLiteDriverLink.VendorLib := ExtractFilePath(ExtractFilePath(ParamStr(0)) + 'lib\sqlite3.dll');
+end;
 
 end.
