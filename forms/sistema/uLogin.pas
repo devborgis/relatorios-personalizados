@@ -65,14 +65,72 @@ implementation
 
 {$R *.dfm}
 
-// conectando ao banco de dados da aplicação
-// habilitando o key preview assim o fomrulario consegue trabalhar com açõs como "ESC" para sair
+{----------------------------------------------------------------
+Create do fomrulario verificando e habilitando conexão etc
+-----------------------------------------------------------------}
 procedure TfrmLogin.FormCreate(Sender: TObject);
+const
+  MAX_RETRIES = 3;       // Número máximo de tentativas
+var
+  attempt: Integer;      // Tentativas
+  dbFound: Boolean;      // Banco de dados está conectado?
+  dbPath: String;        // Caminho padrão do banco de dados
+  iniPath: String;       // Caminho do arquivo INI
 begin
-  KeyPreview := True;
-  mSystem.conSystem.Connected := True;
+  attempt := 0;
+  dbFound := False;
+  dbPath  := ExtractFilePath(ParamStr(0)) + 'SYS.DB';
+  iniPath  := ExtractFilePath(ParamStr(0)) + '.Integracao\CONFIG.INI';
+
+  { Em caso de erro, a aplicação busca novamente o banco de dados por 3 vezes até fechar completamente }
+  while (attempt < MAX_RETRIES) and (not dbFound) do
+  begin
+    Inc(attempt);
+
+    // Verifica se o arquivo INI existe a cada tentativa
+    if FileExists(iniPath) then
+    begin
+      mIntegracao.confFDIntegracao; // Chama a função de configuração se o arquivo INI existir
+    end
+    else
+    begin
+      ShowMessage('O arquivo de configuração CONFIG.INI não foi encontrado.');
+      Break; // Sai do loop se o arquivo INI não existir
+    end;
+
+    try
+      if FileExists(dbPath) then
+      begin
+        mSystem.conSystem.Params.Database := dbPath;
+        mSystem.conSystem.Connected := True;
+        dbFound := True; // Conexão bem-sucedida
+      end
+      else
+      begin
+        raise Exception.CreateFmt('Não foi possível localizar o banco de dados da aplicação. Tentativa %d de %d. Verifique se o arquivo "SYS.DB" está presente no diretório correto.',
+          [attempt, MAX_RETRIES]);
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Erro ao conectar ao banco de dados: ' + E.Message);
+        if attempt < MAX_RETRIES then
+        begin
+          ShowMessage('Tentando novamente...');
+        end
+        else
+        begin
+          ShowMessage('Todas as tentativas falharam. A aplicação será encerrada.');
+          Application.Terminate; // Fecha a aplicação após todas as tentativas falharem
+        end;
+      end;
+    end;
+  end;
 end;
 
+{----------------------------------------------------------------
+Ao pressionar tecla x a palicação faz algo
+-----------------------------------------------------------------}
 procedure TfrmLogin.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
@@ -80,20 +138,28 @@ begin
     begin
       btnExit.Click; // Fechar o formulário ao pressionar Esc
   end;
+  if Key = VK_F1 then
+    BEGIN
+      btnEnter.Click;
+  END;
 end;
 
-// criando formulario e abrindo configurações
+{------------------------------------------------------------------------
+Configurações do banco de dados "Integração" o SYS.DB não é configurado pelo usuario
+-------------------------------------------------------------------------}
 procedure TfrmLogin.btnConfigClick(Sender: TObject);
 begin
-  if not Assigned(frmConfig) then
-    frmConfig := TfrmConfig.Create(Self);
-  frmConfig.Show;
+  frmConfig := TfrmConfig.Create(Self);
+  try
+    frmConfig.ShowModal;
+  finally
+    frmConfig.Free;
+  end;
 end;
 
-{***************************************************
-Verificando se tem permissão de login usando a função da
-unit utils, se for libera o sistema se não barra
-***************************************************}
+{-----------------------------------------------------------
+Validando Login e liberando usuario para utilizacao do sistema
+------------------------------------------------------------}
 procedure TfrmLogin.btnEnterClick(Sender: TObject);
 begin
   if Util.vldLogin(edtLogin.Text, edtPassword.Text) then
@@ -101,7 +167,6 @@ begin
       try
         frmSystem := TfrmSystem.Create(self);
         frmSystem.ShowModal;
-        Util.listaRelatorios;
         frmLogin.Close;
       except
         on E: Exception do
@@ -115,13 +180,17 @@ begin
       end;
 end;
 
-//Fechando a tela de login
+{---------------------------------------------------
+Finalizando a aplicação
+----------------------------------------------------}
 procedure TfrmLogin.btnExitClick(Sender: TObject);
 begin
   Application.Terminate;
 end;
 
-// Mostrar ou cultar a senha
+{----------------------------------------------------
+Ocultar e/ou mostrar a senha na tela de login
+-----------------------------------------------------}
 procedure TfrmLogin.btnShowPasswordClick(Sender: TObject);
 begin
   if edtPassword.PasswordChar <> #0 then
