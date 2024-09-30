@@ -1,18 +1,25 @@
 object mIntegracao: TmIntegracao
+  OnCreate = DataModuleCreate
   Height = 421
   Width = 781
   object DBIntegracao: TFDConnection
+    Params.Strings = (
+      'DriverID=FB'
+      'User_Name=sysdba'
+      'Password=masterkey')
     LoginPrompt = False
     Left = 32
     Top = 24
   end
   object IBXIntegracao: TIBDatabase
+    LoginPrompt = False
     ServerType = 'IBServer'
     Left = 120
     Top = 24
   end
   object fReport: TfrxReport
     Version = '2022.1.3'
+    DataSetName = 'frxUserDataSet1'
     DotMatrixReport = False
     IniFile = '\Software\Fast Reports'
     PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
@@ -95,6 +102,7 @@ object mIntegracao: TmIntegracao
     ShowProgress = True
     OverwritePrompt = False
     DataOnly = False
+    EmbedFontsIfProtected = False
     InteractiveFormsFontSubset = 'A-Z,a-z,0-9,#43-#47 '
     OpenAfterExport = False
     PrintOptimized = False
@@ -229,5 +237,26 @@ object mIntegracao: TmIntegracao
     DefaultDatabase = DBIntegracao
     Left = 664
     Top = 24
+  end
+  object MySQLDriverLink: TFDPhysMySQLDriverLink
+    Left = 72
+    Top = 128
+  end
+  object FBDriverLink: TFDPhysFBDriverLink
+    Left = 184
+    Top = 128
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    ScreenCursor = gcrAppWait
+    Left = 96
+    Top = 192
+  end
+  object FDQuery1: TFDQuery
+    Connection = DBIntegracao
+    SQL.Strings = (
+      'SELECT * FROM RECEBER')
+    Left = 192
+    Top = 192
   end
 end

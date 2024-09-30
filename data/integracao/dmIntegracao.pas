@@ -24,8 +24,7 @@ unit dmIntegracao;
 interface
 
 uses
-  System.SysUtils, System.Classes, ZAbstractConnection, ZConnection, Data.DB,
-  ZAbstractRODataset, ZAbstractDataset, ZDataset, IniFiles, FireDAC.Stan.Intf,
+  System.SysUtils, System.Classes, IniFiles, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
   FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys,
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, frxDesgn, frxClass, IBX.IBDatabase,
@@ -35,7 +34,8 @@ uses
   frxCellularTextObject, frxMap, frxTableObject, frxGaugeView, frxCross,
   frxRich, frxOLE, frxBarcode, uConf, Dialogs, FireDAC.Phys.MySQLDef,
   FireDAC.Phys.FBDef, FireDAC.Phys.PGDef, FireDAC.Phys.PG, FireDAC.Phys.IBBase,
-  FireDAC.Phys.FB, FireDAC.Phys.MySQL;
+  FireDAC.Phys.FB, FireDAC.Phys.MySQL, FireDAC.Comp.UI, FireDAC.Stan.Param,
+  FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, Data.DB;
 
 type
   TmIntegracao = class(TDataModule)
@@ -65,10 +65,16 @@ type
     frxPDFObject1: TfrxPDFObject;
     frxIBXComponents1: TfrxIBXComponents;
     frxFDComponents1: TfrxFDComponents;
+    MySQLDriverLink: TFDPhysMySQLDriverLink;
+    FBDriverLink: TFDPhysFBDriverLink;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDQuery1: TFDQuery;
+    procedure DataModuleCreate(Sender: TObject);
   private
     procedure ConfiguraFirebird(const ServerIP, ServerPort: string);
     procedure ConfiguraMySql(const ServerIP, ServerPort: string);
     procedure ConfiguraPostgres(const ServerIP, ServerPort: string);
+    procedure ConfiguraIBX;
     { Private declarations }
   public
     procedure confFDIntegracao;
@@ -89,7 +95,11 @@ procedure TmIntegracao.confFDIntegracao;
 var
   ServerInfo, ServerIP, ServerPort: string;
   DelimiterPos: Integer;
+  I: Integer;
+  ParamStr: string;
 begin
+
+  DBIntegracao.Connected := False;
   try
     // Separar IP e Porta
     ServerInfo := Conf.getSRV;
@@ -104,6 +114,7 @@ begin
       ServerIP := ServerInfo;
       ServerPort := '';
     end;
+
     // Configuração de acordo com o protocolo
     if Conf.getProtocol = 'Firebird' then
       ConfiguraFirebird(ServerIP, ServerPort)
@@ -111,53 +122,116 @@ begin
       ConfiguraPostgres(ServerIP, ServerPort)
     else if Conf.getProtocol = 'MySql' then
       ConfiguraMySql(ServerIP, ServerPort);
+
+    if conf.getIBX = 'True' then
+      begin
+        ConfiguraIBX
+      end;
+
   except
     on E: Exception do
-      ShowMessage('Erro ao configurar a conexão: ' + E.Message);
+      raise Exception.Create('Erro ao configurar a conexão: ' + E.Message); // Repassa a exceção
   end;
+
+  ParamStr := '';
+  for I := 0 to DBIntegracao.Params.Count - 1 do
+  begin
+    ParamStr := ParamStr + DBIntegracao.Params.Names[I] + '=' + DBIntegracao.Params.Values[DBIntegracao.Params.Names[I]] + sLineBreak;
+  end;
+  ShowMessage(ParamStr);
 end;
+
 procedure TmIntegracao.ConfiguraFirebird(const ServerIP, ServerPort: string);
 begin
-  DBIntegracao.DriverName := 'FB';
-  DBIntegracao.Params.Values['Database'] := ServerIP + '/' + ServerPort + ':' + Conf.getPathDatabase;
-  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-  if ServerPort <> '' then
-    DBIntegracao.Params.Values['Port'] := ServerPort
-  else
-    DBIntegracao.Params.Values['Port'] := '3050'; // Porta padrão do Firebird
-  DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
-  DBIntegracao.Connected := True;
+  try
+    DBIntegracao.Params.DriverID := 'FB';
+    DBIntegracao.Params.Values['Database'] := ServerIP + '/' + ServerPort + ':' + Conf.getPathDatabase;
+    DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+    DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+    DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+    if ServerPort <> '' then
+      DBIntegracao.Params.Values['Port'] := ServerPort
+    else
+      DBIntegracao.Params.Values['Port'] := '3050'; // Porta padrão do Firebird
+    FBDriverLink.VendorLib := Conf.getPathDll;
+    DBIntegracao.Connected := True;
+  except
+    on E: Exception do
+      raise Exception.Create('Conexão Firebird: ' + E.Message);
+  end;
 end;
+
+procedure TmIntegracao.ConfiguraIBX;
+var
+  ParamsDB: TStringList;
+begin
+  IBXIntegracao.Connected := False;
+  try
+      IBXIntegracao.DatabaseName := Conf.getSRV + ':' + Conf.getPathDatabase;
+
+      ParamsDB := TStringList.Create;
+      try
+        ParamsDB.Add('password=' + Conf.getPassWord);
+        ParamsDB.Add('user_name=' + Conf.getUser);
+        ParamsDB.Add('lc_ctype=' + Conf.getCharset);
+        IBXIntegracao.Params := ParamsDB;
+        IBXIntegracao.Connected := True;
+      finally
+        ParamsDB.Free;
+      end;
+  except
+    on E: Exception do
+      raise Exception.Create('Conexão IBX: ' + E.Message);
+  end;
+end;
+
 procedure TmIntegracao.ConfiguraPostgres(const ServerIP, ServerPort: string);
 begin
-  DBIntegracao.DriverName := 'PG';
-  DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
-  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-  DBIntegracao.Params.Values['Server'] := ServerIP;
-  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-  if ServerPort <> '' then
-    DBIntegracao.Params.Values['Port'] := ServerPort
-  else
-    DBIntegracao.Params.Values['Port'] := '5432'; // Porta padrão do PostgreSQL
-  DBIntegracao.Connected := True;
+  try
+    DBIntegracao.Params.DriverID := 'PG';
+    DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+    DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+    DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+    DBIntegracao.Params.Values['Server'] := ServerIP;
+    DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+    if ServerPort <> '' then
+      DBIntegracao.Params.Values['Port'] := ServerPort
+    else
+      DBIntegracao.Params.Values['Port'] := '5432'; // Porta padrão do PostgreSQL
+    DBIntegracao.Connected := True;
+  except
+    on E: Exception do
+      raise Exception.Create('Conexão Postgres: ' + E.Message);
+  end;
 end;
+
+procedure TmIntegracao.DataModuleCreate(Sender: TObject);
+begin
+  {MySQLDriverLink.VendorLib := ExtractFilePath(ExtractFilePath(ParamStr(0)) + 'lib\LYBMYSQL.DLL');
+    PGDriverLink.VendorHome   := ExtractFilePath(ExtractFilePath(ParamStr(0)));
+      //PGDriverLink.VendorHome   := ExtractFilePath(ExtractFilePath(ParamStr(0)) + 'lib\libpq.dll');}
+end;
+
 procedure TmIntegracao.ConfiguraMySql(const ServerIP, ServerPort: string);
 begin
-  DBIntegracao.DriverName := 'MySQL';
-  DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
-  DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
-  DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
-  DBIntegracao.Params.Values['Server'] := ServerIP;
-  DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
-  if ServerPort <> '' then
-    DBIntegracao.Params.Values['Port'] := ServerPort
-  else
-    DBIntegracao.Params.Values['Port'] := '3306'; // Porta padrão do MySQL
-  DBIntegracao.Params.Values['LibraryName'] := Conf.getPathDll;
-  DBIntegracao.Connected := True;
+  try
+    DBIntegracao.Params.DriverID := 'MySQL';
+    DBIntegracao.Params.Values['Database'] := Conf.getPathDatabase;
+    DBIntegracao.Params.Values['User_Name'] := Conf.getUser;
+    DBIntegracao.Params.Values['Password'] := Conf.getPassWord;
+    DBIntegracao.Params.Values['Server'] := ServerIP;
+    DBIntegracao.Params.Values['CharacterSet'] := Conf.getCharset;
+    if ServerPort <> '' then
+      DBIntegracao.Params.Values['Port'] := ServerPort
+    else
+      DBIntegracao.Params.Values['Port'] := '3306'; // Porta padrão do MySQL
+    MySQLDriverLink.VendorLib := Conf.getPathDll;
+    DBIntegracao.Connected := True;
+  except
+    on E: Exception do
+      raise Exception.Create('Conexão MySQL: ' + E.Message);
+  end;
 end;
+
 
 end.
