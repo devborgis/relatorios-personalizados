@@ -35,8 +35,8 @@ type
     procedure excUsuario(idUsu: Integer);
     procedure cadRelatorio(nom, des, cam: String; idGrp, idSGrp: Integer);
     procedure cadUsuario(nom, log, sen: String; sta: Integer);
-    procedure attRelatorio(idRel, nom, des, cam: String; idGrp, idSGrp: Integer);
-    procedure attUsuario(nom, log, sen: String; sta: Integer);
+    procedure attRelatorio(nom, des, cam: String; idRel, idGrp, idSGrp: Integer);
+    procedure attUsuario(nom, log, sen: String; sta, idUsu: Integer);
     procedure listaRelatorios;
   end;
 
@@ -50,10 +50,10 @@ implementation
 uses dmIntegracao, dmFastReport, dmSystem;
 
 
-{******************************************
-Funções do sistema
-*******************************************}
-procedure TuUtils.attRelatorio(idRel, nom, des, cam: String; idGrp,
+{----------------------------------------------------------------------
+atualizar relatorio
+-----------------------------------------------------------------------}
+procedure TuUtils.attRelatorio(nom, des, cam: String; idRel, idGrp,
   idSGrp: Integer);
 begin
   try
@@ -63,16 +63,16 @@ begin
       begin
         Close;
         SQL.Clear;
-        SQL.Add('UPDATE TB_RELATORIO SET NOME = :nom, DESCRICAO = :des, CAMINHO = :cam, ID_GRUPO = :id_grp, ID_SUB_GRUPO = :id_sgrp;');
+        SQL.Add('UPDATE TB_RELATORIO SET NOME = :nom, DESCRICAO = :des, FR3 = :cam, ID_GRUPO = :id_grp, ID_SUB_GRUPO = :id_sgrp WHERE ID = :id_rel;');
         ParamByName('nom').AsString := nom;
         ParamByName('des').AsString := des;
         ParamByName('cam').AsString := cam;
+        ParamByName('id_rel').AsInteger := idRel;
 
         if idGrp = 0 then
           ParamByName('id_grp').Clear
         else
           ParamByName('id_grp').AsInteger := idGrp;
-
         if idSGrp = 0 then
           ParamByName('id_sgrp').Clear
         else
@@ -93,7 +93,11 @@ begin
   end;
 end;
 
-procedure TuUtils.attUsuario(nom, log, sen: String; sta: Integer);
+{-----------------------------------------------------------------
+atualizar usuario
+------------------------------------------------------------------}
+
+procedure TuUtils.attUsuario(nom, log, sen: String; sta, idUsu: Integer);
 begin
   try
     mSystem.FDTransaction1.StartTransaction;
@@ -102,11 +106,12 @@ begin
       begin
         Close;
         SQL.Clear;
-        SQL.Add('UPDATE TB_USUARIO SET NOME = :nom, LOGIN = :log, SENHA = :sen, STATUS = :sta;');
+        SQL.Add('UPDATE TB_USUARIO SET NOME = :nom, LOGIN = :log, SENHA = :sen, STATUS = :sta WHERE ID = :ID_USU;');
         ParamByName('nom').AsString := nom;
         ParamByName('log').AsString := log;
         ParamByName('sen').AsString := sen;
         ParamByName('sta').AsInteger := sta;
+        ParamByName('ID_USU').AsInteger := idUsu;
         if sta = 0 then
           ParamByName('sta').Clear
         else
@@ -128,6 +133,10 @@ begin
   end;
 end;
 
+{-------------------------------------------------------------
+cadastrar um relatorio
+--------------------------------------------------------------}
+
 procedure TuUtils.cadRelatorio(nom, des, cam: String; idGrp, idSGrp: Integer);
 var
   idRel: Integer;
@@ -139,7 +148,7 @@ begin
       begin
         Close;
         SQL.Clear;
-        SQL.Add('INSERT INTO TB_RELATORIO (NOME, DESCRICAO, CAMINHO, ID_GRUPO, ID_SUB_GRUPO) VALUES (:nom, :des, :cam, :id_grp, :id_sgrp);');
+        SQL.Add('INSERT INTO TB_RELATORIO (NOME, DESCRICAO, FR3, ID_GRUPO, ID_SUB_GRUPO) VALUES (:nom, :des, :cam, :id_grp, :id_sgrp);');
         ParamByName('nom').AsString := nom;
         ParamByName('des').AsString := des;
         ParamByName('cam').AsString := cam;
@@ -147,17 +156,22 @@ begin
           ParamByName('id_grp').Clear
         else
           ParamByName('id_grp').AsInteger := idGrp;
-
         if idSGrp = 0 then
           ParamByName('id_sgrp').Clear
         else
           ParamByName('id_sgrp').AsInteger := idSGrp;
+
+        {ParamByName('nom').DataType.ftWord;
+                ParamByName('des').DataType.ftWord;
+                        ParamByName('cam').DataType.ftWord;
+                                ParamByName('id_grp').DataType.ftInteger;
+                                        ParamByName('id_sgrp').DataType.ftInteger;}
+
         ExecSQL;
 
         SQL.Clear;
         SQL.Add('SELECT last_insert_rowid() AS ID_RELATORIO;');
         Open;
-        idRel := FieldByName('ID_RELATORIO').AsInteger;
       end;
 
       with mSystem.qryCRUD do
@@ -183,7 +197,9 @@ begin
   end;
 end;
 
-
+{-------------------------------------------------------------
+cadastrar um usuario
+--------------------------------------------------------------}
 procedure TuUtils.cadUsuario(nom, log, sen: String; sta: Integer);
 var
   idUsu: Integer;
@@ -233,6 +249,10 @@ begin
   end;
 end;
 
+{-------------------------------------------------------------
+excluir um relatorio
+--------------------------------------------------------------}
+
 procedure TuUtils.excRelatorio(idRel: Integer);
 begin
   try
@@ -259,6 +279,10 @@ begin
     mSystem.qryCRUD.Close;
   end;
 end;
+
+{-------------------------------------------------------------
+excluir um relatorio
+--------------------------------------------------------------}
 
 procedure TuUtils.excUsuario(idUsu: Integer);
 begin
@@ -287,6 +311,10 @@ begin
   end;
 end;
 
+{-------------------------------------------------------------
+listar relatorios
+--------------------------------------------------------------}
+
 
 procedure TuUtils.listaRelatorios;
 begin
@@ -297,7 +325,9 @@ begin
     Open;
   end;
 end;
-
+{------------------------------------------------------------------
+Validar o login do usuario
+-------------------------------------------------------------------}
 function TuUtils.vldLogin(login: string; senha: string): Boolean;
 begin
   Result := False;
