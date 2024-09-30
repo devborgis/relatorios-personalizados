@@ -41,7 +41,6 @@ type
     function getSRV: String;
     function getConfExiste: Boolean;
     {procedures para definir o conf}
-    procedure setDefaultConf;
     procedure setPathDatabase(PathDatabase: String);
     procedure setPathDll(PathDll: String);
     procedure setUser(User: String);
@@ -83,7 +82,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getIBX: String;
 var
   Ini: TIniFile;
@@ -95,7 +93,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getPassWord: String;
 var
   Ini: TIniFile;
@@ -107,7 +104,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getPathDatabase: String;
 var
   Ini: TIniFile;
@@ -119,7 +115,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getPathDll: String;
 var
   Ini: TIniFile;
@@ -131,7 +126,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getProtocol: String;
 var
   Ini: TIniFile;
@@ -143,7 +137,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getSRV: String;
 var
   Ini: TIniFile;
@@ -155,7 +148,6 @@ begin
     Ini.Free;
   end;
 end;
-
 function TuConf.getUser: String;
 var
   Ini: TIniFile;
@@ -171,6 +163,10 @@ end;
 {***********************************
 Procedures para definir os valores do arquivo INI
 ************************************}
+
+
+{Não existe mais conf padrão uma vez que o sistema suporta mais de um SGBD
+
 procedure TuConf.setDefaultConf;
 var
   Ini: TIniFile;
@@ -193,7 +189,7 @@ begin
     on E: Exception do
       MessageDlg('Erro ao gravar o arquivo CONF padrão: ' + #13#10 + E.Message, mtError, [mbOK], 0);
   end;
-end;
+end;}
 
 procedure TuConf.setCharSet(CharSet: String);
 var
@@ -206,7 +202,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setIBX(IBX: String);
 var
   Ini: TIniFile;
@@ -218,7 +213,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setPassWord(PassWord: String);
 var
   Ini: TIniFile;
@@ -230,7 +224,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setPathDatabase(PathDatabase: String);
 var
   Ini: TIniFile;
@@ -242,7 +235,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setPathDll(PathDll: String);
 var
   Ini: TIniFile;
@@ -254,7 +246,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setProtocol(Protocol: String);
 var
   Ini: TIniFile;
@@ -266,7 +257,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setSRV(SRV: String);
 var
   Ini: TIniFile;
@@ -278,7 +268,6 @@ begin
     Ini.Free;
   end;
 end;
-
 procedure TuConf.setUser(User: String);
 var
   Ini: TIniFile;
