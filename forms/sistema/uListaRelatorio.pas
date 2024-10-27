@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
-  Vcl.ExtCtrls, dmSystem, Vcl.Buttons, Vcl.StdCtrls, uUtils, dmIntegracao, dmFastReport, uCadReport;
+  Vcl.ExtCtrls, dmSystem, Vcl.Buttons, Vcl.StdCtrls, uUtils, dmIntegracao, dmFastReport, uCadReport,
+  classe_relatorios;
 
 type
   TfrmListaRelatorio = class(TForm)
@@ -101,17 +102,7 @@ var
 begin
   id := dbgRelatorios.DataSource.DataSet.FieldByName('ID').AsInteger;
 
-  if MessageDlg('Tem certeza que deseja excluir o registro selecionado?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-    begin
-      try
-        // Exclui o registro
-        Util.excRelatorio(id);
-        dbgRelatorios.DataSource.DataSet.Refresh;
-      except
-        on E: Exception do
-          ShowMessage('Erro ao excluir o registro: ' + E.Message);
-      end;
-    end;
+  mSystem.Relatorios.deletar( id )
 
 end;
 
