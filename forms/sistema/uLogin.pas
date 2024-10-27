@@ -52,6 +52,7 @@ type
     procedure btnShowPasswordClick(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
+    procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -140,8 +141,14 @@ begin
   end;
   if Key = VK_F1 then
     BEGIN
-      btnEnter.Click;
+      btnEnter.Click; // ABRE O SISTEMA
   END;
+end;
+
+procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    edtPassword.SetFocus; // MUDA O FOCO DO EDIT
 end;
 
 {------------------------------------------------------------------------
@@ -170,11 +177,11 @@ begin
         frmLogin.Hide;
       except
         on E: Exception do
-        ShowMessage('Erro ao abrir o sistema: ' + #13#10 + #13#10 + E.Message);
+        Util.CriarMensagem('OK', 'ERROR', 'ERRO AO ABRIR O SISTEMA', 'NÃO POSSIVEL ABRIR O SISTEMA VERIFIQUE:' + E.Message, 'ERROR');
       end;
     end else
       begin
-        ShowMessage('Usuário e/ou senha incorretos, usuário não tem permissão para acessar o sistema.');
+        Util.CriarMensagem('OK', 'ATENÇÃO', 'ACESSO NEGADO', 'USUÁRIO E /OU SENHA INCORRETOS, USUÁRIO NÃO TEM PERMISSÃO PARA ACESSAR O SISTEMA:', 'DANGER');
         edtPassword.Text := '';
         edtLogin.SetFocus;
       end;

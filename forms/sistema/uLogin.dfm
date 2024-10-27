@@ -7370,6 +7370,7 @@ object frmLogin: TfrmLogin
     ParentFont = False
     TabOrder = 0
     StyleElements = []
+    OnKeyPress = edtLoginKeyPress
   end
   object edtPassword: TEdit
     Left = 417
