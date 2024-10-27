@@ -1109,7 +1109,7 @@ object frmConfig: TfrmConfig
     OnSelect = cbbProtocoloSelect
     Items.Strings = (
       'Firebird'
-      'Postgres'
+      '-- Postgres'
       'MySQL')
   end
   object ckAtivaIBX: TCheckBox

@@ -256,9 +256,10 @@ object frmCadReport: TfrmCadReport
     Top = 191
     Width = 361
     Height = 23
+    DataField = 'ID'
+    DataSource = mSystem.dsGruRelLista
     KeyField = 'ID'
     ListField = 'DESCRICAO'
-    ListSource = mSystem.dsGruRelLista
     TabOrder = 2
     StyleElements = []
   end
@@ -273,8 +274,6 @@ object frmCadReport: TfrmCadReport
     ParentBackground = False
     TabOrder = 3
     StyleElements = []
-    ExplicitTop = 255
-    ExplicitWidth = 406
     object btnSalvar: TSpeedButton
       Left = 454
       Top = 0
@@ -752,6 +751,7 @@ object frmCadReport: TfrmCadReport
     Top = 229
     Width = 361
     Height = 23
+    DataField = 'DESCRICAO'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -12

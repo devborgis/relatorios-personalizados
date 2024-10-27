@@ -7,6 +7,8 @@ object mSystem: TmSystem
       'Database=C:\GitHub\rlsBorgis\Win32\Debug\SYS.DB'
       'MonitorBy=S'
       'DriverID=SQLite')
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
+    UpdateOptions.AutoCommitUpdates = True
     LoginPrompt = False
     Transaction = FDTransaction1
     Left = 56
@@ -289,8 +291,12 @@ object mSystem: TmSystem
     Top = 200
   end
   object qryUsuCadPermissao: TFDQuery
+    FieldOptions.UpdatePersistent = True
     CachedUpdates = True
     Connection = conSystem
+    Transaction = FDTransaction1
+    UpdateOptions.AssignedValues = [uvAutoCommitUpdates]
+    UpdateOptions.AutoCommitUpdates = True
     SQL.Strings = (
       'SELECT '
       '    R.DESCRICAO AS DESCRICAO,'
@@ -346,6 +352,7 @@ object mSystem: TmSystem
     end
   end
   object dsUsuCadPermissao: TDataSource
+    AutoEdit = False
     DataSet = qryUsuCadPermissao
     Left = 704
     Top = 112
@@ -368,6 +375,7 @@ object mSystem: TmSystem
       FieldName = 'ID'
       Origin = 'ID'
       ProviderFlags = [pfInWhere, pfInKey]
+      ReadOnly = True
     end
     object qryUsuCadSTATUS: TIntegerField
       FieldName = 'STATUS'

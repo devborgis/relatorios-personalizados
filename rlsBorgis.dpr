@@ -18,7 +18,8 @@ uses
   Vcl.Styles,
   uConfiguracoes in 'forms\sistema\uConfiguracoes.pas' {frmConfiguracoes},
   uListaRelatorio in 'forms\sistema\uListaRelatorio.pas' {frmListaRelatorio},
-  uListaUsuarios in 'forms\sistema\uListaUsuarios.pas' {frmListaUsuario};
+  uListaUsuarios in 'forms\sistema\uListaUsuarios.pas' {frmListaUsuario},
+  classe_relatorios in 'classes\classe_relatorios.pas';
 
 {$R *.res}
 

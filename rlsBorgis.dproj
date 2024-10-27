@@ -183,6 +183,7 @@
             <Form>frmListaUsuario</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="classes\classe_relatorios.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

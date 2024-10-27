@@ -12,6 +12,7 @@ object frmLogin: TfrmLogin
   Font.Height = -13
   Font.Name = 'Segoe UI Semibold'
   Font.Style = [fsBold]
+  KeyPreview = True
   Position = poScreenCenter
   StyleElements = []
   OnCreate = FormCreate

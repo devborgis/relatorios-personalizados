@@ -38,7 +38,7 @@ object frmCadUser: TfrmCadUser
     Top = 41
     Width = 564
     Height = 318
-    ActivePage = tbsDados
+    ActivePage = tbsPermissoes
     Align = alClient
     TabOrder = 0
     StyleElements = []
@@ -222,7 +222,7 @@ object frmCadUser: TfrmCadUser
         Font.Height = -12
         Font.Name = 'Segoe UI'
         Font.Style = []
-        Options = [dgTitles, dgIndicator, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+        Options = [dgTitles, dgIndicator, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
         ParentBiDiMode = False
         ParentCtl3D = False
         ParentFont = False
@@ -235,7 +235,7 @@ object frmCadUser: TfrmCadUser
         TitleFont.Height = -12
         TitleFont.Name = 'Segoe UI'
         TitleFont.Style = []
-        StyleElements = [seBorder]
+        StyleElements = []
         OnCellClick = dbgUsuPermissaoCellClick
         OnDrawColumnCell = dbgUsuPermissaoDrawColumnCell
         OnDblClick = dbgUsuPermissaoDblClick
