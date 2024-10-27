@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Data.DB, Vcl.StdCtrls,
   Vcl.Grids, Vcl.DBGrids, dmSystem, System.JSON, System.Net.HttpClient, System.Net.URLClient, System.Net.HttpClientComponent,
-  Vcl.OleCtrls, SHDocVw, Vcl.Buttons, ShellAPI;
+  Vcl.OleCtrls, SHDocVw, Vcl.Buttons, ShellAPI, uconfig;
 
 type
   TfrmConfiguracoes = class(TForm)
@@ -21,6 +21,7 @@ type
     btnNossoGitHub: TSpeedButton;
     ScrollBox1: TScrollBox;
     Panel1: TPanel;
+    btnConfIntegracao: TSpeedButton;
     procedure FormShow(Sender: TObject);
     procedure btnNossoSiteClick(Sender: TObject);
     procedure btnNossoGitHubClick(Sender: TObject);
@@ -28,6 +29,7 @@ type
       Shift: TShiftState);
     procedure dbgSubGrupoRelatorioKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure btnConfIntegracaoClick(Sender: TObject);
   private
     procedure GetRelease;
   public
@@ -88,8 +90,18 @@ begin
 end;
 
 {---------------------------------------------------------------------
-ações dos botões para redirecionar ao github e ao site
+ações dos botões para redirecionar e configurar novamente o banco de dados
 ----------------------------------------------------------------------}
+procedure TfrmConfiguracoes.btnConfIntegracaoClick(Sender: TObject);
+begin
+  frmConfig := TfrmConfig.Create(Self);
+  try
+    frmConfig.ShowModal;
+  finally
+    frmConfig.Free;
+  end;
+end;
+
 procedure TfrmConfiguracoes.btnNossoGitHubClick(Sender: TObject);
 begin
   ShellExecute(0, 'open', 'https://github.com/devborgis/relatorios-personalizados/releases', nil, nil, SW_SHOWNORMAL);
