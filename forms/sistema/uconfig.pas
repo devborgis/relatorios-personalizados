@@ -184,6 +184,31 @@ begin
       ckAtivaIBX.Checked := True
     else
       ckAtivaIBX.Checked := False;
+    if cbbProtocolo.Text = 'Firebird' then
+   begin
+     dbCharset.Items.Clear;
+     dbCharset.Items.Add('WIN1252');
+     dbCharset.Items.Add('UTF8');
+     dbCharset.Items.Add('ASCII');
+     dbCharset.Items.Add('BIG_5');
+     dbCharset.Items.Add('UNICODE_FSS');
+     ckAtivaIBX.Enabled := True;
+   end else if cbbProtocolo.Text = 'Postgres' then
+    begin
+      dbCharset.Items.Clear;
+      dbCharset.Items.Add('WIN1252');
+      dbCharset.Items.Add('UTF8');
+      dbCharset.Items.Add('SQL_ASCII');
+      dbCharset.Items.Add('BIG_5');
+      ckAtivaIBX.Enabled := False;
+    end else if cbbProtocolo.Text = 'MySQL' then
+      begin
+        dbCharset.Items.Clear;
+        dbCharset.Items.Add('utf8');
+        dbCharset.Items.Add('ascii');
+        dbCharset.Items.Add('big5');
+        ckAtivaIBX.Enabled := False;
+      end;
   finally
     Ini.Free;
   end;
