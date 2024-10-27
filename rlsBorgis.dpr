@@ -19,7 +19,8 @@ uses
   uConfiguracoes in 'forms\sistema\uConfiguracoes.pas' {frmConfiguracoes},
   uListaRelatorio in 'forms\sistema\uListaRelatorio.pas' {frmListaRelatorio},
   uListaUsuarios in 'forms\sistema\uListaUsuarios.pas' {frmListaUsuario},
-  classe_relatorios in 'classes\classe_relatorios.pas';
+  classe_relatorios in 'classes\classe_relatorios.pas',
+  uMensagens in 'forms\sistema\uMensagens.pas' {frmMensagens};
 
 {$R *.res}
 
@@ -31,10 +32,12 @@ begin
   Application.Title := 'Borgis - Relatórios Personalizados';
   Application.CreateForm(TmSystem, mSystem);
   Application.CreateForm(TmIntegracao, mIntegracao);
+  Application.CreateForm(TmFastReport, mFastReport);
+  //Application.CreateForm(TfrmMensagens, frmMensagens);
   //Application.CreateForm(TfrmListaUsuario, frmListaUsuario);
   //Application.CreateForm(TfrmListaRelatorio, frmListaRelatorio);
   //Application.CreateForm(TmIntegracao, mIntegracao);
-  Application.CreateForm(TmFastReport, mFastReport);
+
   //Application.CreateForm(TfrmLogin, frmLogin);
   //Application.CreateForm(TfrmCarregando, frmCarregando);
   {a aplicação não vai mais criar os formularios serao criados

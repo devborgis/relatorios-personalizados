@@ -184,6 +184,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="classes\classe_relatorios.pas"/>
+        <DCCReference Include="forms\sistema\uMensagens.pas">
+            <Form>frmMensagens</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
