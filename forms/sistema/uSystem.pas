@@ -28,7 +28,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Buttons,
   Vcl.Imaging.pngimage, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, dmIntegracao, dmSystem,
   JvExControls, JvButton, JvTransparentButton, uCadUser, uCadReport, uUtils,
-  Data.DB, JvSpeedButton, uConfiguracoes, uListaRelatorio, uListaUsuarios;
+  Data.DB, JvSpeedButton, uConfiguracoes, uListaRelatorio, uListaUsuarios,
+  classe_relatorios;
 
 type
   TfrmSystem = class(TForm)
@@ -104,8 +105,9 @@ end;
 
 procedure TfrmSystem.btnSairClick(Sender: TObject);
 begin
-  if MessageDlg('Tem certeza que deseja sair do sistema?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+  if Util.CriarMensagem('CONFIRMAR', 'CONFIRMAÇÃO', 'Sair do Sistema ?', 'Você está prestes a sair. Deseja continuar?', 'INFO') then
   begin
+     mSystem.Relatorios.Destroy;
      Application.Terminate;
   end else
   begin
@@ -124,10 +126,7 @@ end;
 procedure TfrmSystem.FormKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #27 then
-  if MessageDlg('Tem certeza que deseja sair do sistema?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
-  begin
-    Application.Terminate;
-  end;
+  btnSair.Click;
 end;
 
 procedure TfrmSystem.FormShow(Sender: TObject);
@@ -135,6 +134,7 @@ begin
   pExpandido           := True;
   pnlMenuLateral.Width := 50;
   lbUsuLogado.Caption  := mSystem.dsUsuLogado.DataSet.FieldByName('NOME').AsString + ' - ' + DateToStr(Date);
+  mSystem.Relatorios := TRelatorios.Create( mSystem.conSystem )
 end;
 
 end.
