@@ -55,37 +55,51 @@ salvar um relatorio
 
 procedure TfrmCadReport.btnSalvarClick(Sender: TObject);
 var
-  idRel: Integer;
-  idGrp, idSGrp: Integer;
+  sTipoOperacao, sErro: String;
 begin
-  { Verifica se os ComboBoxes têm um valor selecionado }
-  if VarIsNull(cbbGroupReport.KeyValue) then
-    idGrp := 0  // Se não houver seleção, define como 0
+  if edtIdReport.Text = '' then
+    sTipoOperacao := 'INSERIR'
   else
-    idGrp := cbbGroupReport.KeyValue;
-  if VarIsNull(cbbSubGrupoReport.KeyValue) then
-    idSGrp := 0  // Se não houver seleção, define como 0
-  else
-    idSGrp := cbbSubGrupoReport.KeyValue;
-  { Se ação for cadastrar, executa a função de cadastro }
-  if Acao = 0 then
-  begin
-    Util.cadRelatorio(edtNameReport.Text,
-                      memoDescricao.Text,
-                      edtPathReport.Text,
-                      idGrp,  // Passa a variável com 0 se estiver vazio
-                      idSGrp)
-  end
-  else
-  begin
-    idRel := StrToInt(edtIdReport.Text);
-    Util.attRelatorio(edtNameReport.Text,
-                      memoDescricao.Text,
-                      edtPathReport.Text,
-                      idRel,
-                      idGrp,  // Passa a variável com 0 se estiver vazio
-                      idSGrp);
-  end;
+    sTipoOperacao := 'ALTERAR';
+
+  sErro := '';
+
+  with mSystem.Relatorios do
+    begin
+
+      Nome := edtNameReport.Text;
+      Descricao := memoDescricao.Text;
+
+      if not VarIsNull(cbbGroupReport.KeyValue) then
+        Grupo := cbbGroupReport.KeyValue
+      else
+        Grupo := -1;
+
+      if not VarIsNull(cbbGroupReport.KeyValue) then
+        Grupo := cbbGroupReport.KeyValue
+      else
+        Grupo := -1;
+
+      Fr3 := edtPathReport.Text;
+
+      if inserir_alterar( sTipoOperacao, sErro ) then
+        begin
+          Util.CriarMensagem('OK', 'SUCESSO',
+                            'INCLUIR/ALTERAR RELATÓRIO', 'CADASTRO CONFIRMADO NO BANCO DE DADOS',
+                            'INFO');
+          Close;
+      end else
+        begin
+          Util.CriarMensagem('OK', 'ERROR',
+                          'INCLUIR/ALTERAR RELATÓRIO', 'NÃO FOI POSSIVEL CONCLUIR A OPERAÇÃO, CAUSA:' + sErro,
+                          'ERROR');
+
+          edtNameReport.SetFocus;
+      end;
+    end;
+
+    mSystem.qryRelLista.Refresh;
+
 end;
 
 {-------------------------------
