@@ -31,7 +31,8 @@ uses
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
   FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.Stan.Param, FireDAC.DatS,
-  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.UI;
+  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.UI,
+  classe_relatorios;
 
 type
   TmSystem = class(TDataModule)
@@ -94,6 +95,7 @@ type
     { Private declarations }
   public
     { Public declarations }
+    Relatorios : TRelatorios;
   end;
 
 var
