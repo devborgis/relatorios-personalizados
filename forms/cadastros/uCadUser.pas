@@ -89,7 +89,7 @@ begin
                       StrToInt(edtIdUser.Text)
                       );
     end;
-
+  Close;
 end;
 
 procedure TfrmCadUser.btnShowPasswordClick(Sender: TObject);
@@ -125,40 +125,26 @@ end;
 
 procedure TfrmCadUser.dbgUsuPermissaoDblClick(Sender: TObject);
 begin
-  {// Verifica se o dataset está vazio
-  if (Sender as TDBGrid).DataSource.Dataset.IsEmpty then
-    Exit;
-  // Coloca o dataset no modo de edição
+  if ((Sender as TDBGrid).DataSource.Dataset.IsEmpty) then
+  Exit;
+
   (Sender as TDBGrid).DataSource.Dataset.Edit;
-  // Alterna o valor do campo EXCLUIR
-  (Sender as TDBGrid).DataSource.Dataset.FieldByName('EXCLUIR').AsInteger :=
-    IfThen((Sender as TDBGrid).DataSource.Dataset.FieldByName('EXCLUIR').AsInteger = 1, 0, 1);
-  // Alterna o valor do campo EDITAR
-  (Sender as TDBGrid).DataSource.Dataset.FieldByName('EDITAR').AsInteger :=
-    IfThen((Sender as TDBGrid).DataSource.Dataset.FieldByName('EDITAR').AsInteger = 1, 0, 1);
-  // Alterna o valor do campo INCLUIR
-  (Sender as TDBGrid).DataSource.Dataset.FieldByName('INCLUIR').AsInteger :=
-    IfThen((Sender as TDBGrid).DataSource.Dataset.FieldByName('INCLUIR').AsInteger = 1, 0, 1);
-  // Alterna o valor do campo VISUALIZAR
-  (Sender as TDBGrid).DataSource.Dataset.FieldByName('VISUALIZAR').AsInteger :=
-    IfThen((Sender as TDBGrid).DataSource.Dataset.FieldByName('VISUALIZAR').AsInteger = 1, 0, 1);
-  // Salva as alterações
-  (Sender as TDBGrid).DataSource.Dataset.Post;}
 
-  // Verifica se o dataset está ativo e atualizado
- with (Sender as TDBGrid).DataSource.Dataset do
-begin
-  if IsEmpty then Exit;
-  Edit;
-
-  FieldByName('EXCLUIR').AsInteger := IfThen(FieldByName('EXCLUIR').AsInteger = 1, 0, 1);
-  FieldByName('EDITAR').AsInteger := IfThen(FieldByName('EDITAR').AsInteger = 1, 0, 1);
-  FieldByName('INCLUIR').AsInteger := IfThen(FieldByName('INCLUIR').AsInteger = 1, 0, 1);
-  FieldByName('VISUALIZAR').AsInteger := IfThen(FieldByName('VISUALIZAR').AsInteger = 1, 0, 1);
-
-  Post;  // Primeiro salva no DataSet
-  //ApplyUpdates(0);  // Agora aplica as mudanças no banco de dados
+  // Identifica a coluna selecionada
+  with (Sender as TDBGrid).DataSource.Dataset do
+  begin
+    if (Sender as TDBGrid).SelectedField.FieldName = 'VISUALIZAR' then
+      FieldByName('VISUALIZAR').AsInteger := IfThen(FieldByName('VISUALIZAR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'EDITAR' then
+      FieldByName('EDITAR').AsInteger := IfThen(FieldByName('EDITAR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'EXCLUIR' then
+      FieldByName('EXCLUIR').AsInteger := IfThen(FieldByName('EXCLUIR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'INCLUIR' then
+      FieldByName('INCLUIR').AsInteger := IfThen(FieldByName('INCLUIR').AsInteger = 1, 0, 1);
   end;
+
+  (Sender as TDBGrid).DataSource.Dataset.Post;
+  (Sender as TDBGrid).DataSource.Dataset.UpdateRecord;
 end;
 
 procedure TfrmCadUser.dbgUsuPermissaoDrawColumnCell(Sender: TObject;
@@ -229,6 +215,7 @@ begin
   pgcCadUser.ActivePage := pgcCadUser.Pages[0];
   edtNameUser.SetFocus;
   cbbStatus.ItemIndex := 1;
+  dbgUsuPermissao.DataSource.DataSet.Active := True;
   AutoSizeDBGridColumns(dbgUsuPermissao);
 
 end;
