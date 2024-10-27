@@ -1,4 +1,5 @@
 # Delphi specific
+*.rsm
 *.dcu
 *.dcp
 *.~*
