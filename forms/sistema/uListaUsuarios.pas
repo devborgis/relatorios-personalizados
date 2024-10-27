@@ -66,7 +66,7 @@ var
 begin
   id := dbgListaUsuario.DataSource.DataSet.FieldByName('ID').AsInteger;
   // Confirmação antes de excluir
-    if MessageDlg('Tem certeza que deseja excluir o registro selecionado?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+    {if MessageDlg('Tem certeza que deseja excluir o registro selecionado?', mtConfirmation, [mbYes, mbNo], 0) = mrYes then
     begin
       try
         // Exclui o registro
@@ -76,7 +76,7 @@ begin
         on E: Exception do
           ShowMessage('Erro ao excluir o registro: ' + E.Message);
       end;
-    end;
+    end; }
 end;
 
 {----------------------------------------------------------

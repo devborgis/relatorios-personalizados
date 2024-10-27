@@ -78,7 +78,7 @@ Salvar e atualizar cadastro
 procedure TfrmCadUser.btnSalvarClick(Sender: TObject);
 begin
   // Se o ID já estiver preenchido atualizar se não cadastrar
-  if edtIdUser.Text <> '' then
+  {if edtIdUser.Text <> '' then
     begin
       // Nome, Login, Senha, Status e ID do usuario alterado;
 
@@ -88,7 +88,7 @@ begin
                       cbbStatus.ItemIndex,
                       StrToInt(edtIdUser.Text)
                       );
-    end;
+    end;}
   Close;
 end;
 
@@ -127,9 +127,7 @@ procedure TfrmCadUser.dbgUsuPermissaoDblClick(Sender: TObject);
 begin
   if ((Sender as TDBGrid).DataSource.Dataset.IsEmpty) then
   Exit;
-
   (Sender as TDBGrid).DataSource.Dataset.Edit;
-
   // Identifica a coluna selecionada
   with (Sender as TDBGrid).DataSource.Dataset do
   begin
@@ -142,7 +140,6 @@ begin
     else if (Sender as TDBGrid).SelectedField.FieldName = 'INCLUIR' then
       FieldByName('INCLUIR').AsInteger := IfThen(FieldByName('INCLUIR').AsInteger = 1, 0, 1);
   end;
-
   (Sender as TDBGrid).DataSource.Dataset.Post;
   (Sender as TDBGrid).DataSource.Dataset.UpdateRecord;
 end;
