@@ -161,11 +161,11 @@ begin
         else
           ParamByName('id_sgrp').AsInteger := idSGrp;
 
-        {ParamByName('nom').DataType.ftWord;
-                ParamByName('des').DataType.ftWord;
-                        ParamByName('cam').DataType.ftWord;
-                                ParamByName('id_grp').DataType.ftInteger;
-                                        ParamByName('id_sgrp').DataType.ftInteger;}
+        ParamByName('nom').DataType := ftword;
+        ParamByName('des').DataType := ftString;
+        ParamByName('cam').DataType := ftString;
+        ParamByName('id_grp').DataType := ftInteger;
+        ParamByName('id_sgrp').DataType := ftInteger;
 
         ExecSQL;
 
