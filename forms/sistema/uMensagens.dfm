@@ -26,7 +26,6 @@ object frmMensagens: TfrmMensagens
     ShowCaption = False
     TabOrder = 0
     StyleElements = []
-    ExplicitHeight = 248
     object shpFundo: TShape
       Left = 1
       Top = 42
@@ -220,8 +219,9 @@ object frmMensagens: TfrmMensagens
     object lb_mensagem: TLabel
       Left = 191
       Top = 118
-      Width = 72
-      Height = 17
+      Width = 433
+      Height = 98
+      AutoSize = False
       Caption = 'MENSAGEM'
       Color = clGray
       Font.Charset = DEFAULT_CHARSET
@@ -231,6 +231,7 @@ object frmMensagens: TfrmMensagens
       Font.Style = []
       ParentColor = False
       ParentFont = False
+      WordWrap = True
       StyleElements = []
     end
     object btn_sim: TJvTransparentButton
@@ -655,8 +656,6 @@ object frmMensagens: TfrmMensagens
       ShowCaption = False
       TabOrder = 0
       StyleElements = []
-      ExplicitLeft = 2
-      ExplicitTop = -2
       object lb_titulo_janela: TLabel
         Left = 10
         Top = 10
