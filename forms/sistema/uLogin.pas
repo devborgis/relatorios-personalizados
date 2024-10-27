@@ -167,7 +167,7 @@ begin
       try
         frmSystem := TfrmSystem.Create(self);
         frmSystem.ShowModal;
-        frmLogin.Close;
+        frmLogin.Hide;
       except
         on E: Exception do
         ShowMessage('Erro ao abrir o sistema: ' + #13#10 + #13#10 + E.Message);
