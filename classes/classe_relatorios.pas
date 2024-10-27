@@ -3,7 +3,7 @@ unit classe_relatorios;
 interface
 
 uses
-  FireDAC.Comp.Client, System.SysUtils, Vcl.Forms;
+  FireDAC.Comp.Client, System.SysUtils, Vcl.Forms, uUtils, Data.DB;
 
   type TRelatorios = Class
     private
@@ -64,12 +64,85 @@ end;
 
 function TRelatorios.inserir_alterar(TipoOperacao: String;
   out Erro: String): Boolean;
+
+  var
+    QryInserir: TFDQuery;
 begin
 
+  try
+    try
+      FConexao.Connected := False;
+      FConexao.Connected := True;
+
+      QryInserir            := TFDQUery.Create( nil );
+      QryInserir.Connection := FConexao;
+
+      QryInserir.Close;
+      QryInserir.SQL.Clear;
+
+      if TipoOperacao = 'INSERIR' then
+      begin
+        QryInserir.SQL.Add('INSERT INTO TB_RELATORIO (NOME, DESCRICAO, ID_GRUPO, ID_SUB_GRUPO, FR3)');
+        QryInserir.SQL.Add('VALUES (:NOME, :DESCRICAO, :ID_GRUPO, :ID_SUB_GRUPO, :FR3)');
+      end else
+        begin
+          QryInserir.SQL.Add('UPDATE TB_RELATORIO SET ');
+          QryInserir.SQL.Add('NOME         = :NOME, ');
+          QryInserir.SQL.Add('DESCRICAO    = :DESCRICAO, ');
+          QryInserir.SQL.Add('ID_GRUPO     = :ID_GRUPO, ');
+          QryInserir.SQL.Add('ID_SUB_GRUPO = :ID_SUB_GRUPO, ');
+          QryInserir.SQL.Add('FR3          = :FR3 ');
+
+          QryInserir.SQL.Add('WHERE ID     = :ID ');
+
+          QryInserir.ParamByName('ID').AsInteger         := FId;
+        end;
+
+        QryInserir.ParamByName('NOME').AsString          := FNome;
+        QryInserir.ParamByName('DESCRICAO').AsString     := FDescricao;
+
+         QryInserir.ParamByName('ID_GRUPO').DataType := ftInteger;
+          if FGrupo <> -1 then
+         QryInserir.ParamByName('ID_GRUPO').AsInteger := FGrupo
+          else
+         QryInserir.ParamByName('ID_GRUPO').Clear;
+
+         QryInserir.ParamByName('ID_SUB_GRUPO').DataType := ftInteger;
+          if FSubGrupo <> -1 then
+         QryInserir.ParamByName('ID_SUB_GRUPO').AsInteger := FSubGrupo
+          else
+         QryInserir.ParamByName('ID_SUB_GRUPO').Clear;
+
+        {QryInserir.ParamByName('ID_GRUPO').AsInteger     := FGrupo;
+        QryInserir.ParamByName('ID_SUB_GRUPO').AsInteger := FSubGrupo;}
+        QryInserir.ParamByName('FR3').AsString           := FFr3;
+
+        QryInserir.ExecSQL;
+
+        Result := True;
+    except
+      on E: Exception do
+        begin
+          Erro   := E.Message;
+          Result := False;
+        end;
+    end;
+  finally
+    QryInserir.Destroy;
+  end;
 end;
 
 procedure TRelatorios.deletar(IdRelatorio: integer);
 begin
+  if Util.CriarMensagem('CONFIRMA', 'EXCLUSÃO DE RELATÓRIO',
+                        'Remover Relatório?', 'Esta ação não pode ser desfeita e excluirá o relatório do cadastro. Tem certeza?',
+                        'TRASH')
+  then begin
+    FConexao.Connected := False;
+    FConexao.Connected := True;
+
+    FConexao.ExecSQL('DELETE FROM TB_USU_PERMISSAO WHERE ID_RELATORIO = :ID; DELETE FROM TB_RELATORIO WHERE ID = :ID', [IdRelatorio])
+  end;
 
 end;
 
