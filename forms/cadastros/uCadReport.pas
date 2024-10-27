@@ -63,12 +63,10 @@ begin
     idGrp := 0  // Se não houver seleção, define como 0
   else
     idGrp := cbbGroupReport.KeyValue;
-
   if VarIsNull(cbbSubGrupoReport.KeyValue) then
     idSGrp := 0  // Se não houver seleção, define como 0
   else
     idSGrp := cbbSubGrupoReport.KeyValue;
-
   { Se ação for cadastrar, executa a função de cadastro }
   if Acao = 0 then
   begin
@@ -169,7 +167,7 @@ setando o foco conforme a tecla #13 - enter
 procedure TfrmCadReport.edtNameReportKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
-    memoDescricao.SetFocus
+    memoDescricao.SetFocus;
 end;
 
 end.
