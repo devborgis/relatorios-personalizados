@@ -78,6 +78,16 @@ var
   dbPath: String;        // Caminho padrão do banco de dados
   iniPath: String;       // Caminho do arquivo INI
 begin
+
+  // Impedindo a execução de duas isntancias
+  if not Util.VerificaInstancia then
+    begin
+      Util.CriarMensagem('OK', 'ATENÇÃO', 'Sistema já em Execução',
+                         'Já existe uma instância do sistema em execução. Por favor, verifique a janela aberta.',
+                         'DANGER');
+      Application.Terminate;
+    end;
+
   attempt := 0;
   dbFound := False;
   dbPath  := ExtractFilePath(ParamStr(0)) + 'SYS.DB';
