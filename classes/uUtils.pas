@@ -23,7 +23,7 @@ unit uUtils;
 
 interface
 
-Uses System.SysUtils, System.Classes, IniFiles, Vcl.Dialogs;
+Uses System.SysUtils, System.Classes, IniFiles, Vcl.Dialogs, Windows;
 
 type
   TuUtils = Class
@@ -33,6 +33,7 @@ type
     function vldLogin(login, senha: String): Boolean;
     procedure listaRelatorios;
     function CriarMensagem( Tipo, TituloJanela, TituloMensagem, Mensagem, Icone: String ): Boolean;
+    function VerificaInstancia: Boolean;
   end;
 
 var
@@ -45,9 +46,8 @@ implementation
 uses dmIntegracao, dmFastReport, dmSystem, uMensagens;
 
 {-------------------------------------------------------------
-listar relatorios
+Mensagens personalizadas
 --------------------------------------------------------------}
-
 
 function TuUtils.CriarMensagem(Tipo, TituloJanela, TituloMensagem, Mensagem,
   Icone: String): Boolean;
@@ -60,12 +60,16 @@ begin
   frmMensagens.sTituloJanela    := TituloJanela;
   frmMensagens.sTituloMensagem  := TituloMensagem;
   frmMensagens.sMensagem        := Mensagem;
-  frmMensagens.sTipoIcone    := Icone;
+  frmMensagens.sTipoIcone       := Icone;
 
   frmMensagens.ShowModal;
 
   Result := frmMensagens.bRespostaMSG;
 end;
+
+{-------------------------------------------------------------
+listar relatorios
+--------------------------------------------------------------}
 
 procedure TuUtils.listaRelatorios;
 begin
@@ -76,6 +80,23 @@ begin
     Open;
   end;
 end;
+
+{-------------------------------------------------------------
+Bloquear mais de uma instancia aberta
+--------------------------------------------------------------}
+
+function TuUtils.VerificaInstancia: Boolean;
+const
+  MutexName = 'BORGIS-6EACD0BF-F3E0-44D9-91E7-47467B5A2B6A'; // GUID
+var
+  hMutex: THandle;
+begin
+  hMutex := CreateMutex(nil, True, PChar(MutexName));
+  if hMutex = 0 then
+    RaiseLastOSError;
+  Result := GetLastError <> ERROR_ALREADY_EXISTS;
+end;
+
 {------------------------------------------------------------------
 Validar o login do usuario
 -------------------------------------------------------------------}
