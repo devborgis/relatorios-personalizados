@@ -101,21 +101,19 @@ begin
         QryInserir.ParamByName('NOME').AsString          := FNome;
         QryInserir.ParamByName('DESCRICAO').AsString     := FDescricao;
 
-         QryInserir.ParamByName('ID_GRUPO').DataType := ftInteger;
-          if FGrupo <> -1 then
-         QryInserir.ParamByName('ID_GRUPO').AsInteger := FGrupo
-          else
-         QryInserir.ParamByName('ID_GRUPO').Clear;
+        if FGrupo > 0 then
+          QryInserir.ParamByName('ID_GRUPO').AsInteger   := FGrupo
+        else
+          QryInserir.ParamByName('ID_GRUPO').DataType    := ftInteger;
+          QryInserir.ParamByName('ID_GRUPO').Clear;
 
-         QryInserir.ParamByName('ID_SUB_GRUPO').DataType := ftInteger;
-          if FSubGrupo <> -1 then
-         QryInserir.ParamByName('ID_SUB_GRUPO').AsInteger := FSubGrupo
-          else
-         QryInserir.ParamByName('ID_SUB_GRUPO').Clear;
+        if FSubGrupo > 0 then
+          QryInserir.ParamByName('ID_SUB_GRUPO').AsInteger := FSubGrupo
+        else
+          QryInserir.ParamByName('ID_SUB_GRUPO').DataType  := ftInteger;
+          QryInserir.ParamByName('ID_SUB_GRUPO').Clear;
 
-        {QryInserir.ParamByName('ID_GRUPO').AsInteger     := FGrupo;
-        QryInserir.ParamByName('ID_SUB_GRUPO').AsInteger := FSubGrupo;}
-        QryInserir.ParamByName('FR3').AsString           := FFr3;
+        QryInserir.ParamByName('FR3').AsString             := FFr3;
 
         QryInserir.ExecSQL;
 
