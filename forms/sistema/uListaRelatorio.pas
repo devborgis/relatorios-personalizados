@@ -80,7 +80,7 @@ procedure TfrmListaRelatorio.btnNovoClick(Sender: TObject);
 begin
   frmCadReport          := TfrmCadReport.Create(Self);
   frmCadReport.Caption  := 'Cadastro de relatório - NOVO';
-  frmCadReport.Acao     := 0;
+  //frmCadReport.Acao     := 0;
   frmCadReport.ShowModal;
 end;
 
@@ -88,7 +88,7 @@ procedure TfrmListaRelatorio.btnAlterarClick(Sender: TObject);
 begin
   frmCadReport          := TfrmCadReport.Create(Self);
   frmCadReport.Caption  := 'Cadastro de relatório - ALTERANDO';
-  frmCadReport.Acao     := 1;
+  //frmCadReport.Acao     := 1;
   frmCadReport.ShowModal;
 end;
 
