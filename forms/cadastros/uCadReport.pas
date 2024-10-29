@@ -98,7 +98,7 @@ begin
       end;
     end;
 
-    mSystem.qryRelLista.Refresh;
+    Util.listaRelatorios;
 
 end;
 
