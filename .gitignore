@@ -51,3 +51,4 @@ win32/
 *.ico
 *.iss
 IbExpert/
+Images/*
