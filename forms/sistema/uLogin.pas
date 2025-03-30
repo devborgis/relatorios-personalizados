@@ -29,7 +29,7 @@ uses
   ZConnection, frxDesgn, frxClass, Vcl.Buttons, Vcl.Imaging.pngimage,
   Vcl.ExtCtrls, System.ImageList, Vcl.ImgList, uConfig, uSystem, dmIntegracao, dmSystem,
   Vcl.Imaging.jpeg, JvExControls, JvButton, JvTransparentButton, JvExStdCtrls,
-  JvEdit, IniFiles;
+  JvEdit, IniFiles, uUtils;
 
 type
   TfrmLogin = class(TForm)
@@ -49,9 +49,10 @@ type
     procedure btnExitClick(Sender: TObject);
     procedure btnConfigClick(Sender: TObject);
     procedure btnEnterClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
     procedure btnShowPasswordClick(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure edtLoginKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
   public
@@ -65,57 +66,148 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmLogin.btnConfigClick(Sender: TObject);
+{----------------------------------------------------------------
+Create do fomrulario verificando e habilitando conexão etc
+-----------------------------------------------------------------}
+procedure TfrmLogin.FormCreate(Sender: TObject);
+const
+  MAX_RETRIES = 3;       // Número máximo de tentativas
+var
+  attempt: Integer;      // Tentativas
+  dbFound: Boolean;      // Banco de dados está conectado?
+  dbPath: String;        // Caminho padrão do banco de dados
+  iniPath: String;       // Caminho do arquivo INI
 begin
-  frmConfig.ShowModal;
-end;
 
-procedure TfrmLogin.btnEnterClick(Sender: TObject);
-begin
-  try
-    with mSystem.qryLogin do
+  // Impedindo a execução de duas isntancias
+  if not Util.VerificaInstancia then
     begin
-      Close;
-      SQL.Clear;
-      SQL.Add('SELECT * FROM TB_USERS WHERE LOGIN = :login AND PASSWORD = :password');
-      ParamByName('login').AsString := edtLogin.Text;
-      ParamByName('password').AsString := edtPassword.Text;
-      Open;
-      if not IsEmpty then // Verifica se a consulta retornou algum registro
+      Util.CriarMensagem('OK', 'ATENÇÃO', 'Sistema já em Execução',
+                         'Já existe uma instância do sistema em execução. Por favor, verifique a janela aberta.',
+                         'DANGER');
+      Application.Terminate;
+    end;
+
+  attempt := 0;
+  dbFound := False;
+  dbPath  := ExtractFilePath(ParamStr(0)) + 'SYS.DB';
+  iniPath  := ExtractFilePath(ParamStr(0)) + '.Integracao\CONFIG.INI';
+
+  { Em caso de erro, a aplicação busca novamente o banco de dados por 3 vezes até fechar completamente }
+  while (attempt < MAX_RETRIES) and (not dbFound) do
+  begin
+    Inc(attempt);
+
+    // Verifica se o arquivo INI existe a cada tentativa
+    if FileExists(iniPath) then
+    begin
+      mIntegracao.confFDIntegracao; // Chama a função de configuração se o arquivo INI existir
+    end
+    else
+    begin
+      ShowMessage('O arquivo de configuração CONFIG.INI não foi encontrado.');
+      Break; // Sai do loop se o arquivo INI não existir
+    end;
+
+    try
+      if FileExists(dbPath) then
       begin
-        if FieldByName('STATUS').AsString = '0' then // Ajuste aqui para usar FieldByName para obter o campo 'STATUS'
-        begin
-          ShowMessage('O Usuário não tem permissão para acessar o sistema, verifique!');
-        end
-        else
-        begin
-          mSystem.conSystem.Connected := True;
-          mSystem.qryUsers.Active := True;
-          mSystem.qryReports.Active := True;
-          mSystem.qryGroupsReport.Active := True;
-          frmSystem.ShowModal;
-          frmLogin.Close;
-        end;
+        mSystem.conSystem.Params.Database := dbPath;
+        mSystem.conSystem.Connected := True;
+        dbFound := True; // Conexão bem-sucedida
       end
       else
       begin
-        ShowMessage('Usuário e/ou senha incorretos, verifique');
-        edtPassword.Text := '';
-        edtLogin.SetFocus;
+        raise Exception.CreateFmt('Não foi possível localizar o banco de dados da aplicação. Tentativa %d de %d. Verifique se o arquivo "SYS.DB" está presente no diretório correto.',
+          [attempt, MAX_RETRIES]);
+      end;
+    except
+      on E: Exception do
+      begin
+        ShowMessage('Erro ao conectar ao banco de dados: ' + E.Message);
+        if attempt < MAX_RETRIES then
+        begin
+          ShowMessage('Tentando novamente...');
+        end
+        else
+        begin
+          ShowMessage('Todas as tentativas falharam. A aplicação será encerrada.');
+          Application.Terminate; // Fecha a aplicação após todas as tentativas falharem
+        end;
       end;
     end;
-  except
-    on E: Exception do
-      ShowMessage('Erro ao fazer login no sistema: ' + #13#10 + #13#10 + E.Message);
   end;
 end;
 
-
-procedure TfrmLogin.btnExitClick(Sender: TObject);
+{----------------------------------------------------------------
+Ao pressionar tecla x a palicação faz algo
+-----------------------------------------------------------------}
+procedure TfrmLogin.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
 begin
-  close;
+  if Key = VK_ESCAPE then
+    begin
+      btnExit.Click; // Fechar o formulário ao pressionar Esc
+  end;
+  if Key = VK_F1 then
+    BEGIN
+      btnEnter.Click; // ABRE O SISTEMA
+  END;
 end;
 
+procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
+begin
+  if key = #13 then
+    edtPassword.SetFocus; // MUDA O FOCO DO EDIT
+end;
+
+{------------------------------------------------------------------------
+Configurações do banco de dados "Integração" o SYS.DB não é configurado pelo usuario
+-------------------------------------------------------------------------}
+procedure TfrmLogin.btnConfigClick(Sender: TObject);
+begin
+  frmConfig := TfrmConfig.Create(Self);
+  try
+    frmConfig.ShowModal;
+  finally
+    frmConfig.Free;
+  end;
+end;
+
+{-----------------------------------------------------------
+Validando Login e liberando usuario para utilizacao do sistema
+------------------------------------------------------------}
+procedure TfrmLogin.btnEnterClick(Sender: TObject);
+begin
+  if Util.vldLogin(edtLogin.Text, edtPassword.Text) then
+    begin
+      try
+        frmSystem := TfrmSystem.Create(self);
+        frmSystem.ShowModal;
+        frmLogin.Hide;
+      except
+        on E: Exception do
+        Util.CriarMensagem('OK', 'ERROR', 'ERRO AO ABRIR O SISTEMA', 'NÃO POSSIVEL ABRIR O SISTEMA VERIFIQUE:' + E.Message, 'ERROR');
+      end;
+    end else
+      begin
+        Util.CriarMensagem('OK', 'ATENÇÃO', 'ACESSO NEGADO', 'USUÁRIO E /OU SENHA INCORRETOS, USUÁRIO NÃO TEM PERMISSÃO PARA ACESSAR O SISTEMA:', 'DANGER');
+        edtPassword.Text := '';
+        edtLogin.SetFocus;
+      end;
+end;
+
+{---------------------------------------------------
+Finalizando a aplicação
+----------------------------------------------------}
+procedure TfrmLogin.btnExitClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+{----------------------------------------------------
+Ocultar e/ou mostrar a senha na tela de login
+-----------------------------------------------------}
 procedure TfrmLogin.btnShowPasswordClick(Sender: TObject);
 begin
   if edtPassword.PasswordChar <> #0 then
@@ -127,68 +219,6 @@ begin
   begin
     btnShowPassword.Images.ActiveIndex := 0;
     edtPassword.PasswordChar := '•';
-  end;
-end;
-
-procedure TfrmLogin.edtLoginKeyPress(Sender: TObject; var Key: Char);
-begin
-  if key = #13 then
-    edtPassword.SetFocus
-end;
-
-procedure TfrmLogin.FormShow(Sender: TObject);
-var
-  IniPath, DatabasePath, DLLPath: string;
-  Ini: TIniFile;
-begin
-  IniPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'CONFIG.INI';
-  DatabasePath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'integracao.FDB';
-  DLLPath := ExtractFilePath(ParamStr(0)) + '.integracao\' + 'firebird.dll';
-
-  dmSystem.mSystem.conSystem.Params.Database := ExtractFilePath(ParamStr(0)) + '.system\' + 'borgis.db';
-
-  if not FileExists(IniPath) then
-  begin
-    if MessageDlg('Arquivo INI não encontrado. Deseja criar com as configurações padrão?', mtInformation, [mbYes, mbNo], 0) = mrYes then
-    begin
-      Ini := TIniFile.Create(IniPath);
-      try
-        Ini.ReadString('CONEXAO', 'DATABASE', DatabasePath);
-        Ini.ReadString('CONEXAO', 'DLL', DLLPath);
-        Ini.ReadString('CONEXAO', 'PORT', '3050');
-        Ini.ReadString('CONEXAO', 'HOST', '127.0.0.1');
-        Ini.ReadString('CONEXAO', 'USER', 'sysdba');
-        Ini.ReadString('CONEXAO', 'PASSWORD', 'masterkey');
-        Ini.ReadString('FASTREPORT', 'CHARSET', 'WIN1252');
-        Ini.UpdateFile;
-
-        mIntegracao.ConfConnection;
-
-        try
-          mIntegracao.conIntegracao.Connected := True;
-          mIntegracao.conIntegracao.Connected := False;
-        except
-          on E: Exception do
-            MessageDlg('Erro na conexão com o banco de dados: ' + E.Message, mtError, [mbOK], 0);
-        end;
-      finally
-        Ini.Free;
-      end;
-    end
-    else
-    begin
-      uConfig.frmConfig.ShowModal;
-    end;
-  end;
-
-  mIntegracao.ConfConnection;
-
-  try
-    mIntegracao.conIntegracao.Connected := True;
-    mIntegracao.conIntegracao.Connected := False;
-  except
-    on E: Exception do
-      MessageDlg('Erro na conexão com o banco de dados: ' + #13#10 + E.Message, mtError, [mbOK], 0);
   end;
 end;
 

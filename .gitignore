@@ -1,4 +1,5 @@
 # Delphi specific
+*.rsm
 *.dcu
 *.dcp
 *.~*
@@ -43,10 +44,11 @@ __recovery/
 *.ipch
 *.tvsconfig
 *.code-workspace
-
+win32/
 
 #others
 
 *.ico
 *.iss
 IbExpert/
+Images/*

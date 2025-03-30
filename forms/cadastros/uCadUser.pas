@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
   JvExControls, JvButton, JvTransparentButton, Data.DB, Vcl.Grids, Vcl.DBGrids, dmSystem,
-  System.ImageList, Vcl.ImgList;
+  System.ImageList, Vcl.ImgList, JvExComCtrls, JvDBTreeView, Vcl.Buttons, uUtils;
 
 type
   TfrmCadUser = class(TForm)
@@ -19,37 +19,39 @@ type
     Label3: TLabel;
     Label4: TLabel;
     pgcCadUser: TPageControl;
-    TabSheet1: TTabSheet;
+    tbsDados: TTabSheet;
     pnlButtons: TPanel;
-    btnDadosUser: TJvTransparentButton;
-    GroupBox1: TGroupBox;
-    ckAlterUser: TCheckBox;
-    ckCreateUser: TCheckBox;
-    ckDeleteUser: TCheckBox;
-    GroupBox2: TGroupBox;
-    ckReportAlter: TCheckBox;
-    ckReportCreate: TCheckBox;
-    ckReportDelete: TCheckBox;
     pnlFooter: TPanel;
-    btnSaveCadUser: TJvTransparentButton;
-    btnCancelCad: TJvTransparentButton;
     cbbStatus: TComboBox;
-    lbInfo: TLabel;
     btnShowPassword: TJvTransparentButton;
     ImageList1: TImageList;
+    btnSalvar: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    btnUsuPermissao: TSpeedButton;
+    btnUsuDados: TSpeedButton;
+    cbbAdmin: TComboBox;
+    tbsPermissoes: TTabSheet;
+    dbgUsuPermissao: TDBGrid;
     procedure FormShow(Sender: TObject);
-    procedure btnDadosUserClick(Sender: TObject);
-    procedure btnPReportsClick(Sender: TObject);
-    procedure btnCancelCadClick(Sender: TObject);
     procedure edtNameUserKeyPress(Sender: TObject; var Key: Char);
     procedure edtLoginUserKeyPress(Sender: TObject; var Key: Char);
-    procedure btnSaveCadUserClick(Sender: TObject);
     procedure btnShowPasswordClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnUsuDadosClick(Sender: TObject);
+    procedure btnUsuPermissaoClick(Sender: TObject);
+    procedure dbgUsuPermissaoDrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure dbgUsuPermissaoDblClick(Sender: TObject);
+    procedure dbgUsuPermissaoCellClick(Column: TColumn);
+    procedure btnSalvarClick(Sender: TObject);
   private
     { Private declarations }
+
   public
     { Public declarations }
-    procedure PreencheDadosUser(ID: Integer);
+    procedure AutoSizeDBGridColumns(Grid: TDBGrid);
+    procedure PreencheUsuario(Id:Integer);
   end;
 
 var
@@ -62,153 +64,32 @@ uses StrUtils,
 
 {$R *.dfm}
 
-{Bloco para preencher os campos do cadastro do usuarios quando o tipo for alterar}
-procedure TfrmCadUser.PreencheDadosUser(ID: Integer);
+{-----------------------------------------
+Botão para cancelar cadatro
+------------------------------------------}
+procedure TfrmCadUser.btnCancelarClick(Sender: TObject);
 begin
-  with mSystem.qryCadUser do
-  begin
-    Close;
-    SQL.Clear;
-    SQL.Add('SELECT ');
-    SQL.Add('    U.*,');
-    SQL.Add('    UPU.`ALTER` AS USU_ALTER,');
-    SQL.Add('    UPU.`DELETE` AS USU_DELETE,');
-    SQL.Add('    UPU.`CREATE` AS USU_CREATE,');
-    SQL.Add('    UPR.`ALTER` AS REP_ALTER,');
-    SQL.Add('    UPR.`DELETE` AS REP_DELETE,');
-    SQL.Add('    UPR.`CREATE` AS REP_CREATE ');
-    SQL.Add('FROM ');
-    SQL.Add('    `tb_users` AS U ');
-    SQL.Add('    LEFT JOIN `TB_USER_PERMISSION` AS UPU ON UPU.`ID_USER` = U.`ID` AND UPU.`DESC_PERMISSION` = ''SystemUser'' ');
-    SQL.Add('    LEFT JOIN `TB_USER_PERMISSION` AS UPR ON UPR.`ID_USER` = U.`ID` AND UPR.`DESC_PERMISSION` = ''SystemReport'' ');
-    SQL.Add('WHERE ');
-    SQL.Add('    `id` = :id_user');
-
-    ParamByName('id_user').AsInteger := ID;
-    Open;
-
-    // Verifica se o conjunto de dados não está vazio
-    if not IsEmpty then
-    begin
-      edtIdUser.Text := FieldByName('ID').AsString;
-      edtNameUser.Text := FieldByName('NAME').AsString;
-      edtLoginUser.Text := FieldByName('LOGIN').AsString;
-      edtPasswordUser.Text := FieldByName('PASSWORD').AsString;
-      cbbStatus.ItemIndex := StrToIntDef(FieldByName('STATUS').AsString, -1);
-
-      // Verificações de permissão para usuário
-      ckAlterUser.Checked := FieldByName('USU_ALTER').AsString = 'S';
-      ckDeleteUser.Checked := FieldByName('USU_DELETE').AsString = 'S';
-      ckCreateUser.Checked := FieldByName('USU_CREATE').AsString = 'S';
-
-      // Verificações de permissão para relatório
-      ckReportAlter.Checked := FieldByName('REP_ALTER').AsString = 'S';
-      ckReportDelete.Checked := FieldByName('REP_DELETE').AsString = 'S';
-      ckReportCreate.Checked := FieldByName('REP_CREATE').AsString = 'S';
-    end;
-  end;
-end;
-
-procedure TfrmCadUser.btnCancelCadClick(Sender: TObject);
-begin
-  edtIdUser.Clear;
-  edtNameUser.Clear;
-  edtLoginUser.Clear;
-  edtPasswordUser.Clear;
-  ckAlterUser.Checked := False;
-  ckCreateUser.Checked := False;
-  ckDeleteUser.Checked := False;
-  ckReportAlter.Checked := False;
-  ckReportCreate.Checked := False;
-  ckReportDelete.Checked := False;
-  cbbStatus.ItemIndex := -1;
   Close;
 end;
 
-procedure TfrmCadUser.btnDadosUserClick(Sender: TObject);
+{-----------------------------------------
+Salvar e atualizar cadastro
+------------------------------------------}
+procedure TfrmCadUser.btnSalvarClick(Sender: TObject);
 begin
-  pgcCadUser.ActivePage := pgcCadUser.Pages[0];
-end;
-
-procedure TfrmCadUser.btnPReportsClick(Sender: TObject);
-begin
-  pgcCadUser.ActivePage := pgcCadUser.Pages[1];
-end;
-
-procedure TfrmCadUser.btnSaveCadUserClick(Sender: TObject);
-begin
-
-  try
-    if edtIdUser.text <> 'NOVO' then
+  // Se o ID já estiver preenchido atualizar se não cadastrar
+  {if edtIdUser.Text <> '' then
     begin
-       with mSystem.qryCadUser do
-        begin
-          SQL.Clear;
-          SQL.Add('UPDATE TB_USERS');
-          SQL.Add('SET NAME = :edt_name, LOGIN = :edt_login, PASSWORD = :edt_password, STATUS = :status');
-          SQL.Add('WHERE ID = :edt_id;');
-          SQL.Add('');
-          SQL.Add('UPDATE TB_USER_PERMISSION');
-          SQL.Add('SET `ALTER` = :ck_alter, `DELETE` = :ck_delete, `CREATE` = :ck_create');
-          SQL.Add('WHERE DESC_PERMISSION = ''SystemUser'' AND ID_USER = :edt_id;');
-          SQL.Add('');
-          SQL.Add('UPDATE TB_USER_PERMISSION');
-          SQL.Add('SET `ALTER` = :ck_alter_r, `DELETE` = :ck_delete_r, `CREATE` = :ck_create_r');
-          SQL.Add('WHERE DESC_PERMISSION = ''SystemReport'' AND ID_USER = :edt_id;');
+      // Nome, Login, Senha, Status e ID do usuario alterado;
 
-          ParamByName('edt_name').AsString := edtNameUser.Text;
-          ParamByName('edt_login').AsString := edtLoginUser.Text;
-          ParamByName('edt_password').AsString := edtPasswordUser.Text;
-          ParamByName('status').AsInteger := cbbStatus.ItemIndex;
-          ParamByName('edt_id').AsString := edtIdUser.Text;
-          ParamByName('ck_alter').AsString := IfThen(ckAlterUser.Checked, 'S', 'N');
-          ParamByName('ck_delete').AsString := IfThen(ckDeleteUser.Checked, 'S', 'N');
-          ParamByName('ck_create').AsString := IfThen(ckCreateUser.Checked, 'S', 'N');
-          ParamByName('ck_alter_r').AsString := IfThen(ckReportAlter.Checked, 'S', 'N');
-          ParamByName('ck_delete_r').AsString := IfThen(ckReportDelete.Checked, 'S', 'N');
-          ParamByName('ck_create_r').AsString := IfThen(ckReportCreate.Checked, 'S', 'N');
-
-          ExecSQL;
-        end;
-    end else
-      begin
-        with mSystem.qryCadUser do
-        begin
-          Close;
-          SQL.Clear;
-          SQL.Add('INSERT INTO TB_USERS (STATUS, NAME, LOGIN, PASSWORD) VALUES (:status, :edt_name, :edt_login, :edt_password)');
-          ParamByName('edt_name').AsString := edtNameUser.text;
-          ParamByName('edt_login').AsString := edtLoginUser.text;
-          ParamByName('edt_password').AsString := edtPasswordUser.text;
-          ParamByName('status').AsInteger := cbbStatus.ItemIndex;
-          ExecSQL;
-        end;
-      end;
-  except
-    on E: Exception do
-      MessageDlg('Erro ao gravar registros no banco de dados: ' + #13#10 + E.Message, mtError, [mbOK], 0);
-  end;
-
-  edtIdUser.Clear;
-  edtNameUser.Clear;
-  edtLoginUser.Clear;
-  edtPasswordUser.Clear;
-  ckAlterUser.Checked := False;
-  ckCreateUser.Checked := False;
-  ckDeleteUser.Checked := False;
-  ckReportAlter.Checked := False;
-  ckReportCreate.Checked := False;
-  ckReportDelete.Checked := False;
-  cbbStatus.ItemIndex := -1;
-
-  with mSystem.qryUsers do
-    begin
-      Close;
-      Open;
-    end;
-
-    Close;
-
+      Util.attUsuario(edtNameUser.Text,
+                      edtLoginUser.Text,
+                      edtPasswordUser.Text,
+                      cbbStatus.ItemIndex,
+                      StrToInt(edtIdUser.Text)
+                      );
+    end;}
+  Close;
 end;
 
 procedure TfrmCadUser.btnShowPasswordClick(Sender: TObject);
@@ -222,6 +103,75 @@ begin
   begin
     btnShowPassword.Images.ActiveIndex := 0;
     edtPasswordUser.PasswordChar := '•';
+  end;
+end;
+
+procedure TfrmCadUser.btnUsuDadosClick(Sender: TObject);
+begin
+  pgcCadUser.ActivePageIndex := 0;
+end;
+
+procedure TfrmCadUser.btnUsuPermissaoClick(Sender: TObject);
+begin
+  pgcCadUser.ActivePageIndex := 1;
+end;
+
+procedure TfrmCadUser.dbgUsuPermissaoCellClick(Column: TColumn);
+var
+  Sender: TObject;
+begin
+ //
+end;
+
+procedure TfrmCadUser.dbgUsuPermissaoDblClick(Sender: TObject);
+begin
+  if ((Sender as TDBGrid).DataSource.Dataset.IsEmpty) then
+  Exit;
+  (Sender as TDBGrid).DataSource.Dataset.Edit;
+  // Identifica a coluna selecionada
+  with (Sender as TDBGrid).DataSource.Dataset do
+  begin
+    if (Sender as TDBGrid).SelectedField.FieldName = 'VISUALIZAR' then
+      FieldByName('VISUALIZAR').AsInteger := IfThen(FieldByName('VISUALIZAR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'EDITAR' then
+      FieldByName('EDITAR').AsInteger := IfThen(FieldByName('EDITAR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'EXCLUIR' then
+      FieldByName('EXCLUIR').AsInteger := IfThen(FieldByName('EXCLUIR').AsInteger = 1, 0, 1)
+    else if (Sender as TDBGrid).SelectedField.FieldName = 'INCLUIR' then
+      FieldByName('INCLUIR').AsInteger := IfThen(FieldByName('INCLUIR').AsInteger = 1, 0, 1);
+  end;
+  (Sender as TDBGrid).DataSource.Dataset.Post;
+  (Sender as TDBGrid).DataSource.Dataset.UpdateRecord;
+end;
+
+procedure TfrmCadUser.dbgUsuPermissaoDrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  Check: Integer;
+  R: TRect;
+begin
+  TDBGrid(Sender).Canvas.FillRect(Rect);
+  // Verifica se a coluna é 'EXCLUIR', 'EDITAR', 'INCLUIR' ou 'VISUALIZAR'
+  if (Column.FieldName = 'EXCLUIR') or
+     (Column.FieldName = 'EDITAR') or
+     (Column.FieldName = 'INCLUIR') or
+     (Column.FieldName = 'VISUALIZAR') then
+  begin
+    // Define o valor do CheckBox baseado no valor do campo (1 ou 0)
+    if Column.Field.AsInteger = 1 then
+      Check := DFCS_CHECKED
+    else
+      Check := 0;
+    R := Rect;
+    InflateRect(R, -2, -2); { Ajusta o tamanho do CheckBox }
+    // Desenha o CheckBox
+    DrawFrameControl(TDBGrid(Sender).Canvas.Handle, R, DFC_BUTTON,
+      DFCS_BUTTONCHECK or Check);
+  end
+  else
+  begin
+    // Para as demais colunas, o comportamento normal de desenho é mantido
+    TDBGrid(Sender).DefaultDrawColumnCell(Rect, DataCol, Column, State);
   end;
 end;
 
@@ -246,6 +196,11 @@ begin
     edtLoginUser.SetFocus
 end;
 
+procedure TfrmCadUser.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
 procedure TfrmCadUser.FormShow(Sender: TObject);
 var
 pages: integer;
@@ -257,7 +212,48 @@ begin
   pgcCadUser.ActivePage := pgcCadUser.Pages[0];
   edtNameUser.SetFocus;
   cbbStatus.ItemIndex := 1;
+  dbgUsuPermissao.DataSource.DataSet.Active := True;
+  AutoSizeDBGridColumns(dbgUsuPermissao);
 
+end;
+
+procedure TfrmCadUser.PreencheUsuario(Id: Integer);
+begin
+  with dmSystem.mSystem.qryUsuCad do
+    begin
+      Close;
+      ParamByName('ID').AsInteger := Id;
+      Open;
+      edtIdUser.Text := IntToStr(FieldByName('ID').AsInteger);
+      edtNameUser.Text := FieldByName('NOME').AsString;
+      edtLoginUser.Text := FieldByName('LOGIN').AsString;
+      edtPasswordUser.Text := FieldByName('SENHA').AsString;
+      cbbStatus.ItemIndex := FieldByName('STATUS').AsInteger;
+      //cbbAdmin.ItemIndex := FieldByName('ADM').AsInteger;
+
+    end;
+end;
+
+procedure TfrmCadUser.AutoSizeDBGridColumns(Grid: TDBGrid);
+var
+  Col, Row: Integer;
+  MaxWidth, CellWidth: Integer;
+  FieldText: string;
+begin
+  for Col := 0 to Grid.Columns.Count - 1 do
+  begin
+    MaxWidth := Grid.Canvas.TextWidth(Grid.Columns[Col].Title.Caption) + 10;
+    Grid.DataSource.DataSet.First;
+    for Row := 0 to Grid.DataSource.DataSet.RecordCount - 1 do
+    begin
+      FieldText := Grid.Columns[Col].Field.AsString;
+      CellWidth := Grid.Canvas.TextWidth(FieldText) + 10;
+      if CellWidth > MaxWidth then
+        MaxWidth := CellWidth;
+      Grid.DataSource.DataSet.Next;
+    end;
+    Grid.Columns[Col].Width := MaxWidth;
+  end;
 end;
 
 end.

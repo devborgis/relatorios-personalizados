@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, JvExControls, JvButton,
   JvTransparentButton, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ExtCtrls, dmFastReport, dmSystem, uCadGroupReport,
-  Data.DB, Datasnap.DBClient;
+  Data.DB, Datasnap.DBClient, Vcl.Buttons, uUtils;
 
 type
   TfrmCadReport = class(TForm)
@@ -15,28 +15,31 @@ type
     cbbGroupReport: TDBLookupComboBox;
     Label1: TLabel;
     Label2: TLabel;
-    btnAddGroupReport: TJvTransparentButton;
     Panel1: TPanel;
-    bntSaveCad: TJvTransparentButton;
-    btnCancCadReport: TJvTransparentButton;
     dlgNewFr3: TOpenDialog;
     Label3: TLabel;
-    btnEdtReport: TJvTransparentButton;
     edtPathReport: TEdit;
-    bntFileReport: TJvTransparentButton;
-    procedure btnCancCadReportClick(Sender: TObject);
-    procedure btnNewFr3Click(Sender: TObject);
-    procedure bntSaveCadClick(Sender: TObject);
+    cbbSubGrupoReport: TDBLookupComboBox;
+    Label4: TLabel;
+    btnSalvar: TSpeedButton;
+    btnFr3: TSpeedButton;
+    btnCancelar: TSpeedButton;
+    btnBuscaFr3: TSpeedButton;
+    memoDescricao: TMemo;
+    Label5: TLabel;
     procedure edtNameReportKeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
-    procedure btnAddGroupReportClick(Sender: TObject);
-    procedure bntFileReportClick(Sender: TObject);
     procedure btnEdtReportClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnBuscaFr3Click(Sender: TObject);
+    procedure btnSalvarClick(Sender: TObject);
   private
     { Private declarations }
+    FAcao: Integer;
   public
     { Public declarations }
-    procedure PreencheDadosReport(IdReport: Integer);
+    property Acao: Integer read FAcao write FAcao;
   end;
 
 var
@@ -46,109 +49,71 @@ implementation
 
 {$R *.dfm}
 
-procedure TfrmCadReport.PreencheDadosReport(IdReport: Integer);
-begin 
-  with mSystem.qryCadReport do
-    begin
-      Close;
-      SQL.Clear;
-      SQL.Add('SELECT * FROM TB_REPORTS WHERE ID = :id_report');
-      ParamByName('id_report').AsInteger := IdReport;
-      Open;
-      edtIdReport.text := FieldByName('ID').AsString;
-      edtNameReport.Text := FieldByName('DESCRIPTION').AsString;
-      cbbGroupReport.KeyValue :=  StrToInt(FieldByName('ID_GROUP').AsString);
-      edtPathReport.Text := FieldByName('PATH_REPORT').AsString;
-    end;
-end;
+{--------------------------------------
+salvar um relatorio
+---------------------------------------}
 
-procedure TfrmCadReport.bntFileReportClick(Sender: TObject);
+procedure TfrmCadReport.btnSalvarClick(Sender: TObject);
+var
+  sTipoOperacao, sErro: String;
 begin
-  dlgNewFr3.Filter := 'Arquivos FastReport (*.fr3)|*.fr3|Todos os arquivos (*.*)|*.*';
+  if edtIdReport.Text = '' then
+    sTipoOperacao := 'INSERIR'
+  else
+    sTipoOperacao := 'ALTERAR';
 
-  if dlgNewFr3.Execute then
-  begin
-    edtPathReport.Text := dlgNewFr3.FileName;
-  end;
-end;
+  sErro := '';
 
-procedure TfrmCadReport.bntSaveCadClick(Sender: TObject);
-begin
-
-  try
-    if edtIdReport.text <> 'NOVO' then
+  with mSystem.Relatorios do
     begin
-      with mSystem.qryCadReport do
+
+      Nome := edtNameReport.Text;
+      Descricao := memoDescricao.Text;
+
+      if not VarIsNull(cbbGroupReport.KeyValue) then
+        Grupo := cbbGroupReport.KeyValue
+      else
+        Grupo := -1;
+
+      if not VarIsNull(cbbGroupReport.KeyValue) then
+        Grupo := cbbGroupReport.KeyValue
+      else
+        Grupo := -1;
+
+      Fr3 := edtPathReport.Text;
+
+      if inserir_alterar( sTipoOperacao, sErro ) then
         begin
+          Util.CriarMensagem('OK', 'SUCESSO',
+                            'INCLUIR/ALTERAR RELATÓRIO', 'CADASTRO CONFIRMADO NO BANCO DE DADOS',
+                            'INFO');
           Close;
-          SQL.Clear;
-          SQL.Add('UPDATE TB_REPORTS');
-          SQL.Add('SET DESCRIPTION = :edt_name, ID_GROUP = :id_group, PATH_REPORT = :edt_report');
-          SQL.Add('WHERE ID = :edt_id');
+      end else
+        begin
+          Util.CriarMensagem('OK', 'ERROR',
+                          'INCLUIR/ALTERAR RELATÓRIO', 'NÃO FOI POSSIVEL CONCLUIR A OPERAÇÃO, CAUSA:' + sErro,
+                          'ERROR');
 
-          ParamByName('edt_name').AsString := edtNameReport.Text;
-          ParamByName('id_group').AsInteger := cbbGroupReport.KeyValue;
-          ParamByName('edt_id').AsInteger := StrToInt(edtIdReport.Text);
-          ParamByName('edt_report').AsString := edtPathReport.Text;
-
-          ExecSQL;
-        end;
-
-        edtIdReport.Clear;
-        edtNameReport.Clear;
-        edtPathReport.Clear;
-
-          with mSystem.qryReports do
-            begin
-              Close;
-              Open;
-            end;
-
-          frmCadReport.Close;
-    end else 
-      begin
-
-          with mSystem.qryCadReport do
-          begin
-            Close;
-            SQL.Clear;
-            SQL.Add('INSERT INTO TB_REPORTS (ID_GROUP, DESCRIPTION, PATH_REPORT) VALUES (:id_group, :edt_name, :fr3)');
-            ParamByName('id_group').AsInteger := cbbGroupReport.KeyValue;
-            ParamByName('edt_name').AsString := edtNameReport.text;
-            ParamByName('fr3').AsString := edtPathReport.Text;
-            ExecSQL;
-          end;
-
-          edtIdReport.Clear;
-          edtNameReport.Clear;
-          edtPathReport.Clear;
-
-          with mSystem.qryReports do
-            begin
-              Close;
-              Open;
-            end;
-
-          frmCadReport.Close;
-
+          edtNameReport.SetFocus;
       end;
+    end;
 
-  except
-    on E: Exception do
-      ShowMessage('Erro ao cadastrar relatório: ' + E.Message);
-  end;
+    Util.listaRelatorios;
 
 end;
 
-procedure TfrmCadReport.btnAddGroupReportClick(Sender: TObject);
-begin
-  frmCadGroupReport.ShowModal;
-end;
+{-------------------------------
+fechando/cancelando alterações no relatorio
+--------------------------------}
 
-procedure TfrmCadReport.btnCancCadReportClick(Sender: TObject);
+procedure TfrmCadReport.btnCancelarClick(Sender: TObject);
 begin
   Close;
 end;
+
+{--------------------------------------
+botão para editar o relatorio do caminho
+---------------------------------------}
 
 procedure TfrmCadReport.btnEdtReportClick(Sender: TObject);
 var
@@ -166,7 +131,7 @@ begin
     begin
       try
         mFastReport.frxReport1.LoadFromFile(ReportPath);
-        mFastReport.frxReport1.DesignReport();
+        mFastReport.frxReport1.DesignReport(true);
       except
         on E: Exception do
           ShowMessage('Erro ao carregar o relatório: ' + E.Message);
@@ -179,30 +144,44 @@ begin
   end;
 end;
 
-procedure TfrmCadReport.btnNewFr3Click(Sender: TObject);
+{----------------------------------------------------
+botão para buscar o arquivo fr3 do relatorio
+-----------------------------------------------------}
+procedure TfrmCadReport.btnBuscaFr3Click(Sender: TObject);
 begin
   dlgNewFr3.Filter := 'Arquivos FastReport (*.fr3)|*.fr3|Todos os arquivos (*.*)|*.*';
-  try
-    if dlgNewFr3.Execute then
-    begin
-      mFastReport.frxReport1.LoadFromFile(dlgNewFr3.FileName);
-      mFastReport.frxReport1.DesignReport();
-    end;
-  except
-    on E: Exception do
-      ShowMessage('Erro ao buscar arquivo .FR3: ' + E.Message);
+
+  if dlgNewFr3.Execute then
+  begin
+    edtPathReport.Text := dlgNewFr3.FileName;
   end;
 end;
+
+
+{---------------------------------------------
+Fechando o fomrulario e liberando da memoria para proxima criação
+----------------------------------------------}
+procedure TfrmCadReport.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+{-----------------------------------------------
+tratativa do show do formulario
+------------------------------------------------}
+procedure TfrmCadReport.FormShow(Sender: TObject);
+begin
+  edtNameReport.SetFocus;
+end;
+
+{---------------------------------------------
+setando o foco conforme a tecla #13 - enter
+----------------------------------------------}
 
 procedure TfrmCadReport.edtNameReportKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
-    cbbGroupReport.SetFocus
-end;
-
-procedure TfrmCadReport.FormShow(Sender: TObject);
-begin
-  edtNameReport.SetFocus;
+    memoDescricao.SetFocus;
 end;
 
 end.

@@ -31,35 +31,71 @@ uses
   FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Phys.SQLite,
   FireDAC.Phys.SQLiteDef, FireDAC.Stan.ExprFuncs,
   FireDAC.Phys.SQLiteWrapper.Stat, FireDAC.Stan.Param, FireDAC.DatS,
-  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.UI;
+  FireDAC.DApt.Intf, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.UI,
+  classe_relatorios;
 
 type
   TmSystem = class(TDataModule)
     conSystem: TFDConnection;
     qryLogin: TFDQuery;
-    qryUsers: TFDQuery;
-    qryReports: TFDQuery;
-    qryCadUser: TFDQuery;
-    dsUsers: TDataSource;
-    dsReports: TDataSource;
-    qryReportsID: TIntegerField;
-    qryReportsGRUPO: TStringField;
-    qryUserPermission: TFDQuery;
-    qryCadPermission: TFDQuery;
-    qryCadReport: TFDQuery;
-    qryGroupsReport: TFDQuery;
-    qryGroupsReportID: TIntegerField;
-    qryGroupsReportDESCRIPTION: TStringField;
-    dsGroupsReport: TDataSource;
-    qryCadGroupReport: TFDQuery;
-    IntegerField1: TIntegerField;
-    StringField1: TStringField;
-    qryReportsPATH_REPORT: TStringField;
-    qryReportsNOME: TStringField;
+    qryUsuLista: TFDQuery;
+    qryRelLista: TFDQuery;
+    dsUsuLista: TDataSource;
+    dsRelLista: TDataSource;
+    qryUsuPermissao: TFDQuery;
+    qryGruRelLista: TFDQuery;
+    dsGruRelLista: TDataSource;
+    qryCRUD: TFDQuery;
+    FDTransaction1: TFDTransaction;
+    dsUsuPermissao: TDataSource;
+    qrySubGrupRel: TFDQuery;
+    dsSubGrupRel: TDataSource;
+    dsUsuLogado: TDataSource;
+    qryRelListaID: TFDAutoIncField;
+    qryRelListaNOME: TStringField;
+    qryRelListaDESCRICAO: TStringField;
+    qryRelListaID_GRUPO: TIntegerField;
+    qryRelListaID_SUB_GRUPO: TIntegerField;
+    qryRelListaGRUPO: TStringField;
+    qryRelListaSUBGRUPO: TStringField;
+    qryUsuListaID: TFDAutoIncField;
+    qryUsuListaSTATUS: TIntegerField;
+    qryUsuListaNOME: TStringField;
+    qryUsuListaLOGIN: TStringField;
+    qryUsuListaSENHA: TStringField;
+    qrySubGrupRelID: TFDAutoIncField;
+    qrySubGrupRelDESCRICAO: TStringField;
+    qryUsuPermissaoID: TFDAutoIncField;
+    qryUsuPermissaoID_USU: TIntegerField;
+    qryUsuPermissaoID_FORM: TIntegerField;
+    qryUsuPermissaoID_RELATORIO: TIntegerField;
+    qryUsuPermissaoVISUALIZAR: TIntegerField;
+    qryUsuPermissaoINCLUIR: TIntegerField;
+    qryUsuPermissaoEXCLUIR: TIntegerField;
+    qryUsuPermissaoEDITAR: TIntegerField;
+    qryGruRelListaID: TFDAutoIncField;
+    qryGruRelListaDESCRICAO: TStringField;
+    SQLiteDriverLink: TFDPhysSQLiteDriverLink;
+    qryRelListaFR3: TStringField;
+    qryUsuCadPermissao: TFDQuery;
+    dsUsuCadPermissao: TDataSource;
+    qryUsuCadPermissaoDESCRICAO: TStringField;
+    qryUsuCadPermissaoVISUALIZAR: TIntegerField;
+    qryUsuCadPermissaoEXCLUIR: TIntegerField;
+    qryUsuCadPermissaoEDITAR: TIntegerField;
+    qryUsuCadPermissaoINCLUIR: TIntegerField;
+    qryUsuCad: TFDQuery;
+    qryUsuCadID: TFDAutoIncField;
+    qryUsuCadSTATUS: TIntegerField;
+    qryUsuCadNOME: TStringField;
+    qryUsuCadLOGIN: TStringField;
+    qryUsuCadSENHA: TStringField;
+    procedure DataModuleCreate(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
+    Relatorios : TRelatorios;
   end;
 
 var
@@ -70,5 +106,12 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+
+procedure TmSystem.DataModuleCreate(Sender: TObject);
+var CaminhoDB: String;
+begin
+  SQLiteDriverLink.VendorLib := ExtractFilePath(ExtractFilePath(ParamStr(0)) + 'lib\sqlite3.dll');
+end;
 
 end.

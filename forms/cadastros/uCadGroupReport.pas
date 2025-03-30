@@ -29,7 +29,10 @@ implementation
 
 procedure TfrmCadGroupReport.btnSaveCadClick(Sender: TObject);
 begin
-  try
+
+//Unit será desativada e a função de criar grupos ficara em uma nova unit "configurações"
+
+  {try
     with mSystem.qryCadGroupReport do
     begin
       Close;
@@ -52,7 +55,7 @@ begin
 
       ShowMessage('Erro ao gravar cadastro: ' + E.Message);
     end;
-  end;
+  end;}
 end;
 
 end.
